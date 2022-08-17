@@ -13,7 +13,6 @@
 #### 1.2 爬虫的矛与盾：
 
 * 反爬机制： 门户网站，可以通过制定相应的策略或者技术手段，防止爬虫程序进行网站数据的爬取
-
 * 反反爬策略： 爬虫程序可以通过指定相关策略或者技术手段，破解门户网站中具备的反爬机制，从而可以获取门户网站中相关的数据
 
 #### 1.3 robots.txt协议：
@@ -28,14 +27,10 @@
 #### 1.4 HTTP&HTTPS协议
 
 * 当前URL地址在数据传输的时候遵循的HTTP协议
-
 * 协议：就是两个计算机之间为了能够流畅的进行沟通而设置的一个君子协议，常见的协议有TCP/IP SOAP协议，HTTP协议， SMTP协议等...
-
 * **HTTP协议**： Hyper Text Transfer Protocol(超文本传输协议) 的缩写，是用于万维网服务器传输超文本到浏览器的传送协议
 * **HTTPS协议**：安全的超文本传输协议
-
 * 直白点，**就是浏览器和服务器之间的数据交互遵守的HTTP协议**
-
 * HTTP协议把一条消息分为三大快内容，无论是请求还是响应的三块内容
 
 ```python
@@ -360,7 +355,7 @@ for item in result:
     print(item.group("daihao"))
     print(item.group("number"))
     print(item.group("name"))
-    
+  
 ```
 
 **案例一**：豆瓣排行
@@ -407,10 +402,12 @@ print("over")
 
 **数据解析原理**
 
-       1. ​	标签定位，
-       2. 提取标签，标签属性中存储的数据值
-           实例化一个beautifulSoup对象，并且将页面源码数据加载到该对象 中
-       3. 通过调用BeautifulSoup对象中相关属性或者方法进行标签定位和数据提取
+```
+   1. 	标签定位，
+   2. 提取标签，标签属性中存储的数据值
+       实例化一个beautifulSoup对象，并且将页面源码数据加载到该对象 中
+   3. 通过调用BeautifulSoup对象中相关属性或者方法进行标签定位和数据提取
+```
 
 **环境安装：**
 
@@ -421,21 +418,27 @@ pip install lxml
 
 **如何实例化BeautifulSoup对象**
 
-    - from bs4 import BeautifulSoup
+```
+- from bs4 import BeautifulSoup
+```
 
 * 对象实例化：
-    1. 将本地的html文档中的数据加载到该对象中
-    ```python
-    fp=open('../01_初识爬虫/周杰伦.html','r',encoding='utf-8')
-    soup=BeautifulSoup(fp,'lxml')
-    print(soup)
-    ```
-    2. 将互联网上获取的页面源码加载到该对象中
-    ```python
-    page_text=response.text
-    soup=BeautifulSoup(page_text,'lxml')
-    print(soup)
-    ```
+
+  1. 将本地的html文档中的数据加载到该对象中
+
+  ```python
+  fp=open('../01_初识爬虫/周杰伦.html','r',encoding='utf-8')
+  soup=BeautifulSoup(fp,'lxml')
+  print(soup)
+  ```
+
+  2. 将互联网上获取的页面源码加载到该对象中
+
+  ```python
+  page_text=response.text
+  soup=BeautifulSoup(page_text,'lxml')
+  print(soup)
+  ```
 
 ```python
 * 提供的用于数据解析的方法和属性：
@@ -448,7 +451,7 @@ pip install lxml
 4. soup.select('.tang') #class_='tang'  返回复数，列表里
     * soup.select('某种选择器') 选择器可以是id,class ，标签。。。选择器
     * 层级选择器使用：
-        * soup.select('.tang > ul > li >a')[0]    
+        * soup.select('.tang > ul > li >a')[0]  
         >    >表示一个层级
         * soup.select('.tang > ul > li a')[0]
         > 空格表示多个层级
@@ -462,7 +465,7 @@ pip install lxml
 
 **案例一**：爬取三国演义小说所有章节标题和章节内容
 
-[三国演义]( https://www.shicimingju.com/book/sanguoyanyi.html)
+[三国演义](https://www.shicimingju.com/book/sanguoyanyi.html)
 
 ```python
 import requests
@@ -502,7 +505,7 @@ if __name__ =='__main__':
 * 实例化etree对象，且将被解析的源码加载到该对象中
 * 调用etree对象中的xpath方法，结合着xpath表达式实现标签定位和内容的捕获
 
-**案例一**：彼岸图网  
+**案例一**：彼岸图网
 
 ```python
 import requests
@@ -673,26 +676,26 @@ if __name__ == '__main__':
 #### 4.0验证码识别
 
 * 验证码是门户网站中采取的一种反扒机制
-
 * 反扒机制：验证码，识别验证码图片中的数据，用于模拟登陆操作
 
 #### 4.1 cookie
 
-* http/https协议特性:无状态  
+* http/https协议特性:无状态
 * 没有请求到对应页面数据的原因：发起第二次基于个人主页请求的时候，服务器端并不知道该此请求是基于登陆状态下的请求
-
 * **cookie:**
+
 > 用来让服务器端记录客户端的相关信息
+
 1. 手动处理：通过抓包工具获取cookie值，将该值封装到headers中 （不建议）
 2. 自动处理： 进行模拟登陆post请求后，由服务器创建，
 
 * session会话对象
   * 作用：1. 可以进行请求发送
-   2.如果请求过程中产生了cookie，则该cookie会被自动存储/携带在该session对象中
+    2.如果请求过程中产生了cookie，则该cookie会被自动存储/携带在该session对象中
 * 使用：
-       1. 创建session对象
-       2. 使用session对象进行模拟登陆post请求的发送，（cookie就会被存储在session中）
-      3. session对象对个人主页对应的get请求进行发送（携带了cookie）
+  1. 创建session对象
+  2. 使用session对象进行模拟登陆post请求的发送，（cookie就会被存储在session中）
+  3. session对象对个人主页对应的get请求进行发送（携带了cookie）
 
 ```python
 import requests
@@ -728,25 +731,26 @@ res=requests.get('https://user.17k.com/ck/author/shelf?page=1&appKey=2406394919'
 print(res.json())
 ```
 
-#### 4.2代理 
+#### 4.2代理
 
 > 破解封IP的各种反扒机制
+
 * 社么是代理：
-       1. 代理服务器
+  1. 代理服务器
 * 代理作用：
-       * 突破自身IP访问的限制
-       * 可以隐藏自身真实IP 
+  * 突破自身IP访问的限制
+  * 可以隐藏自身真实IP
 * 代理相关网站：
-       * 快代理
-           * www.goubanjia.com
-           * 西祠代理
+  * 快代理
+  * www.goubanjia.com
+  * 西祠代理
 * 代理IP类型：
-       * http:应用到http协议对应的URL中
-       * https:应用到https协议对应的URL中
+  * http:应用到http协议对应的URL中
+  * https:应用到https协议对应的URL中
 * 代理IP的匿名度：
-      * 透明：服务器知道该次请求使用了代理， 也知道请求对应的真实IP
-      * 匿名：知道使用代理，不知道真实IP
-      * 高匿名：不知道使用代理，更不知道真实IP
+  * 透明：服务器知道该次请求使用了代理， 也知道请求对应的真实IP
+  * 匿名：知道使用代理，不知道真实IP
+  * 高匿名：不知道使用代理，更不知道真实IP
 
 **案例**：
 
@@ -811,33 +815,36 @@ with open('./网络爬虫/sucai/梨video/video.mp4','wb')as fp:
 ## (五)异步爬虫
 
 目的：在爬虫中使用异步实现高性能的数据爬取操作
+
 * 进程是资源单位，每一个进程至少要有一个线程
 * 线程是执行单位
 * 同一个进程中的线程可共享该进程的资源
-* 启动每一个城西默认都会有一个主线程  
+* 启动每一个城西默认都会有一个主线程
 
 **异步爬虫方式：**
 
 1. 多线程，多进程：（不建议）
-    * 好处：可以被相关阻塞的操作单独开启线程或者进程，阻塞操作就可以异步执行
-    * 弊端：无法无限开启多线程或者多进程。
 
+   * 好处：可以被相关阻塞的操作单独开启线程或者进程，阻塞操作就可以异步执行
+   * 弊端：无法无限开启多线程或者多进程。
 2. 进程池，线程池（适当使用）
-    * 好处：可以降低系统对进程或者线程创建和销毁一个频率，从而很好的降低系统的开销
-    * 弊端：池中线程或者进程的数量有上限
-    * 线程池 
->一次性开辟一些线程，我们用户直接给线程池提交任务，线程任务的调度交给线程池来完成
+
+   * 好处：可以降低系统对进程或者线程创建和销毁一个频率，从而很好的降低系统的开销
+   * 弊端：池中线程或者进程的数量有上限
+   * 线程池
+
+> 一次性开辟一些线程，我们用户直接给线程池提交任务，线程任务的调度交给线程池来完成
+
 3. 单线程+异步协程
+
 * event_loop:事件循环，相当于一个无限循环，我们可以把一些函数注册到这个事件循环上
-当满足某些条件的时候，函数就会被循环执行
+  当满足某些条件的时候，函数就会被循环执行
 * coroutine:协程对象，我们可以将协程对象注册到事件循环中，它会被事件循环调用。
-我们可以使用 **async**关键字来定义一个方法，这个方法在调用时不会立即执行，而是返回一个协程对象
+  我们可以使用 **async**关键字来定义一个方法，这个方法在调用时不会立即执行，而是返回一个协程对象
 * task：任务，它是对协程对象的进一步封装，包含了任务的各个状态，
 * future:代表将来执行或还没有执行的任务，实际上和task没有本质区别
 * async:定义一个协程
 * await用来挂起阻塞方法的执行
-
-
 
 #### 5.0单线程
 
@@ -869,7 +876,7 @@ if __name__ =='__main__':
 
     for i in range(100):
         print('main',i)
-        
+    
 '''
 def MyThread(Thread):
     def run(self):   #当线程被执行的时候，被执行的就是run
@@ -994,23 +1001,16 @@ if __name__ =='__main__':
     print("全部下载完毕")
 ```
 
-
-
 #### 5.4协程
 
 * 协程不是计算机真实存在的（计算机只有进程，线程），而是由程序员人为创造出来的。
 * 协程也可以被成为微线程，是一种用户态内的上下文切换技术，简而言之，其实就是通过一个线程实现代码块相互切换执行
-
 * **实现协程方法：**
 
   * 通过greenlet，早期模块
-
   * yield关键字
-
   * asyncio模块
-
   * **async,await关键字** 【推荐】
-
 * **协程意义**
 
   * 在一个线程中如果遇到IO等待时间，线程不会傻傻等，利用空闲的时间再去干点别的事
@@ -1036,6 +1036,7 @@ def fun():
 if __name__ =='__main__':
     fun()
 ```
+
 ```python
 
 #Python 协程
@@ -1116,10 +1117,8 @@ if __name__ =="__main__":
     asyncio.run(main())
     t2=time.time()
     print(t2-t1)
-    
+  
 ```
-
-
 
 ##### 5.4.1async  & await关键字
 
@@ -1148,7 +1147,6 @@ loop.run_untile_complete(asyncio.wait(task))
 
 ```
 
-
 ##### **5.4.2事件循环**
 
 理解为一个死循环，检测并执行某些代码
@@ -1165,6 +1163,7 @@ loop.run_untile_complete(任务)
 
 协程函数：定义函数时，async def 函数名
 协程对象：执行 协程函数()，得到的就是协程对象
+
 ```python
 async def func():
     pass
@@ -1172,6 +1171,7 @@ async def func():
 result=func()
 
 ```
+
 **执行协程函数创建协程对象，函数内部代码不会执行**
 **如果想要执行协程函数内部代码，必须要将协程对象交给事件循环来处理**
 
@@ -1194,6 +1194,7 @@ asyncio.run(result)
 await +可等待对象（协程对象，task对象，Future对象=====》IO等待）
 
 示例1：
+
 ```python
 
 import asyncio
@@ -1204,7 +1205,9 @@ async def fun():
 
 asyncio.run(fun())
 ```
+
 示例2:
+
 ```python
 import asyncio
 async def others():
@@ -1224,7 +1227,9 @@ async def fun():
 asyncio.run(fun())
 
 ```
+
 示例3：
+
 ```python
 import asyncio
 async def others():
@@ -1245,14 +1250,16 @@ async def fun():
 asyncio.run(fun())
 
 ```
+
 await  等待对象的值得到结果之后才继续往下走
 
 ##### 5.4.5Task对象
 
 > 白话：在事件循环中添加多个任务
-> Task用于并发调度协程，通`asyncio.create_task(协程对象)`的方式创建Task对象，这样可以让协程加入事件循环中等待被调度执行，除了使用`asyncio.create_task（）`函数以外，还可以用低级的`loop.create_task()`或者`ensure_future()`函数。不建议手动实例化Task对象
+> Task用于并发调度协程，通 `asyncio.create_task(协程对象)`的方式创建Task对象，这样可以让协程加入事件循环中等待被调度执行，除了使用 `asyncio.create_task（）`函数以外，还可以用低级的 `loop.create_task()`或者 `ensure_future()`函数。不建议手动实例化Task对象
 
 示例1：
+
 ```python
 import asyncio
 
@@ -1278,7 +1285,9 @@ async def main():
 
 asyncio.run(main())
 ```
+
 示例2：
+
 ```python
 import asyncio
 
@@ -1301,7 +1310,9 @@ async def main():
 
 asyncio.run(main())
 ```
+
 示例3：
+
 ```python
 import asyncio
 
@@ -1316,15 +1327,17 @@ task_list=[
         func(),
         func(),
 ]
-    
+  
 
 done,pending=asyncio.run( asyncio.wait(task_list))
 print(done)
 ```
+
 ##### 5.4.6async.Future对象
 
 Task继承Tuture对象，Task对象内部await结果的处理基于Future对象来的
 示例1：
+
 ```python
 async def main():
     #获取当前事件循环
@@ -1338,7 +1351,9 @@ async def main():
 
 asyncio.run(main())
 ```
+
 示例2：
+
 ```python
 async def set_after():
     await asyncio.sleep(2)
@@ -1361,9 +1376,11 @@ async def main():
 asyncio.run(main())
 
 ```
+
 ##### 5.4.7concurrent.futures.Future对象
 
 使用线程池，进程池来实现异步操作时用到的对象
+
 ```python
 import time 
 from concurrent.futures.thread import ThreadPoolExecutor
@@ -1382,6 +1399,7 @@ for i in range(10):
 ```
 
 ##### 5.4.8异步和非异步
+
 案例：asyncio + 不支持异步的模块
 
 ```python
@@ -1414,8 +1432,6 @@ if __name__=="__main__":
 ```
 
 ##### 5.4.9异步上下文管理器
-
-
 
 #### 5.5 多任务异步协程
 
@@ -1487,7 +1503,7 @@ async def main():
     for url in urls
         task_obj=asyncio.ensure_future(download(url))
         tasks.append(task_obj)
-    
+  
     await asyncio.wait(tasks)
     '''
 if __name__=="__main__":
@@ -1495,30 +1511,6 @@ if __name__=="__main__":
     #loop=asyncio.get_event_loop()
     #loop.run_until_complete(main())
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## (六）动态加载数据处理
 
@@ -1536,19 +1528,21 @@ if __name__=="__main__":
 
 [查看驱动和浏览器版本的映射关系](http://blog.csdn.net/huilan_same/article/details/51896672)
 
-[chromedriver官方文档]( https://chromedriver.chromium.org/home)
+[chromedriver官方文档](https://chromedriver.chromium.org/home)
 
 [浏览迷：各种浏览器版本](https://liulanmi.com/tag/chrome)
 
 实例化一个浏览器对象：
+
 ```python
 from selenium import webdriver
 #实例化一个浏览器对象，（传入浏览器的驱动生成）
 bro = webdriver.Chrome(executable_path = './chromedriver')
 ```
+
 **方法**：
 
-****
+---
 
 ```python
 #发起请求 get(url)
@@ -1806,48 +1800,34 @@ bro.quit()
 
 ## (七)scrapy框架
 
-**创建工程**
-
-```python
+创建工程
 scrapy startproject  xxx
-```
 
-**进去到工程下**
-
-```bash
+进去到工程下
 cd xxx
-```
 
-**新建一个爬虫文件**
-
-```python
+新建一个爬虫文件
 scrapy genspider spiderName www.xxx.com
-```
 
-**运行**
-
-```python
+运行
 scrapy crawl spiderName      (--nolog)
-```
-
-
 
 ##### 7.0Scrapy持久化存储：
 
 - 基于终端指令：
-    - 要求：只可以将parse方法的返回值存储到本地的文本文件中
-    - 要求：持久化存储对应的文本文件类型只可以是：json,jsonlines,jl,csv,xml,
-    - 指令：scrapy crawl filename -o filepath
-    - 缺点：局限性强，（数据只可以存储到指定后缀的文本文件中）
+  - 要求：只可以将parse方法的返回值存储到本地的文本文件中
+  - 要求：持久化存储对应的文本文件类型只可以是：json,jsonlines,jl,csv,xml,
+  - 指令：scrapy crawl filename -o filepath
+  - 缺点：局限性强，（数据只可以存储到指定后缀的文本文件中）
 - 基于管道指令：
-    -  编码流程：
-        - 1. 数据解析
-        - 2. 在item类中定义相关的属性
-        - 3. 将解析的数据封装到item 类型的对象
-        - 4. 将item类型对象提交给管道进行持久化存储的操作
-        - 5. 在管道类的process_item中要将其接收到的item对象中存储的数据进行持久化存储操作
-        - 6. 在配置文件中开启管道
-    - 优点：通用性强。
+  - 编码流程：
+    - 1. 数据解析
+    - 2. 在item类中定义相关的属性
+    - 3. 将解析的数据封装到item 类型的对象
+    - 4. 将item类型对象提交给管道进行持久化存储的操作
+    - 5. 在管道类的process_item中要将其接收到的item对象中存储的数据进行持久化存储操作
+    - 6. 在配置文件中开启管道
+  - 优点：通用性强。
 
 1. 基于本地存储
 
@@ -1875,7 +1855,7 @@ class DoubanSpider(scrapy.Spider):
             #.extract_first()将列表中第0个元素提取出来
             title =i.xpath('./div[2]/h2/a/text()').extract_first()
             author=i.xpath('./div[2]/p/a/text()')[0].extract()
-          
+      
 
              dic={
                  'title':title,
@@ -1901,12 +1881,12 @@ class DoubanSpider(scrapy.Spider):
     def parse(self, response):
         # 解析小说的作者和标题
         list_data=response.xpath('//div[@class="book-img-text"]/ul/li')
-     
+   
         for i in list_data:
-            
+        
             title =i.xpath('./div[2]/h2/a/text()').extract_first()
             author=i.xpath('./div[2]/p/a/text()')[0].extract()
-        
+    
             item = DoubanItem()
             item['title'] = title
             item['author']=author
@@ -1989,14 +1969,12 @@ class mysqlPipeline:
         # 爬虫文件提交的item类型的对象最终会提交给哪一个管道类哪
 ```
 
-
-
 ##### 7.1基于Spider的全站数据解析爬取
 
 - 就是将网站中某板块下的全部页码对应的页面数据进行爬取
 - 自行手动进行请求发送数据（推荐）
-    - 手动发送请求
-        -yield scrapy.Resquest(url,callback) callback专门用作数据解析
+  - 手动发送请求
+    -yield scrapy.Resquest(url,callback) callback专门用作数据解析
 
 **案例**：
 
@@ -2028,26 +2006,33 @@ class QidianSpider(scrapy.Spider):
 
 ```
 
-
-
 ##### 7.2五大核心组件
 
 1. 引擎 Scrapy
->用来处理整个系统的数据流处理，触发事物（框架核心）
+
+> 用来处理整个系统的数据流处理，触发事物（框架核心）
+
 2. 调度器 Scheduler
->用来接受引擎发过来的请求，压入队列中，并在引擎再次请求的时候返回，可以想象成一个URL（抓取网页的地址或者说是链接）的优先**队列**，由它来决定下一个要抓取的网址是什么，同时**去除重复**的网址
+
+> 用来接受引擎发过来的请求，压入队列中，并在引擎再次请求的时候返回，可以想象成一个URL（抓取网页的地址或者说是链接）的优先队列，由它来决定下一个要抓取的网址是什么，同时去除重复的网址
+
 3. 下载器 Downloader
->用于下载网页内容，并将网页内容返回给的链接（Scrapy下载器是建立在twisted这个高效的异步模型上的）
+
+> 用于下载网页内容，并将网页内容返回给的链接（Scrapy下载器是建立在twisted这个高效的异步模型上的）
+
 4. 爬虫 Spider
->爬虫是主要干活的，用于从特定的网页中提取自己需要的信息，即所有的实体（item）用户也可以从中提取链接，让Scrapy继续抓取下一个页面
+
+> 爬虫是主要干活的，用于从特定的网页中提取自己需要的信息，即所有的实体（item）用户也可以从中提取链接，让Scrapy继续抓取下一个页面
+
 5. 项目管道 Pipeline
->负责处理爬虫从网页中抽取的实体，主要功能是持久化存储，验证实体的有效性，清楚不许需要的信息，当页面被爬虫解析后，将被发送到项目管道，并经过几个特定的次序处理数据
+
+> 负责处理爬虫从网页中抽取的实体，主要功能是持久化存储，验证实体的有效性，清楚不许需要的信息，当页面被爬虫解析后，将被发送到项目管道，并经过几个特定的次序处理数据
 
 ##### 7.3请求传参
 
-*  使用场景：如果爬取解析的数据不在同一张页面中（深度爬取）,
-将item 传递给请求所对应的回调函数
-需要将不同解析方法中获取的解析数据封装存储到同一个Item中，并且提交到管道
+* 使用场景：如果爬取解析的数据不在同一张页面中（深度爬取）,
+  将item 传递给请求所对应的回调函数
+  需要将不同解析方法中获取的解析数据封装存储到同一个Item中，并且提交到管道
 
 **案例**：起点小说网
 
@@ -2131,26 +2116,26 @@ class Qidian2Pipeline:
         self.fp.close()
 ```
 
-
-
 ##### 7.4图片数据爬取之ImagePipeline
 
-    * 基于scrapy爬取字符串类型数据和爬取图片类型数据区别：
-        - 字符串： 只需要基于xpath 进行解析，且提交管道进行持久化存储
-        - 图片： 只可以通过xpath解析出图片的src属性，单独的对图片地址发请求获取图片二进制类型的数据。
-    * 基于ImagePipeline：
-        - 只需要将img的src属性值进行解析，提交到管道，管道就会对图片src进行发送请求获取图片二进制类型的数据，且还会帮我么进行持久化存储。
-    * 需求：爬取站长素材中高清图片
-        - 使用流程：
-            1. 数据解析（图片地址）
-            2. 将存储图片地址的item提交到指定的管道类中
-            3. 在管道文件中自定义一个基于ImagesPipeline的一个管道类
-                - get_media_requests()
-                - file_path()
-                - item_completed()
-            4. 在配置文件中：
-                - 指定存储图片的目录：IMAGES_STORE='./imgs_站长素材'
-                - 开启自定义的管道：
+```
+* 基于scrapy爬取字符串类型数据和爬取图片类型数据区别：
+    - 字符串： 只需要基于xpath 进行解析，且提交管道进行持久化存储
+    - 图片： 只可以通过xpath解析出图片的src属性，单独的对图片地址发请求获取图片二进制类型的数据。
+* 基于ImagePipeline：
+    - 只需要将img的src属性值进行解析，提交到管道，管道就会对图片src进行发送请求获取图片二进制类型的数据，且还会帮我么进行持久化存储。
+* 需求：爬取站长素材中高清图片
+    - 使用流程：
+        1. 数据解析（图片地址）
+        2. 将存储图片地址的item提交到指定的管道类中
+        3. 在管道文件中自定义一个基于ImagesPipeline的一个管道类
+            - get_media_requests()
+            - file_path()
+            - item_completed()
+        4. 在配置文件中：
+            - 指定存储图片的目录：IMAGES_STORE='./imgs_站长素材'
+            - 开启自定义的管道：
+```
 
 **1. 爬虫文件编写解析数据**
 
@@ -2180,10 +2165,11 @@ class ImgSpider(scrapy.Spider):
 
 2.**把图片地址提交到管道**
 
-```python 
+```python
 #来到item 中封装一个属性
 scr=scrapy.Field()
 ```
+
 3.**将解析到的数据封装到**item中
 
 ```python
@@ -2217,6 +2203,7 @@ class ImagsPipeline(ImagesPipeline):
             return item #该返回值会传递一给下一个即将被执行的管道类
 
 ```
+
 5.**图片存储路径**
 
 ```python
@@ -2239,77 +2226,3 @@ ROBOTSTXT_OBEY = False
 #显示报错日志 只显示错误类型的日志信息
 LOG_LEVEL="ERROR"
 ```
-
-##### 7.5中间件
-
-* 下载中间件：
-
-  * 位置：处于引擎和下载器之间
-  * 作用：批量拦截到整个工程当中所有的请求和响应
-  * 拦截请求：
-    * UA伪装：process_request
-    * 代理IP:     process_exception: return request
-  * 拦截响应：
-    * 篡改响应数据，响应对象。
-
-  ##### 7.6网易新闻案例
-
-  爬取网易新闻中的新闻数据（标题和内容）
-
-  * 1. 通过新闻首页解析出版块对应的详情页的url
-
-  * 2. 每一个板块对应的新闻标题都是**动态加载**出来的
-
-  * 3. 通过解析出每一条详情页的url获取详情页的页面源码，解析出新闻内容
-
-    
-
-##### 7.7 CrawlSpider全站书数据爬取
-
-* **类：基于Spider子类**
-
-**全站数据爬取的方式**
-
-- 基于Spider：手动请求
-- 基于Crawl Spider：
-
-**Crawl Spider使用：**
-
-- 创建一个工程
-- cd xxx
-- 创建爬虫文件（CrawlSpider）：
-  - scrapy  genspider  -t  crawl  xxx www.xxx.com
-  - 链接提取器：
-    - 作用：根据指定规则(allow="正则表达式")进行指定连结提取
-  - 规则解析器：
-    - 作用：将链接提取器提取到的链接进行指定规则（callback）的解析操作
-
-## (八)分布式爬虫
-
-**概念**：需要搭建一个分布式机群，让其对一组资源进行分布联合爬取
-
-**作用**：提升爬取效率
-
-**如何实现分布式**
-
-1. 安装一个scrapy-redis的组件：
-2. 原生的scrapy是不可以实现分布式爬虫，必须要让scrapy结合着scrapy-redis组件一起实现分布式
-3. 为什么原生的scrapy不可以实现分布式？
-   1. 调度器不可以被分布式机群共享
-   2. 管道不可以被分布式机群共享
-4. scrapy-redis组件的作用：
-   1. 可以给原生的scrapy框架提供可以被共享的管道和调度器
-5. 实现流程
-   1. 创建一个工程
-   2. 创建一个基于crawlspider的爬虫文件
-   3. 修改当前的爬虫文件
-      1. 导包：from scrapy_redis.spiders import RedisSpider
-      2. 将start_url和allowed_domains进行注释
-      3. 添加一个新的属性redis_key='qidian'，可以被共享的调度器队列的名称
-
-## (九)增量式式爬虫
-
-**概念**：检测网站数据更新的情况，只会爬取网站最新更新出来的数据
-
-
-
