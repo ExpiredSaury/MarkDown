@@ -107,7 +107,8 @@ response=requests.get(url=url)
 page_text=response.text
 print(page_text)
 #持久化存储
-with open("sougou.html",'w',encoding='utf-8') as f:   		f.write(page_text)
+with open("sougou.html",'w',encoding='utf-8') as f:   		
+    f.write(page_text)
 print('爬取结束')
 ```
 
