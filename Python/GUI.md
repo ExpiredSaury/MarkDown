@@ -4,7 +4,7 @@
 
 通过`geometry('wxh±x±y')`进行设置，`w为宽度，h为高度，+x表示距离屏幕左边的距离，-x表示距离屏幕右边的距离，+y表示距离屏幕上边的距离，-y表示屏幕下边的距离`
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-BuQvJGlJ-1663334689040)(E:\MarkDown\markdown\Python\img\image-20220916093630428.png)\]](https://img-blog.csdnimg.cn/1da84ecb379149f8a3f110056ac68a06.png)
+![](https://img-blog.csdnimg.cn/1da84ecb379149f8a3f110056ac68a06.png)
 
 
 ```python
@@ -33,7 +33,7 @@ window.mainloop()#事件循环。
 
 ### GUI编程描述
 
-![](E:\MarkDown\markdown\Python\img\54d8a6eb7eced27d4871d352d1edd346.png)
+![](E:\MarkDown\markdown\imgs\54d8a6eb7eced27d4871d352d1edd346.png)
 
 **Tkinter和Wm**
 
@@ -57,7 +57,7 @@ BaseWidget是所有组件的父类
 
 Widget是所有组件类的父类，Widget一共有四个父类：Base Widget、Pack、Grid、Place，意味着所有GUI组件同时具备者四个父类的属性和方法
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-9uWNoAKn-1663334689042)()\]](https://img-blog.csdnimg.cn/b850d1d0f8744d979467d7ae21831d4b.png)
+![](https://img-blog.csdnimg.cn/b850d1d0f8744d979467d7ae21831d4b.png)
 
 
 ### 常用组件汇总
@@ -208,7 +208,7 @@ if __name__ == '__main__':
 
 **效果展示**
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-omYYasmD-1663334689043)()\]](https://img-blog.csdnimg.cn/a776bdacdacb474391fed6c7719049a7.png)
+![](https://img-blog.csdnimg.cn/a776bdacdacb474391fed6c7719049a7.png)
 
 
 #### Option选项
@@ -277,7 +277,7 @@ if __name__ == '__main__':
     root.mainloop()
 ```
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-6awvzcSf-1663334689046)()\]](https://img-blog.csdnimg.cn/ecf4b405b57349c7a4fa3526fded4a60.png)
+![](https://img-blog.csdnimg.cn/ecf4b405b57349c7a4fa3526fded4a60.png)
 
 
 #### Entry 当行文本框
@@ -423,7 +423,7 @@ if __name__ == '__main__':
     window.mainloop()
 ```
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-9ElW8ExB-1663334689048)()\]](https://img-blog.csdnimg.cn/8b233b3a8450486fadf429a7300a74fb.png)
+![](https://img-blog.csdnimg.cn/8b233b3a8450486fadf429a7300a74fb.png)
 
 
 #### Radiobutton单选按钮
@@ -575,7 +575,7 @@ if __name__ == '__main__':
 
 grid表格布局，采用表格结构组织组件，子组件的位置由行和列的单元格来确定， 并且可以跨行和跨列，从而实现复杂的布局
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-g5rY4SML-1663334689050)()\]](https://img-blog.csdnimg.cn/ea23c40b97c14582b56d3a696f58b80c.png)
+![](https://img-blog.csdnimg.cn/ea23c40b97c14582b56d3a696f58b80c.png)
 
 
 ```python
@@ -614,7 +614,7 @@ if __name__ == '__main__':
     root.mainloop()
 ```
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-XWbIMjxk-1663334689053)()\]](https://img-blog.csdnimg.cn/b6072fefaf8b40b2a3e378107dd9a899.png)
+![](https://img-blog.csdnimg.cn/b6072fefaf8b40b2a3e378107dd9a899.png)
 
 
 Grid实现计算器页面
@@ -663,7 +663,7 @@ if __name__ == '__main__':
     root.mainloop()
 ```
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-3PdgEeqN-1663334689056)()\]](https://img-blog.csdnimg.cn/3353fbe0d5eb4a8b8c65487ad5b3f027.png)
+![](https://img-blog.csdnimg.cn/3353fbe0d5eb4a8b8c65487ad5b3f027.png)
 
 
 #### pack布局管理器
@@ -672,7 +672,7 @@ pack按照组件的创建顺序将子组件添加到父组件，按照垂直或�
 
 pack是代码量最少，最简单的一种，可以用于快速生成界面
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-unZmHSUH-1663334689057)()\]](https://img-blog.csdnimg.cn/f4fd65ab5b9344ff9c39ca249e74c318.png)
+![](https://img-blog.csdnimg.cn/f4fd65ab5b9344ff9c39ca249e74c318.png)
 
 
 ```python
@@ -699,14 +699,14 @@ for i in range(1,20):
 root.mainloop()
 ```
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-FeFm0Fbv-1663334689058)()\]](https://img-blog.csdnimg.cn/cab62827a27a431bb7b43614a83f52d9.png)
+![](https://img-blog.csdnimg.cn/cab62827a27a431bb7b43614a83f52d9.png)
 
 
 #### place布局管理器
 
 可以通过坐标精确控制组件的位置，适用于一些布局更加灵活的场景
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-2ydYpQm2-1663334689059)()\]](https://img-blog.csdnimg.cn/c09537eae6c04acfb355ed79e9116513.png)
+![](https://img-blog.csdnimg.cn/c09537eae6c04acfb355ed79e9116513.png)
 
 
 ```python
@@ -791,12 +791,12 @@ widget.bind(event,handler)
 
 #### 鼠标和键盘事件
 
-![\外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-0NtGtGrz-1663334689060)()\]](https://img-blog.csdnimg.cn/0ab772064716406ea801d0510648db3e.png)
+![](https://img-blog.csdnimg.cn/0ab772064716406ea801d0510648db3e.png)
 
 
 #### event对象常用属性
 
-![\外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-h9LHocGt-1663334689061)(](https://img-blog.csdnimg.cn/a3a07244c83c40ef89706797fbc51792.png)
+![](https://img-blog.csdnimg.cn/a3a07244c83c40ef89706797fbc51792.png)
 
 
 ```python
@@ -909,7 +909,7 @@ b1.bind_class('Button', "<Button-2>", mouseTest3)
 root.mainloop()
 ```
 
-![\外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-X0y5T8eg-1663334689062)()\]](https://img-blog.csdnimg.cn/3fa4fe664d9c4ab1a450794ff3f2b5fd.png)
+![](https://img-blog.csdnimg.cn/3fa4fe664d9c4ab1a450794ff3f2b5fd.png)
 
 
 ### 其他组件
@@ -941,7 +941,7 @@ Button(root, text='确定', command=test1).pack()
 root.mainloop()
 ```
 
-![\外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-cImgpNvN-1663334689064)(\]](https://img-blog.csdnimg.cn/751c7d9d59bf4edba9a69564c7090c7d.png)
+![](https://img-blog.csdnimg.cn/751c7d9d59bf4edba9a69564c7090c7d.png)
 
 
 #### Scale移动滑块
@@ -972,7 +972,7 @@ a.pack()
 root.mainloop()
 ```
 
-![\外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-HdgK18Zi-1663334689065)()\]](https://img-blog.csdnimg.cn/2b8eeb3296f64d8d95faf94fe93d16cd.png)
+![](https://img-blog.csdnimg.cn/2b8eeb3296f64d8d95faf94fe93d16cd.png)
 
 
 #### 颜色选择框
@@ -1021,11 +1021,12 @@ show.pack()
 root.mainloop()
 ```
 
-![在这里插入图片描述](E:\MarkDown\markdown\Python\img\210350f74045499599d613dc26bc36d2.png)
+![在这里插入图片描述](E:\MarkDown\markdown\imgs\210350f74045499599d613dc26bc36d2.png)
 **命名参数option的常见值**
-![在这里插入图片描述](E:\MarkDown\markdown\Python\img\c04e89321fd342b7a80d429a32e61813.png)
-
+![在这里插入图片描述](E:\MarkDown\markdown\imgs\c04e89321fd342b7a80d429a32e61813.png)
 #### 简单对话框
+
+![在这里插入图片描述](E:\MarkDown\markdown\imgs\eef5bbed724e4996b5f3c5286ed54404.png)
 
 ```python
 # -*- coding: UTF-8 -*-  @Date ：2022/9/17 8:26
@@ -1047,8 +1048,8 @@ show = Label(root, width=40, height=3, bg='green')
 show.pack()
 
 root.mainloop()
-```
 
+```
 #### 上下文菜单
 
 ```python
@@ -1116,138 +1117,9 @@ if __name__ == '__main__':
     root.title("简易记事本")
     app = Application(master=root)
     root.mainloop()
+
 ```
-
-简易记事本
-
-```python
-# -*- coding: UTF-8 -*-  @Date ：2022/9/17 8:32
-
-
-from tkinter import *
-from tkinter.colorchooser import askcolor
-from tkinter.filedialog import *
-
-
-class Application(Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.filename = None
-        self.master = master
-        self.textpad = None
-        self.pack()
-        self.createWidget()
-
-    def createWidget(self):
-        """创建主菜单栏"""
-        menubar = Menu(root)
-
-        # 创建子菜单
-        menuFile = Menu(menubar)
-        menuEdit = Menu(menubar)
-        menuHelp = Menu(menubar)
-
-        # 将子菜单加入到主菜单栏
-        menubar.add_cascade(label='文件(F)', menu=menuFile)
-        menubar.add_cascade(label='编辑(E)', menu=menuEdit)
-        menubar.add_cascade(label='帮助(H)', menu=menuHelp)
-
-        # 添加菜单项
-        menuFile.add_command(label='新建', accelerator="ctrl+n", command=self.newfile)
-        menuFile.add_command(label='打开', accelerator="ctrl+o", command=self.openfile)
-        menuFile.add_command(label='保存', accelerator="ctrl+s", command=self.savefile)
-        menuFile.add_separator()  # 添加分割线
-        menuFile.add_command(label='退出', accelerator='ctrl+q', command=self.exit)
-
-        # 将主菜单加到根窗口
-        root['menu'] = menubar
-
-        # 增加快捷键的处理
-        root.bind('<Control-n>', lambda event: self.newfile())
-        root.bind('<Control-s>', lambda event: self.savefile())
-        root.bind('<Control-q>', lambda event: self.exit())
-        root.bind('<Control-o>', lambda event: self.openfile())
-
-        # 文本编辑区
-        self.textpad = Text(root, width=50, height=30)
-        self.textpad.pack()
-
-        # 创建上下菜单
-        self.contextMenu = Menu(root)
-        self.contextMenu.add_command(label='背景颜色', command=self.openAskColor)
-
-        # 为右键绑定事件
-        root.bind("<Button-3>", self.createContextMenu)
-
-    def newfile(self):
-        self.filename = asksaveasfilename(title='另存为', initialfile='未命名.txt',
-                                          filetypes=[("文本 文档", '.txt')],
-                                          defaultextension='.txt')
-        self.savefile()
-
-    def openfile(self):
-        self.textpad.delete("1.0", "end")
-        with askopenfile(title='打开文本文件') as f:
-            self.textpad.insert(INSERT, f.read())
-            self.filename = f.name
-
-    def savefile(self):
-        with open(self.filename, 'w', encoding='utf-8') as f:
-            c = self.textpad.get(1.0, END)
-            f.write(c)
-
-    def exit(self):
-        root.quit()
-
-    def openAskColor(self):
-        s1 = askcolor(color='red', title='选择背景色')
-        self.textpad.config(bg=s1[1])
-
-    def createContextMenu(self, event):
-        # 菜单在鼠标右键单机的座标处显示
-        self.contextMenu.post(event.x_root, event.y_root)
-
-
-if __name__ == '__main__':
-    root = Tk()
-    root.geometry("400x200")
-    root.title("简易记事本")
-    app = Application(master=root)
-    root.mainloop()
-```
-
-#### 将python程序打包成exe可执行文件
-
-可以使用pyinstaller模块实现将python项目打包成exe执行文件
-
-```python
-"""
-先安装模块
-1.pip install pyinstaller
-"""
-```
-
-```python
-"""
-2.在Pycharm的Terminal终端输入命令：pyinstaller -F xxx.py
-"""
-```
-
-```python
-相关参数
---icon=图标路径（pyinstaller -F --icon=my.icon xxx.py）
--F 打包成一个exe文件
--w 使用窗口，无控制台
--c 使用控制台 ，无窗口
--D 创建一个目录，里面包含exe以及其他一些依赖性文件
-```
-
-```python
-"""
-3.在项目目录下会生成一个dist目录，里面有一个exe文件
-"""
-```
-
+![在这里插入图片描述](E:\MarkDown\markdown\imgs\1ebad2056f624da2b5c13b1f0320307c.png)
 #### 记事本优化
 
 ```python
@@ -1346,7 +1218,6 @@ if __name__ == '__main__':
     root.mainloop()
 
 ```
-
 #### 画图软件开发
 
 ```python
@@ -1360,6 +1231,7 @@ if __name__ == '__main__':
 6.修改画笔的颜色、背景颜色
 """
 ```
+
 
 ```python
 # -*- coding: UTF-8 -*-  @Date ：2022/9/17 8:32
@@ -1492,7 +1364,6 @@ if __name__ == '__main__':
     root.title("程序员的画图软件开发")
     app = Application(master=root)
     root.mainloop()
+
 ```
-
-
-
+![在这里插入图片描述](E:\MarkDown\markdown\imgs\0432bb77f8234676b80b95c733cb9bf7.png)

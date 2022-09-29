@@ -57,105 +57,105 @@ $('p').css('color','blue')
 ```python 
 //id选择器
 $('#d1')
-S.fn.init [div#d1]0: div#d1length: 1[[Prototype]]: Object(0)
+S.fn.init [div#d1]0: div#d1length: 1[[Prototype]]: Object(0)
            
 //class选择器
 $('.c1')
-S.fn.init [p.c1, prevObject: S.fn.init(1)]0: p.c1length: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init [p.c1, prevObject: S.fn.init(1)]0: p.c1length: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
            
 //标签选择器
 $('span')
-S.fn.init(3) [span, span, span, prevObject: S.fn.init(1)]0: span1: span2: spanlength: 3prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init(3) [span, span, span, prevObject: S.fn.init(1)]0: span1: span2: spanlength: 3prevObject: S.fn.init [document][[Prototype]]: Object(0)
            
 //jQuery对象如何变成标签对象
 $('#d1')[0]
-<div id=​"d1">​…​</div>​
+<div id="d1">…</div>
 document.getElementById('d1')
-<div id=​"d1">​…​</div>​
+<div id="d1">…</div>
            
 //标签对象如何变jQuery对象呢
 $(document.getElementById('d1'))
-S.fn.init [div#d1]
+S.fn.init [div#d1]
 $(document.getElementById('d1'))[0] //又转成了标签对象
-<div id=​"d1">​…​</div>​
+<div id="d1">…</div>
 ```
 
 ##### 组合选择器/分组与嵌套
 
 ```python
 $('div')
-S.fn.init(2) [div#d1, div.c1, prevObject: S.fn.init(1)]
+S.fn.init(2) [div#d1, div.c1, prevObject: S.fn.init(1)]
               
 $('div.c1')
-S.fn.init [div.c1, prevObject: S.fn.init(1)]0: div.c1length: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init [div.c1, prevObject: S.fn.init(1)]0: div.c1length: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
               
 $('div#d1')
-S.fn.init [div#d1, prevObject: S.fn.init(1)]0: div#d1length: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init [div#d1, prevObject: S.fn.init(1)]0: div#d1length: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
            
 $('*')
-S.fn.init(18) [html, head, meta, title, script, style, body, span, span, div#d1, span, p, span, span, div.c1, span, span, script, prevObject: S.fn.init(1)]
+S.fn.init(18) [html, head, meta, title, script, style, body, span, span, div#d1, span, p, span, span, div.c1, span, span, script, prevObject: S.fn.init(1)]
                
 $('#d1,.c1,p')
-S.fn.init(3) [div#d1, p, div.c1, prevObject: S.fn.init(1)]
+S.fn.init(3) [div#d1, p, div.c1, prevObject: S.fn.init(1)]
               
 $('div span') #后代
-S.fn.init(3) [span, span, span, prevObject: S.fn.init(1)]
+S.fn.init(3) [span, span, span, prevObject: S.fn.init(1)]
               
 $('div>span')#儿子
-S.fn.init(2) [span, span, prevObject: S.fn.init(1)]0: span1: spanlength: 2prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init(2) [span, span, prevObject: S.fn.init(1)]0: span1: spanlength: 2prevObject: S.fn.init [document][[Prototype]]: Object(0)
               
 $('div+span')#第一个
-S.fn.init [span, prevObject: S.fn.init(1)]
+S.fn.init [span, prevObject: S.fn.init(1)]
               
 $('div~span') #兄弟
-S.fn.init(2) [span, span, prevObject: S.fn.init(1)]
+S.fn.init(2) [span, span, prevObject: S.fn.init(1)]
 ```
 
 ##### 基本筛选器
 
 ```python 
 $('ul li') #ul下所有li
-S.fn.init(10) [li, li, li, li, li, li, li.c1, li, li, li#d1, prevObject: S.fn.init(1)]
+S.fn.init(10) [li, li, li, li, li, li, li.c1, li, li, li#d1, prevObject: S.fn.init(1)]
                
 $('ul li:first') #大儿子
-S.fn.init [li, prevObject: S.fn.init(1)]0: lilength: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init [li, prevObject: S.fn.init(1)]0: lilength: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
                
 $('ul li:last')#小儿子
-S.fn.init [li#d1, prevObject: S.fn.init(1)]0: li#d1length: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init [li#d1, prevObject: S.fn.init(1)]0: li#d1length: 1prevObject: S.fn.init [document][[Prototype]]: Object(0)
            
 $('ul li:eq(2)')#索引为2的
-S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init [document][[Prototype]]: Object(0)
            
 $('ul li:even') #偶数
-S.fn.init(5) [li, li, li, li.c1, li, prevObject: S.fn.init(1)]0: li1: li2: li3: li.c14: lilength: 5prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init(5) [li, li, li, li.c1, li, prevObject: S.fn.init(1)]0: li1: li2: li3: li.c14: lilength: 5prevObject: S.fn.init [document][[Prototype]]: Object(0)
            
 $('ul li:odd')#奇数
-S.fn.init(5) [li, li, li, li, li#d1, prevObject: S.fn.init(1)]0: li1: li2: li3: li4: li#d1length: 5prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init(5) [li, li, li, li, li#d1, prevObject: S.fn.init(1)]0: li1: li2: li3: li4: li#d1length: 5prevObject: S.fn.init [document][[Prototype]]: Object(0)
               
 $('ul li:gt(2)')#索引大于2的
-S.fn.init(7) [li, li, li, li.c1, li, li, li#d1, prevObject: S.fn.init(1)]
+S.fn.init(7) [li, li, li, li.c1, li, li, li#d1, prevObject: S.fn.init(1)]
               
 $('ul li:lt(2)')#索引小于2的
-S.fn.init(2) [li, li, prevObject: S.fn.init(1)]
+S.fn.init(2) [li, li, prevObject: S.fn.init(1)]
               
 $('ul li:not("#d1")')#ul下所有li，除了id为d1的
-S.fn.init(9) [li, li, li, li, li, li, li.c1, li, li, prevObject: S.fn.init(1)]
+S.fn.init(9) [li, li, li, li, li, li, li.c1, li, li, prevObject: S.fn.init(1)]
               
 $('div:has("p")')#选取出包含一个或多个标签在内的标签，简单将就是div里面有p的div        
-S.fn.init [div, prevObject: S.fn.init(1)]
+S.fn.init [div, prevObject: S.fn.init(1)]
 ```
 
 ##### 属性选择器
 
 ```python
 $('[username]')
-<input type=​"text" id username=​"zhangsan">​
+<input type="text" id username="zhangsan">
 
 $('[username="lisi"]')
-<p username=​"lisi">​</p>​
+<p username="lisi"></p>
 
 $('p[username]')
-<p username=​"lisi">​</p>​
+<p username="lisi"></p>
 
 $('[type]')
 
@@ -166,16 +166,16 @@ $('[type="text"]')
 
 ```python
 $('input[type="text"]')
-S.fn.init [input, prevObject: S.fn.init(1)]
+S.fn.init [input, prevObject: S.fn.init(1)]
 
 $('input[type="password"]')
-S.fn.init [input, prevObject: S.fn.init(1)]
+S.fn.init [input, prevObject: S.fn.init(1)]
 
 $(':password')  #等价于上面第二个
-S.fn.init [input, prevObject: S.fn.init(1)]
+S.fn.init [input, prevObject: S.fn.init(1)]
 
 $(':text')  ##等价于上面第一个
-S.fn.init [input, prevObject: S.fn.init(1)]
+S.fn.init [input, prevObject: S.fn.init(1)]
 
 :text
 :password
@@ -194,22 +194,22 @@ S.fn.init [input, prevObject: S.fn.init(1)]
 
 
 $(':checked')  #它会将checked 和selected都拿到
-S.fn.init(2) [input, option, prevObject: S.fn.init(1)]0: input1: optionlength: 2prevObject: S.fn.init [document][[Prototype]]: Object(0)
+S.fn.init(2) [input, option, prevObject: S.fn.init(1)]0: input1: optionlength: 2prevObject: S.fn.init [document][[Prototype]]: Object(0)
 
 $(':checked')[0]
-<input type=​"checkbox" value=​"222" checked>​
+<input type="checkbox" value="222" checked>
 
 $(':checked')[1]
-<option value selected>​333​</option>​   slot 
+<option value selected>333</option>   slot 
 
 $(':selected') #它不会，只拿selected
-S.fn.init [option, prevObject: S.fn.init(1)]
+S.fn.init [option, prevObject: S.fn.init(1)]
 
 $(':selected')[0]
-<option value selected>​333​</option>​   slot 
+<option value selected>333</option>   slot 
 
 $('input:selected') #自己加一个限制条件
-S.fn.init [prevObject: S.fn.init(1)]
+S.fn.init [prevObject: S.fn.init(1)]
 ```
 
 ##### 筛选器方法
@@ -253,7 +253,7 @@ $('#d3').parents()  #所有父标签
 
               
 $('#d2').children()#儿子
-S.fn.init(3) [span, p, span, prevObject: S.fn.init(1)]
+S.fn.init(3) [span, p, span, prevObject: S.fn.init(1)]
               
 $('#d2').siblings()#同级别上下所有
 
@@ -350,13 +350,13 @@ $('div').text()
 $('div').html()
 '\n       <p> 独步江湖，东方不败</p>\n    '
 $('div').text('人生苦短，我学Python')
-S.fn.init [div, prevObject: S.fn.init(1)]
+S.fn.init [div, prevObject: S.fn.init(1)]
 $('div').html('人生路，冷冷的夜光')
-S.fn.init [div, prevObject: S.fn.init(1)]
+S.fn.init [div, prevObject: S.fn.init(1)]
 $('div').text('<h1>人生苦短，我学Python</h1>')
-S.fn.init [div, prevObject: S.fn.init(1)]
+S.fn.init [div, prevObject: S.fn.init(1)]
 $('div').html('<h1>人生苦短，我学Python</h1>')
-S.fn.init [div, prevObject: S.fn.init(1)]
+S.fn.init [div, prevObject: S.fn.init(1)]
 ```
 
 
@@ -371,7 +371,7 @@ js         jQuery
 $('#d1').val()
 'vfdghjmhnbv'
 $('#d1').val('520')  #括号内不加参数是获取，加了参数是设置
-S.fn.init [input#d1]
+S.fn.init [input#d1]
 $('#d2')[0].files[0]  #两个对象之间的转换
            
 $(':checkbox').val(666)#所有的value值都改变成666
@@ -412,7 +412,7 @@ $pEle.removeAttr('password','456666')
 $('#i2').prop('checked')
 true
 $('#i3').prop('checked',true)
-S.fn.init [input#i3]
+S.fn.init [input#i3]
 ```
 
 * 文档处理
@@ -438,7 +438,7 @@ $('#d1').prepend($pELe)  #内部头部追加
 $pELe.prependTo($('#d1'))
 
 $('#d2').after($pELe)  #放在某个标签后面
-S.fn.init {}[[Prototype]]: Object(0)
+S.fn.init {}[[Prototype]]: Object(0)
 $pELe.insertAfter($('#d2'))
 
 $('#d1').before($pELe)#放在某个标签前面
@@ -936,28 +936,28 @@ VM196:1 7
 VM196:1 8
 
 $('div').each(function(index,obj{console.log(index,obj)})
-VM262:1 0 <div>​1​</div>​
-VM262:1 1 <div>​2​</div>​
-VM262:1 2 <div>​3​</div>​
-VM262:1 3 <div>​4​</div>​
-VM262:1 4 <div>​5​</div>​
-VM262:1 5 <div>​6​</div>​
-VM262:1 6 <div>​7​</div>​
-VM262:1 7 <div>​8​</div>​
-VM262:1 8 <div>​9​</div>​
-S.fn.init(9) [div, div, div, div, div, div, div, div, div, prevObject: S.fn.init(1)]
+VM262:1 0 <div>1</div>
+VM262:1 1 <div>2</div>
+VM262:1 2 <div>3</div>
+VM262:1 3 <div>4</div>
+VM262:1 4 <div>5</div>
+VM262:1 5 <div>6</div>
+VM262:1 6 <div>7</div>
+VM262:1 7 <div>8</div>
+VM262:1 8 <div>9</div>
+S.fn.init(9) [div, div, div, div, div, div, div, div, div, prevObject: S.fn.init(1)]
 #第二种方式              
 $.each([111,222,333,444],function(index,obj){console.log(index,obj)})
 VM529:1 0 111
 VM529:1 1 222
 VM529:1 2 333
 VM529:1 3 444
-(4) [111, 222, 333, 444]
+(4) [111, 222, 333, 444]
   """ 有了each后就不用写for循环，更方便""" 
 #data()    
 """ 能够让标签帮我们存储数据，并且用户肉眼看不见   """
 $('div').data('info','回来吧，我原谅你了!')
-S.fn.init(10) [div#d1, div, div, div, div, div, div, div, div, div, prevObject: S.fn.init(1)]
+S.fn.init(10) [div#d1, div, div, div, div, div, div, div, div, div, prevObject: S.fn.init(1)]
                
 $('div').first().data('info')
 '回来吧，我原谅你了!'
@@ -966,9 +966,8 @@ $('div').last().data('info')
 '回来吧，我原谅你了!'
                
 $('div').first().removeData('info')
-S.fn.init [div#d1, prevObject: S.fn.init(10)]
+S.fn.init [div#d1, prevObject: S.fn.init(10)]
            
 $('div').first().data('info')
 undefined              
 ```
-

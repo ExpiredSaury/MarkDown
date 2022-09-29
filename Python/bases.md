@@ -2116,7 +2116,9 @@ changGlobal()
 
 #### 4.7、引用
 
-* c
+* Python中所有值的传递，传递都不是值本身，而是值的引用，即内存地址
+* 在Python中，值是靠引用来传递来的，可以用id()查看一个对象的引用是否相同.
+* id是值保存在内存中那块内存地址的标识.
 * **不可变类型**
 
 ```python
@@ -2154,7 +2156,7 @@ print('外部变量对象{}'.format(li))
 
 #### 4.8、函数对象和闭包
 
-##### **函数对象**
+**函数对象**
 
 可以把函数当成变量去用
 
@@ -2321,13 +2323,14 @@ while True:
 
 ---
 
-##### **闭包函数**
-
-> 1. 嵌套函数
->
+**闭包函数**
+> 1. 嵌套函数	
 > 2. 内部函数引用了外部函数的变量
->
-> 3. 返回值是内部函数
+> 	3. 返回值是内部函数
+
+
+
+
 
 闭包函数=名称空间与作用域+函数嵌套+函数对象
 
@@ -2341,7 +2344,7 @@ def f1():
         pass
 ```
 
-* ''包''函数指的是该函数对外层函数作用域名字的引用（不是对全局作用域） 6
+* ''包''函数指的是该函数对外层函数作用域名字的引用（不是对全局作用域）
 
 ```python
 """闭包函数:名称空间与作用域+函数嵌套"""
@@ -2410,11 +2413,11 @@ foo()
 
 **（2）为何要用装饰器**
 
-==开放封闭原则==
+开放封闭原则
 
-**开放**：指的是对扩展功能是开放的
+开放：指的是对扩展功能是开放的
 
-**封闭**：指的是对修改源代码是封闭的
+封闭：指的是对修改源代码是封闭的
 
 **装饰器就是在不修改被装饰器对象的源代码以及调用方式的前提下，为被装饰对象添加新功能** 
 
@@ -3359,7 +3362,7 @@ def f1():
 f1()
 ```
 
-**递归 : 自己调用自己**
+**递归  自己调用自己**
 **必须有一个明确的结束条件**
 
 * 阶乘/通过递归实现
@@ -4007,25 +4010,16 @@ class Animal:
 dog =Animal('旺财','黑色')
 print(dog)
 
-"""结果如下"""
---------new-------
---------init-------
-我的名字是旺财,我的颜色为黑色
 
-
-
-```
-
-
-```python
-"""__new__和__init__函数区别"""
+'''
+__new__和__init__函数区别
 __new__类的实例化方法：必须返回该实例 否则对象就创建不成功
 __init__用来做数据属性的初始化工作，也可以认为是实例的构造方法，接收类的实例 self 并对其进行构造
 __new__至少有一个参数是cls是代表要实例化的类，此参数在实例化时由Python解释器自动操作
 __new__函数执行要早于__init__函数
+'''
+
 ```
-
-
 
 ```PYTHON
 class People:
@@ -4375,7 +4369,7 @@ Foo.f1
 
 1. 菱形问题,,或称钻石问题，有时候也被称为“死亡钻石”
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/714ab23f7ab9402ea8656ccf6845f3b6.png)
+![在这里插入图片描述](E:\MarkDown\markdown\imgs\714ab23f7ab9402ea8656ccf6845f3b6.png)
 
 
 ```python
@@ -4957,7 +4951,7 @@ lili
 
 #### 6.19、`__new__`方法
 
-![image.png](https://img-blog.csdnimg.cn/img_convert/9f8069f3e7366eb43814f43223bcba50.png)
+![image.png](E:\MarkDown\markdown\imgs\9f8069f3e7366eb43814f43223bcba50.png)
 
 * **new方法在init方法之前执行**
 
@@ -4977,9 +4971,7 @@ a = A()  # 实例化的过程会自动调用__new__方法取创建实例
 
 **运行结果如下：**
 
-![image.png](https://img-blog.csdnimg.cn/img_convert/deb37b1e90d00c698fbd909123142976.png)
-
-
+![image.png](E:\MarkDown\markdown\imgs\deb37b1e90d00c698fbd909123142976.png)
 
 #### 6.20、单例模式
 
@@ -5869,4 +5861,4 @@ print(res.group())
 
 ```xxxxxxxxxx23 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-4923python
 ```xxxxxxxxxx24 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-492324```xxxxxxxxxx23 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-4923pythonpython
-```xxxxxxxxxx25 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-492324```xxxxxxxxxx23 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-4923python25```xxxxxxxxxx24 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-492324```xxxxxxxxxx23 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-4923pythonpythonpython
+```xxxxxxxxxx26 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-492324```xxxxxxxxxx23 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-4923python25```xxxxxxxxxx24 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-492324```xxxxxxxxxx23 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-4923pythonpython26```xxxxxxxxxx25 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-492324```xxxxxxxxxx23 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-4923python25```xxxxxxxxxx24 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-492324```xxxxxxxxxx23 1'''2python 中默认是贪婪的，总是贪婪的匹配尽可能多的字符，非贪婪相反，总是尝试匹配尽可能少的字符3在  ” * ？ + {m,n}"后面加上 ? 使贪婪变成非贪婪45'''6#贪婪7import  re8res=re.match('[\d]{6,9}','111222333')9print(res.group())101112#非贪婪13res=re.match('[\d]{6,9}?','111222333')14print(res.group())151617content='asdfbsdbdsabsd'18# pattern=re.compile('a.*b')# 贪婪19pattern=re.compile('a.*?b')#非贪婪20res=pattern.search(content)21print(res.group())22#0710-4923pythonpythonpythonpython

@@ -1,14 +1,18 @@
+````bash
 ### 基本理论
 
 ### Git本地有三个工作区域：
 
-***(1)工作目录** (Working Direct**ory)
+```python
 
-***(2)*暂存区**(Stage/Index)**
+***(1)工作目录 (Working Directory)
 
-***(3)资源库(Repository)***
+***(2)暂存区(Stage/Index)
 
-**(4)如果在远程的git 仓库(Remote Directory)**就可以分为四个工作区域，文件在这四个区域之间的转换关系如下：
+***(3)资源库(Repository)
+
+***(4)如果在远程的git 仓库(Remote Directory),就可以分为四个工作区域，文件在这四个区域之间的转换关系如下：
+```
 
 * Workspace:工作区，就是平时存放代码的地方
 * Index/Stage：暂存区 ，用于临时存放你的改动，事实上它只是一个文件，保存即将提交到文件列表信息
@@ -69,21 +73,23 @@ git commit -m "消息内容"  #提交暂存区中的内容到本地仓库  -m �
 ### 码云
 
 1. 注册登录码云，完善个人信息
+
 2. 设置本机绑定的SSH公钥，实现免密码登录！
 
    ```bash
    #进入C:\users\Administrator\.ssh目录
    #生成公钥
-   ssh-keygen -t rsa #一路按回车就可以
-   
+   ssh-keygen -t rsa
    ```
+
 3. 将公钥信息public key 添加到码云账户中即可
+
 4. 使用码云创建自己的仓库
 
 ### IDEA中集成Git
 
 1. 新建项目，绑定git
-2. 修改文件，使用IDEA操作Gitpu
+2. 修改文件，使用IDEA操作Git
 
    1. 添加到暂存区
    2. commit
@@ -103,16 +109,6 @@ $ git config --global user.name "<用户名>"
 $ git config --global user.email "<电子邮件>"
 ```
 
-修改git 提交缓存大小
-
-```bash
-$ git config --global http.postBuffer 524288000
- 
-$ git config https.postBuffer 524288000
-```
-
-
-
 以下命令能让Git以彩色显示。
 
 ```
@@ -126,7 +122,6 @@ $ git config --global alias.co checkout
 ```
 
 ```
-
 如果在Windows使用命令行 (Git Bash), 含非ASCII字符的文件名会显示为 "\346\226\260\350\246..."。若设定如下，就可以让含非ASCII字符的文件名正确显示了。
 
 $ git config --global core.quotepath off
@@ -218,7 +213,6 @@ $ git pull <repository> <refspec>...
 
 ```bash
 
-
 #建立本次仓库 
 git init 
 #文件添加到缓存区域
@@ -231,4 +225,5 @@ git init
  git pull --rebase origin master
 #发送 
 git push origin master
-```
+```xxxxxxxxxx14 123#建立本次仓库 4git init 5#文件添加到缓存区域6 git add file file7#提交到本地仓库8 git commit -m "描述信息"9#配置远程仓库地址10 git remote add origin [仓库地址]11#拉取12 git pull --rebase origin master13#发送 14git push origin masterbash
+````
