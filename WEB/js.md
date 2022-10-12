@@ -1,4 +1,6 @@
-@[TOC](文章目录)
+[TOC]
+
+
 
 ---
 
@@ -339,9 +341,105 @@ var str = '今年'+ age + '岁了';
 alert(str);
 ```
 
+* **模板字符串**
+
+```js
+# 模板字符串不仅可以定义多行文本还可以实现格式化字符串操作
+var name = 'zhao'
+var age = 18
+var res= `
+	my name is ${name} my age is ${age}
+`
+res
+```
+
+| 方法                      | 说明               |
+| ------------------------- | ------------------ |
+| .length                   | 返回长度           |
+| .trim()                   | 移除空白           |
+| .trimLeft()               | 移除左边空白       |
+| .trimRight()              | 移除右边空白       |
+| .charAt(n)                | 返回第n个字符      |
+| .concat(value,......)     | 拼接               |
+| .indexOf(substring,start) | 子序列位置         |
+| .substring(from,to)       | 根据索引获取子序列 |
+| .slice(start,end)         | 切片               |
+| .toLowerCase()            | 小写               |
+| .toUpperCase()            | 大写               |
+| .split(dilimiter,limit)   | 分割               |
+
+```js
+var name = 'zhaoDSB'
+undefined
+name.length
+7
+var name1 = '  zhaoDSB   '
+undefined
+name1.trim()   //不能加括号指定去除的内容
+'zhaoDSB'
+name1.trimLeft()
+'zhaoDSB   '
+name1.trimRight()
+'  zhaoDSB'
+var name2 = '$$jason$$'
+undefined
+name.charAt(3)
+'o'
+name.indexOf('a')
+2
+name.substring(0,4)
+'zhao'
+name.slice(0,5)
+'zhaoD'
+name.slice(0,4)
+'zhao'
+name.substring(0,-1)  //不识别负数
+''
+name.slice(0,-1);   //推荐使用slice
+'zhaoDS'
+var demo = 'dlaDLjLLJUB666dsER'
+undefined
+demo.toLowerCase()
+'dladljlljub666dser'
+demo.toUpperCase()
+'DLADLJLLJUB666DSER'
+var test = 'tank|zhao|liao|'
+undefined
+name.split('|')
+['zhaoDSB']
+test.split('|',10)   //第二个参数不是限制切割字符的个数，而是获取切割之后元素的个数
+(4) ['tank', 'zhao', 'liao', '']
+test.split('|')
+(4) ['tank', 'zhao', 'liao', '']
+test.concat(name)   //js是弱类型语言，内部会转成相同的数据类型做操作
+'tank|zhao|liao|zhaoDSB'
+
+
+
+//python代码
+l=[1,2,3,4]
+res=('|').join(1)  //直接报错  列表里的数据必须是字符串类型
+print(res)
+```
+
+
+
 #### 布尔型Boolean
 
 布尔类型只有true 和 false，其中true表示真（对）， false表示假（错）
+
+```python
+"""
+1.python中布尔值是首字母大写
+    True
+    False
+2. js中布尔值是全小写
+	true
+	false
+# 布尔值是flase的有:
+	空字符串 、0、null、undefined、Nan
+"""
+```
 
 #### Undefined和Null
 
@@ -351,11 +449,13 @@ alert(str);
 
 #### typeof检测数据类型
 
-typeof用来获取变量的数liangvar num = 10;
+typeof用来获取变量的数据类型
+
+
 
 #### 字面量
 
-字面量是在源代码中一个固定值的表示法，通俗讲，就是字面量如何让表达这个值
+字面量（literal）是用于表达源代码中一个固定值的表示法，通俗讲，就是字面量如何让表达这个值
 
 * 数字字面量：8，9，10
 * 字符串字面量：'html','前端'
@@ -494,15 +594,15 @@ console.log(f)//22
 
 3. **比较运算符**
 
-| 运算符名称 | 说明                         | 案例      | 结果  |
-| ---------- | ---------------------------- | --------- | ----- |
-| >          | 大于                         | 1>2       | false |
-| &#x3c;     | 小于                         | 1&#x3c;2  | true  |
-| >=         | 大于等于                     | 2>=2      | true  |
-| &#x3c;=    | 小于等于                     | 3&#x3c;=2 | false |
-| ==         | 判断等号(会转型)             | 37==37    | true  |
-| !=         | 不等号                       | 32!=32    | false |
-| ===  !===  | 全等，要求值和数据类型都一致 | 37==="37" | false |
+| 运算符名称    | 说明                         | 案例      | 结果  |
+| ------------- | ---------------------------- | --------- | ----- |
+| >             | 大于                         | 1>2       | false |
+| &#x3c;        | 小于                         | 1&#x3c;2  | true  |
+| >=            | 大于等于                     | 2>=2      | true  |
+| &#x3c;=       | 小于等于                     | 3&#x3c;=2 | false |
+| ==            | 判断等号(会转型)             | 37==37    | true  |
+| !=            | 不等号                       | 32!=32    | false |
+| `===` ` !===` | 全等，要求值和数据类型都一致 | 37==="37" | false |
 
 `==`会默认转换数据类型,会把字符串转为整型
 
@@ -558,7 +658,7 @@ console.log(18=='18'); //true
 
 #### 分支流程控制if语法结构
 
-单分支
+* 单分支
 
 条件为真，则执行语句，否则什么也不做
 
@@ -569,7 +669,7 @@ if (表达式){
 
 ```
 
-双分支
+* 双分支
 
 条件为真执行语句1，否则执行语句2
 
@@ -754,7 +854,7 @@ for(初始化变量;条件表达式;操作表达式){
 操作表达式：就是每次循环**最后的执行代码**，经常用于我们计数器变量**进行的递增或递减**
 
 ```js
-for(var i =1;i<=100;i++){
+for(let i =1;i<=100;i++){
 	console.log(i);
 }
 ```
@@ -1232,6 +1332,104 @@ console.log(newArr);
         }
 ```
 
+```python
+var l =[1,2,3,4,5,6,7,8,10]
+undefined
+l.length
+9
+l.push(9)   //尾部添加元素
+10
+l.pop()   //删除最后一个值
+9
+l.unshift(123) //头部插入元素
+10
+l
+(10) [123, 1, 2, 3, 4, 5, 6, 7, 8, 10]
+l.shift()     //头部移除元素
+123
+l
+(9) [1, 2, 3, 4, 5, 6, 7, 8, 10]
+l.slice(0,4)   //切片
+(4) [1, 2, 3, 4]
+l.reverse()    //反转
+(9) [10, 8, 7, 6, 5, 4, 3, 2, 1]
+l.join('&')    //拼接，  跟python正好相反
+'10&8&7&6&5&4&3&2&1'
+l
+(9) [10, 8, 7, 6, 5, 4, 3, 2, 1]
+var j=l.join('^')
+undefined
+j
+'10^8^7^6^5^4^3^2^1'
+l.concat([12121,4545,4551,511,21313,])  //连接数组，跟python里的extend相似
+(14) [10, 8, 7, 6, 5, 4, 3, 2, 1, 12121, 4545, 4551, 511, 21313]
+l
+(9) [10, 8, 7, 6, 5, 4, 3, 2, 1]
+l.sort()   //排序
+(9) [1, 10, 2, 3, 4, 5, 6, 7, 8]
+```
+
+```python
+var ll=[111,222,333,444,555]
+undefined
+ll.forEach(function(value){console.log (value)},ll)
+VM933:1 111   //一个参数就是数组里面每一个元素对象
+VM933:1 222 
+VM933:1 333
+VM933:1 444
+VM933:1 555
+undefined
+ll.forEach(function(value,index){console.log(value,index)},ll)
+VM1084:1 111 0   //两个参数就是  元素+元素索引
+VM1084:1 222 1
+VM1084:1 333 2
+VM1084:1 444 3
+VM1084:1 555 4
+undefined
+ll.forEach(function(value,index,arr){console.log(value,index,arr)},ll)  //三个参数就是 元素+元素索引+元素的数据来源
+VM1189:1 111 0 (5) [111, 222, 333, 444, 555]
+VM1189:1 222 1 (5) [111, 222, 333, 444, 555]
+VM1189:1 333 2 (5) [111, 222, 333, 444, 555]
+VM1189:1 444 3 (5) [111, 222, 333, 444, 555]
+VM1189:1 555 4 (5) [111, 222, 333, 444, 555]
+```
+
+```python
+ll.splice(0,3)  //两个参数，第一个是起始位置，第二个参数是删除的个数
+(3) [111, 222, 333]
+ll
+(2) [444, 555]
+ll.splice(0,1,777)   //先删除，后增加
+[444]
+ll
+(2) [777, 555]
+ll.splice(0,1,[111,222,333,444])
+[777]
+ll
+(2) [Array(4), 555]0: (4) [111, 222, 333, 444]1: 555length: 2[[Prototype]]: Array(0)
+```
+
+```python
+var ll =[11,22,33,44,55,66]
+undefined
+ll
+(6) [11, 22, 33, 44, 55, 66]
+ll.map(function(value){console.log(value)},ll)
+VM1785:1 11
+VM1785:1 22
+VM1785:1 33
+VM1785:1 44
+VM1785:1 55
+VM1785:1 66
+(6) [undefined, undefined, undefined, undefined, undefined, undefined]
+ll.map(function(value,indexedDB){return value*2},ll)
+(6) [22, 44, 66, 88, 110, 132]
+ll.map(function(value,indexed,arr){return value*2},ll)
+(6) [22, 44, 66, 88, 110, 132]
+```
+
+
+
 ### 函数
 
 函数就是一段被重复执行调用的代码块。
@@ -1258,6 +1456,7 @@ var 变量名=function(){
 ```
 
 2. **调用函数**
+   
    ```
    函数名()  //通过调用函数名来执行函数体代码
    ```
