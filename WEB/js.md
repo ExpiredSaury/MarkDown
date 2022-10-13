@@ -492,7 +492,7 @@ typeof用来获取变量的数据类型
         console.log('123'-'120');
 ```
 
-3. 转换为布尔类型
+3. **转换为布尔类型**
 
 | 方式          | 说明                 | 案例             |
 | ------------- | -------------------- | ---------------- |
@@ -750,7 +750,7 @@ if(表达式1){
 
 由三元运算符组成的式子
 
-**语法结构**：条件表达式 ? 表达式1 : 表达式2
+**语法结构**：`条件表达式 ? 表达式1 : 表达式2`
 
 **执行思路**：如果条件表达式为真，则返回表达式1，如果表达式结果为假，则返回表达式2
 
@@ -828,7 +828,7 @@ switch( fruit){
 }
 ```
 
-switch和if else if 区别：
+* **switch和if else if 区别：**
 
 ![image.png](E:\MarkDown\markdown\imgs\c5abc8fc91697aa89ea3d09f593ba91b.png)
 
@@ -1465,7 +1465,7 @@ var 变量名=function(){
 
 注意：声明函数本省不会执行代码。只有调用的时候才会执行函数体的代码
 
-3. 函数的封装
+3. **函数的封装**
 
 * 函数的封装就是把一个或者多个功能通过**函数的方式封装起来**，对外只提供一个简单的的函数名
 
@@ -1484,7 +1484,7 @@ var 变量名=function(){
 
 #### 函数的参数
 
-在声明函数时，可以在函数名称后面的小括号中添加一些参数，这些参数称为形参，而在点用函数时，同样也需要传递响应的参数，被称为实参
+在声明函数时，可以在函数名称后面的小括号中添加一些参数，这些参数称为形参，而在点用函数时，同样也需要传递响应的参数，被称为实参。
 
 ```js
 function 函数名(形参1,形参2){
@@ -1572,7 +1572,34 @@ function getMax(){
         console.log(getMax(101215,15141,11));
 ```
 
-##### 调用另一个函数
+#### 匿名函数
+
+> 没有名字的函数
+
+```js
+var res=function(){
+    console.log('啊哈哈')
+}
+```
+
+#### 箭头函数
+
+```js
+var func1 =v => v;//箭头左边的是形参，右边的是返回值
+等价于
+var func1 =function(v){
+    return v
+}
+
+
+var func2 =(arg1,arg2) => arg1+arg2
+等价于
+var func1 =function(arg1,arg2){
+    return arg1+arg2
+}
+```
+
+#### 调用另一个函数
 
 ```js
 function fn1(){
@@ -1608,7 +1635,9 @@ function backDay() {
         }
 ```
 
-### 作用域
+#### 作用域
+
+> 跟Python一样
 
 就是变量在某个范围内起作用，目的是为了提高程序的可读性，最重要的是减少冲突
 
@@ -1646,6 +1675,35 @@ function fun(){
 }
 fun();
 ```
+
+```js
+var city ='Beijing';
+function Bar(){
+    console.log(city);
+}
+function f(){
+    var city='ShanHai';
+    return Bar;
+}
+var res=f();
+res();    //Beijing
+```
+
+```js
+//闭包
+var city="Beijing";
+function f(){
+    var city="ShanHai";
+    function inner(){
+        console.log(city);
+    }
+    return inner;
+}
+var res=f();
+res();
+```
+
+
 
 ### 预解析
 
@@ -1784,7 +1842,7 @@ console.log(a);//报错
 
 ##### 创建对象三种方式
 
-1. 利用字面量创建对象
+1. ==利用字面量创建对象==
 
 **对象字面量**：就是花括号{}里面包含了表达这个具体事物（对象）的属性和方法
 
@@ -1815,7 +1873,7 @@ console.log(obj['name']);
 obj.myfun();
 ```
 
-2. 利用new Object()创建对象
+2. ==利用new Object()创建对象==
 
 ```js
 var obj=new Object()  //创建了一个空对象
@@ -1832,7 +1890,7 @@ console.log(obj.gender);
 console.log(obj.myfun);
 ```
 
-3. 利用构造函数来创建对象
+3. ==利用构造函数来创建对象==
 
 构造函数：是一种特殊的函数，主要是用来初始化对象，即为对象成员变量赋初始值，它总与nuew运算符一起使用，我们可以把对象中一些公共属性和方法抽取出来，封装到这个函数里面
 
@@ -1966,7 +2024,7 @@ for (变量 in  对象){
 
 ```
 
-Math.random()
+
 
 [Math.random()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Math/random)
 
@@ -1986,6 +2044,21 @@ function getRandom() {
 
 ![image.png](E:\MarkDown\markdown\imgs\1f02494c26fc43d56c9ad47a0d251c23.png)
 
+```python
+# 时间对象具体方法
+let d6=new Date();			
+d6.getDate()  			#获取日期
+d6.getDay()				#获取星期
+d6.getMonth()			#获取月份（0-11）
+d6.getFullYear()		#获取完成年份
+d6.getHours()			#获取小时
+d6.getMinutes()			#获取分钟
+d6.getSeconds()         #获取秒
+d6.getMilliseconds()    #获取毫秒
+d6.getTime()            #时间戳
+```
+
+
 
 #### JSON对象
 
@@ -1996,8 +2069,8 @@ dumps 序列化
 loads 反序列化
 
 
-在js中也有序列化啊和反序列化
-JSON.strinfify()                  dumps
+在js中也有序列化和反序列化
+JSON.stringify()                  dumps
 JSON.parse()                      loads
 """
 let d1={'name':'zhao','age':18}
@@ -2007,13 +2080,36 @@ JSON.parse(res)
 {name: 'zhao', age: 18}
 ```
 
+![image-20221013090135443](E:\MarkDown\markdown\imgs\image-20221013090135443.png)
+
+```python
+Supports the following objects and types by default:
+    +-------------------+---------------+
+    | Python            | JSON          |
+    +===================+===============+
+    | dict              | object        |
+    +-------------------+---------------+
+    | list, tuple       | array         |
+    +-------------------+---------------+
+    | str               | string        |
+    +-------------------+---------------+
+    | int, float        | number        |
+    +-------------------+---------------+
+    | True              | true          |
+    +-------------------+---------------+
+    | False             | false         |
+    +-------------------+---------------+
+    | None              | null          |
+    +-------------------+---------------+
+```
+
 #### RegExp对象
 
 ```python
 """
 python中使用正则，需要借助re模块
 Js中需要创建正则对象
-
+"""
 #第一种，有点麻烦
 let reg1=new RegExp('^[a-zA-Z][a-zA-Z0-9]{5,11}')
 #第二种
@@ -2025,11 +2121,19 @@ reg2.test('zhangang')
 #获取字符串里的字面
 let ss='zhaosong so  sosfaf asn'
 ss.match(/s/)  #拿到第一个停止
+['s', index: 4, input: 'zhaosong so  sosfaf asn', groups: undefined]
 ss.match(/s/g) #全局匹配，g就代表全局模式
-"""
+(5) ['s', 's', 's', 's', 's']
+
+let reg5 =/undefined/
+undefined
+reg5.test('zhao')
+false
+reg5.test()
+true
 ```
 
-### BOM与DOM操作
+### BOM与DOM操作 
 
 ```python
 """
@@ -2062,21 +2166,23 @@ window.close()  关闭当前页面
 
 ```python
 window.navigator.appName
-'Netscape'
+'Netscape'  #网景
 
 window.navigator.appVersion
 '5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'
 window.navigator.userAgent  #用来标识当前是否是一个浏览器.
-
+'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36'
 """
 防爬措施
 1. 校验当前请求的发起者是否是一个浏览器
 爬虫：在代码中加上user-agent配置即可， 就可以UA伪装
 """
 
-window.navigator.platform
+window.navigator.platform  #平台
 'Win32'
 
+# 如果时window的子对象，那么window可以省略不写
+navigator.appVersion
 ```
 
 #### history对象
@@ -2099,19 +2205,25 @@ window.location.reload() #刷新页面（浏览器左上方的刷新小圆圈）
 #### 弹出框
 
 * 警告框
+
+  ```js
+  alert('你不要过来啊')
+  ```
 * 确认框
+
+  ```js
+  comfirm('你确定吗')  #点击取消，控制台显示false，点击确定，控制台显示true
+  ```
 * 提示框
 
 ```python
-alert('你不要过来啊')
-comfirm('你确定吗')  #点击取消，控制台显示false，点击确定，控制台显示true
-prompt('你好吗')#控制台显示输入的内容
+prompt('请输入')#控制台显示输入的内容
 ```
 
 #### 计时器相关
 
-* 过几秒钟后触发 setTimeout()
-* 每隔一段时间触发一次（循环）setInterval()
+* 过几秒钟后触发` setTimeout()`
+* 每隔一段时间触发一次（循环）`setInterval()`
 
 ```js
  <script>
@@ -2119,7 +2231,8 @@ prompt('你好吗')#控制台显示输入的内容
             alert(123)
         }
         let t = setTimeout(fun1,3000)  //毫秒为单位，3秒后自动执行fun1函数
-        clearTimeout(t)  //取消定时任务，如果要清楚定时任务，需要提前用变量指代定时任务
+        clearTimeout(t)  //取消定时任务，如果要清除定时任务，需要提前用变量指代定时任务
+
 
         function fun2(){
             alert(123)
@@ -2176,7 +2289,7 @@ document.getElementsByTagName('div')
 let divEle =document.getElementsByTagName('div')[0]
 divEle
 """
-当用变量指代标签对象的时候，一般情况下携程xxxEle
+当用变量指代标签对象的时候，一般情况下写成xxxEle
 """
 ```
 
@@ -2197,13 +2310,13 @@ let divEle =document.getElementById('d2')
 undefined
 divEle.children #获取所有的子标签
 
-divEle.children[0]
+divEle.children[0]   //获取第一个子标签
 <div>div1>div</div>
 divEle.firstChild
 "div1 "
-divEle.firstElementChild 
+divEle.firstElementChild  //第一个子标签
 <div>div1>div</div>
-divEle.lastElementChild
+divEle.lastElementChild   //最后一个子标签
 <p>div1>p2</p>
 divEle.nextElementSibling  #同级别下面第一个
 <div>div1div2</div>
@@ -2223,13 +2336,13 @@ divEle.previousElementSibling  #同级别上面第一个
 
 ```js
 let imgEle=document.createElement('img')  #创建标签
-undefined
-imgEle
-<img>
+
 imgEle.src='../tou.jpg'   #给标签设置默认的属性
 '../tou.jpg'
+
 imgEle.username='zhao'#自定义的属性没办法以点的方式设置
 'zhao'
+
 imgEle.setAttribute('name','zhao')#既可以设置自定义的属性，也可设置默认的属性
 undefined
 imgEle
@@ -2265,7 +2378,7 @@ let divEle=document.getElementById('d1')
 undefined
 let pEle=document.getElementById('d2')
 undefined
-divEle.insertBefore(aELe,pEle)  #添加标签内容指定位置添加
+divEle.insertBefore(aELe,pEle)  #添加标签内容指定位置添加（a标签添加到div内部，p标签之前）
 <a href="http:www.baidu.com/">别摸我</a>
 ```
 
@@ -2275,20 +2388,22 @@ divEle.insertBefore(aELe,pEle)  #添加标签内容指定位置添加
 appendChild()
 removeChild()
 replaceChild()
+
 setAttribute() 设置属性
 getAttribute() 获取属性
 removeAttrive()  移除属性
 
 
-#innerText与innerHTML
+# innerText与innerHTML
+
 divEle.innerText         #获取到标签内部所有的文本
 '别摸我\n\ndiv>p\n\ndiv>span'
 divEle.innerHTML       #内部文本和标签都拿到
 '\n        <a href="http:www.baidu.com/">别摸我</a><p id="d2">div>p</p>\n        <span>div>span</span>\n    '
 divEle.innerText='hahahah'
 'hahahah'
-divEle.innerHTML='傻逼'
-'傻逼'
+divEle.innerHTML='sb'
+'sb'
 divEle.innerText='<h1>二蛋</h1>'  #不识别HTML标签
 '<h1>二蛋</h1>'
 divEle.innerHTML='<h1>二蛋</h1>'   #识别HTML标签
@@ -2308,7 +2423,7 @@ selectEle.value
 '333
 let inputEle = document.getElementById('d1')
 inputEle.value
-""
+"sxcd"
 
 //如何上传用户输入的文件
 let fileEle =document.getElementById('d3')
@@ -2361,6 +2476,7 @@ pELe.style.backgroundColor='#eee'
 '#eee'
 pELe.style.border='3px solid red'
 '3px solid red'
+
 //会将css中横杠或者下划线去掉，然后将后面的单词变成大写
 //background-color变成backgroundColor
 ```
@@ -2373,18 +2489,19 @@ pELe.style.border='3px solid red'
 """
 //绑定事件的两种方式
 <button onclick="fun1()">点击</button>
-    <button id="d1">点击</button>
-    <script>
-        //第一种绑定事件方式
-        function fun1(){
-            alert(1231)
-        }
-        //第二种
-        let btnEle =document.getElementById('d1');
-        btnEle.onclick=function(){
-            alert(222)
-        }
-    </script>
+<button id="d1">点击</button>
+
+<script>
+    //第一种绑定事件方式
+    function fun1(){
+    alert(1231)
+}
+//第二种
+let btnEle =document.getElementById('d1');
+btnEle.onclick=function(){
+    alert(222)
+}
+</script>
 
 //script标签既可以放在head内，也可以放在body最底部,一般放在body最底部
 
