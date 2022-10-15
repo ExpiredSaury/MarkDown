@@ -2606,7 +2606,7 @@ btnEle.onclick=function(){
         startBtnEle.onclick = function () {
             //限制定时器只能开一个
             if(!t){
-                t=setInterval(showTime, 1000)  //每点击一次就会开设一个定时器，而t只指代最会一个
+                t=setInterval(showTime, 1000)  //每点击一次就会开设一个定时器，而t只指代最后一个
             }
         }
         endtBtnEle.onclick = function () {

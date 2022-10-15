@@ -1,16 +1,32 @@
+[toc]
+
+
+
 该框架已经写好了很多样式，有需要只需要下载对应的文件，直接cv即可
 
 在使用bootstrap的时候，所有页面样式都只需要通过class来调节
 
-https://v3.bootcss.com/推荐使用v3版本
+## 下载
 
-**注意**
+[官网下载](https://v3.bootcss.com/)**推荐使用v3版本**
 
-bootstrap的js代码是依赖于jQUery的，意味着在使用Bootstrap的时候要导入jQuery
+![image-20221015173050904](E:\MarkDown\markdown\imgs\image-20221015173050904.png)
+
+**下载好的bootstrap-3.4.1-dist只需要保留下图的文件，其余可以删除**
+
+**fonts文件夹里的东西保持原样不动**
+
+![image-20221015173356383](E:\MarkDown\markdown\imgs\image-20221015173356383.png)
 
 
 
-#### 布局容器
+**注意:**
+
+==bootstrap的js代码是依赖于jQUery的，意味着在使用Bootstrap的时候要导入jQuery==
+
+## CSS样式
+
+### 布局容器
 
 [Bootstrap全局css样式](https://v3.bootcss.com/css/)
 
@@ -33,17 +49,34 @@ Bootstrap 需要为页面内容和栅格系统包裹一个 `.container` 容器�
 ```
 
 ```html
-<div class="container">
-    左右两侧有留白
-</div>
-<div class="container-fluid">
-    左右两侧没有留白
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!---<script src="../jQuery-3.6.0-min.js"></script>--->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js" ></script>
+    <style>
+        .c1{
+            background-color: red;
+            height: 100px;
+
+        }
+    </style>
+</head>
+<body>
+<div class="container c1"></div>
+<div class="container-fluid c1"></div>
+</body>
+</html>
+
 后续在使用Bootstrap做首页的时候，先写一个div class='container'
 ，然后再里面书写代码
 ```
 
-#### 栅格系统
+### 栅格系统
 
 栅格系统用于通过一系列的行（row）与列（column）的组合来创建页面布局，你的内容就可以放入这些创建好的布局中。下面就介绍一下 Bootstrap 栅格系统的工作原理：
 
@@ -110,20 +143,77 @@ Bootstrap 需要为页面内容和栅格系统包裹一个 `.container` 容器�
 </html>
 ```
 
-#### 栅格参数
+### 栅格参数
 
 ```python
+  手机		 平板		 桌面显示器     大屏幕
 .col-xs-	.col-sm-	.col-md-	.col-lg-
 #针对不同的显示器，bootstrap会自动选择对应的参数
-#如果想兼容所用显示器，就全部加上即可
 
-#如何再一行移动位置
-<div class=col-md-8 col-md-offset-2></div>
+#如果想兼容所有显示器，就全部加上即可
+
+#在一行移动位置
+<div class=col-md-8 col-md-offset-2></div> 从左往右移两位
 ```
 
 ### 排版
 
 bootstrap将所有原生的html标签文本字体统一设置成了肉眼可接受的样式
+
+* 标题
+  * ​	`<small>` 标签或赋予 `.small` 类的元素，可以用来标记副标题
+
+```html
+<h1>人生苦短，<small>我学Python</small></h1>
+```
+
+*  中心内容
+
+  通过添加 `.lead` 类可以让段落突出显示。
+
+```html
+<p class="lead">ldfjalk jlkJlkjlkdasjflkjasklfj</p>
+```
+
+* 高亮
+
+```html
+You can use the mark tag to <mark>highlight</mark> text.
+```
+
+* 插入文本
+  * 额外插入的文本使用 `<ins>` 标签。
+
+```html
+<s>This line of text is meant to be treated as no longer accurate.</s>
+```
+
+*  带下划线的文本
+  * 为文本添加下划线，使用 `<u>` 标签。
+
+```html
+<u>This line of text will render as underlined</u>
+```
+
+* 对齐
+
+```html
+<p class="text-left">Left aligned text.</p>
+<p class="text-center">Center aligned text.</p>
+<p class="text-right">Right aligned text.</p>
+<p class="text-justify">Justified text.</p>
+<p class="text-nowrap">No wrap text.</p>
+```
+
+* 改变大小写
+
+```html
+<p class="text-lowercase">Lowercased text.</p>
+<p class="text-uppercase">Uppercased text.</p>
+<p class="text-capitalize">Capitalized text.</p>
+```
+
+...........
 
 #### 基本缩略语
 
@@ -135,11 +225,43 @@ bootstrap将所有原生的html标签文本字体统一设置成了肉眼可接�
 
 #### 首字母缩略语
 
+* 为缩略语添加 `.initialism` 类，可以让 font-size 变得稍微小些。
+
 ```html
 <abbr title="HyperText Markup Language" class="initialism">HTML</abbr>
 ```
 
-#### 表格
+#### 地址
+
+* 让联系信息以最接近日常使用的格式呈现。在每行结尾添加 `<br>` 可以保留需要的样式。
+
+```html
+<address>
+  <strong>Twitter, Inc.</strong><br>
+  1355 Market Street, Suite 900<br>
+  San Francisco, CA 94103<br>
+  <abbr title="Phone">P:</abbr> (123) 456-7890
+</address>
+
+<address>
+  <strong>Full Name</strong><br>
+  <a href="mailto:#">first.last@example.com</a>
+</address>
+```
+
+#### 引用
+
+```html
+<blockquote>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+</blockquote>
+```
+
+#### ........
+
+[查看官网了解更多](https://v3.bootcss.com/css/#type-addresses)
+
+### 表格
 
 ```html
 <table class="table table-hover table-striped table-bordered">
@@ -149,7 +271,8 @@ bootstrap将所有原生的html标签文本字体统一设置成了肉眼可接�
     <td>123</td>
  </tr> 
     
-    <!-- On rows -->   可以为行或单元格设置颜色
+    
+   <!-- On rows -->   可以为行或单元格设置颜色
 <tr class="active">...</tr>
 <tr class="success">...</tr>
 <tr class="warning">...</tr>
@@ -157,7 +280,7 @@ bootstrap将所有原生的html标签文本字体统一设置成了肉眼可接�
 <tr class="info">...</tr>
 ```
 
-#### 表单
+### 表单
 
 ```html
   <div class="container">
@@ -191,7 +314,7 @@ checkbox和radio一般不会加form-control，直接用原生的即可
 <p class="has-error">username:<input type="text" class="form-control"></p>
 ```
 
-#### 按钮
+### 按钮
 
 ```html
 <a href="https://www.baidu.com" class="btn-primary">点我</a>
@@ -203,11 +326,27 @@ checkbox和radio一般不会加form-control，直接用原生的即可
 <button class="btn btn-default btn-lg">大按钮</button>
 <button class="btn btn-default btn-sm">小按钮</button>
 <button class="btn btn-default btn-xs">超小按钮</button>
-<input type="submit" class="btn btn-primary btn-block" >
-通过给按钮添加 .btn-block 类可以将其拉伸至父元素100%的宽度，而且按钮也变为了块级（block）元素。
 ```
 
-#### 图片
+* 通过给按钮添加 .btn-block 类可以将其拉伸至父元素100%的宽度，而且按钮也变为了块级（block）元素。
+
+```html
+<input type="submit" class="btn btn-primary btn-block" >
+
+<button type="button" class="btn btn-primary btn-lg btn-block">（块级元素）Block level button</button>
+<button type="button" class="btn btn-default btn-lg btn-block">（块级元素）Block level button</button>
+```
+
+* 按钮禁用状态
+
+```html
+<button type="button" class="btn btn-lg btn-primary" disabled="disabled">Primary button</button>
+<button type="button" class="btn btn-default btn-lg" disabled="disabled">Button</button>
+```
+
+
+
+### 图片形状
 
 ```html
 <img src="..." alt="..." class="img-rounded">
@@ -215,16 +354,48 @@ checkbox和radio一般不会加form-control，直接用原生的即可
 <img src="..." alt="..." class="img-thumbnail">
 ```
 
-#### 图标
+### ...........
 
-[font Awesome](http://www.fontawesome.com.cn/)
+## 组件
+
+### 图标
+
+[font Awesome中文网](http://www.fontawesome.com.cn/)
+
+![image-20221015191537470](E:\MarkDown\markdown\imgs\image-20221015191537470.png)
+
+![image-20221015191505149](E:\MarkDown\markdown\imgs\image-20221015191505149.png)
+
+![image-20221015191848615](E:\MarkDown\markdown\imgs\image-20221015191848615.png)
+
+​					选择想要的图标，点击去复制即可
+
+![image-20221015192119199](E:\MarkDown\markdown\imgs\image-20221015192119199.png)
+
+​					复制代码
+
+![image-20221015192344122](E:\MarkDown\markdown\imgs\image-20221015192344122.png)
+
+​					下载完后，在Pycharm中导入
+
+
+
+![image-20221015192048070](E:\MarkDown\markdown\imgs\image-20221015192048070.png)
+
+​					点击查看，得到更多的图标，直接复制使用
+
+![image-20221015192452215](E:\MarkDown\markdown\imgs\image-20221015192452215.png)
+
+![image-20221015192521689](E:\MarkDown\markdown\imgs\image-20221015192521689.png)
+
+![image-20221015192539903](E:\MarkDown\markdown\imgs\image-20221015192539903.png)
 
 ```html
 <h2 class="text-center">登录页面
   <span class="glyphicon glyphicon-user"></span>
 </h2>
 
-修改颜色直接修改文本颜色就可以
+修改图标的颜色直接修改文本颜色就可以
 <style>
     span{
         color:greenyellow
@@ -232,15 +403,18 @@ checkbox和radio一般不会加form-control，直接用原生的即可
 </style>
 ```
 
-#### 导航条
+### 导航条
 
 ```html
 <nav class="navbar navbar-default">白色
 <nav class="navbar navbar-inverse">   黑色 
  添加 .navbar-fixed-bottom 类可以让导航条固定在底部
+<nav class="navbar navbar-default navbar-fixed-bottom">
 ```
 
-#### 分页
+### 分页器
+
+* 接在不同情况下可以定制。你可以给不能点击的链接添加 `.disabled` 类、给当前页添加 `.active` 类。
 
 ```html
 <nav aria-label="Page navigation">
@@ -253,7 +427,7 @@ checkbox和radio一般不会加form-control，直接用原生的即可
     <li class="avtive"><a href="#">1</a></li>
     <li><a href="#">2</a></li>
     <li><a href="#">3</a></li>
-    <li><a href="#">4</a></li>
+    <li class="disabled"><a href="#">4</a></li>
     <li><a href="#">5</a></li>
     <li>
       <a href="#" aria-label="Next">
@@ -262,13 +436,26 @@ checkbox和radio一般不会加form-control，直接用原生的即可
     </li>
   </ul>
 </nav>
+
 ```
 
-#### 弹框
-
-
+### 弹框
 
 [SweetAlert for Bootstrap](http://lipis.github.io/bootstrap-sweetalert/)
+
+进入GitHub
+
+![image-20221015194055179](E:\MarkDown\markdown\imgs\image-20221015194055179.png)
+
+点击Download ZIP
+
+![image-20221015194150416](E:\MarkDown\markdown\imgs\image-20221015194150416.png)
+
+Pycharm中引入
+
+![image-20221015194422705](E:\MarkDown\markdown\imgs\image-20221015194422705.png)
+
+![image-20221015194513055](E:\MarkDown\markdown\imgs\image-20221015194513055.png)
 
 ```js
 swal('你还好吗')
@@ -283,7 +470,9 @@ swal('你还好吗','不好，想你了','error')
 undefined
 ```
 
-#### 进度条
+### 进度条
+
+
 
 ```html
 <!DOCTYPE html>
@@ -326,4 +515,75 @@ undefined
 ```
 
 
+
+## JS插件
+
+### [模态框](https://v3.bootcss.com/javascript/#modals)
+
+```html
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4">.col-md-4</div>
+          <div class="col-md-4 col-md-offset-4">.col-md-4 .col-md-offset-4</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 col-md-offset-3">.col-md-3 .col-md-offset-3</div>
+          <div class="col-md-2 col-md-offset-4">.col-md-2 .col-md-offset-4</div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">.col-md-6 .col-md-offset-3</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-9">
+            Level 1: .col-sm-9
+            <div class="row">
+              <div class="col-xs-8 col-sm-6">
+                Level 2: .col-xs-8 .col-sm-6
+              </div>
+              <div class="col-xs-4 col-sm-6">
+                Level 2: .col-xs-4 .col-sm-6
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+```
+
+### 示例选项卡
+
+```html
+<div>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">...</div>
+    <div role="tabpanel" class="tab-pane" id="profile">...</div>
+    <div role="tabpanel" class="tab-pane" id="messages">...</div>
+    <div role="tabpanel" class="tab-pane" id="settings">...</div>
+  </div>
+
+</div>
+```
 

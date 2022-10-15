@@ -1,5 +1,9 @@
 <h1><center>jQuery</center></h1>
 
+[toc]
+
+
+
 ```python 
 """
 jQuery内部封装了原生的js代码，还添加了很多的功能
@@ -7,6 +11,7 @@ jQuery内部封装了原生的js代码，还添加了很多的功能
 类似于Python里的模块，在前端模块不叫模块，叫”类库“
 
 兼容多个浏览器，使用jQuery就不需要考虑兼容问题
+
 jQuery的宗旨：
 	write less do more
 	让你用更少的代码完成更多的事情
@@ -22,24 +27,54 @@ jQuery在使用的时候也需要导入，但是它的文件特别的小，基�
 
 [BootCDN](https://www.bootcdn.cn/)
 
-```python
-"""
-如果不下载jQuery文件，可以直接引用jQuery提供的CDN服务（基于网络直接请求加载)
-CDN:内容分发网络
-CDN有免费的有收费的
-前端免费的CDN网站 bootcdn
- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+### jQuery下载
 
-"""
+[官网](https://jquery.com/)
+
+![image-20221014184038941](E:\MarkDown\markdown\imgs\image-20221014184038941.png)
+
+![image-20221014184316655](E:\MarkDown\markdown\imgs\image-20221014184316655.png)
+
+* **打开压缩过的链接直接** ==**Ctrl+C**==**复制**，**新建一个==JS文件==直接==Ctrl+V==进去就可以**
+
+![image-20221014184648203](E:\MarkDown\markdown\imgs\image-20221014184648203.png)
+
+![image-20221014185023814](E:\MarkDown\markdown\imgs\image-20221014185023814.png)
+
+**jQuery在使用前一定要确保已经导入了**
+
+### 针对导入问题
+
+1. 文件下载到了本地，如何解决多个文件反复书写引入语句的代码
+
+   * 可以借助Pycharm自动初始化代码功能，完成自动添加
+
+   ![image-20221014185714276](E:\MarkDown\markdown\imgs\image-20221014185714276.png)
+
+2. 如果不下载jQuery文件，可以直接引用`jQuery`提供的==CDN服务==（基于网络直接请求加载)
+
+   * CDN:内容分发网络
+   * CDN有免费的有收费的
+   * 前端免费的CDN网站: [BootCDN](https://www.bootcdn.cn/)
+
+   ![image-20221014190209173](E:\MarkDown\markdown\imgs\image-20221014190209173.png)
+
+   直接复制即可，但是**要保证计算机有网络**，才可以使用。
+
+   ![image-20221014190546708](E:\MarkDown\markdown\imgs\image-20221014190546708.png)
+
+```js
+<scriptsrc="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 ```
 
+![image-20221014191232187](E:\MarkDown\markdown\imgs\image-20221014191232187.png)
 
+### jQuery基本语法
 
 ```python
-#jQuery基本语法
 jQuery(选择器).action()
 秉持着jQuery的宗旨，jQuery简写成$
-jQuery()  === $()
+jQuery()  等价于 $()
 
 #jQuery与js代码对比
 eg:将p标签内部的文本颜色改为红色
@@ -73,7 +108,7 @@ $('#d1')[0]
 document.getElementById('d1')
 <div id="d1">…</div>
            
-//标签对象如何变jQuery对象呢
+//标签对象变jQuery对象
 $(document.getElementById('d1'))
 S.fn.init [div#d1]
 $(document.getElementById('d1'))[0] //又转成了标签对象
@@ -95,7 +130,7 @@ S.fn.init [div#d1, prevObject: S.fn.init(1)]0: div#d1length: 1prevObject: S.fn.i
 $('*')
 S.fn.init(18) [html, head, meta, title, script, style, body, span, span, div#d1, span, p, span, span, div.c1, span, span, script, prevObject: S.fn.init(1)]
                
-$('#d1,.c1,p')
+$('#d1,.c1,p') #并列+混用
 S.fn.init(3) [div#d1, p, div.c1, prevObject: S.fn.init(1)]
               
 $('div span') #后代
@@ -104,7 +139,7 @@ S.fn.init(3) [span, span, span, prevObject: S.fn.init(1)]
 $('div>span')#儿子
 S.fn.init(2) [span, span, prevObject: S.fn.init(1)]0: span1: spanlength: 2prevObject: S.fn.init [document][[Prototype]]: Object(0)
               
-$('div+span')#第一个
+$('div+span')#紧挨着的第一个（毗邻）
 S.fn.init [span, prevObject: S.fn.init(1)]
               
 $('div~span') #兄弟
@@ -220,7 +255,7 @@ $('#d1').next()   #同级别下一个
 $('#d1').nextAll()
 
               
-$('#d1').nextUntil('.c1') #下面所有直到.c1,不包括.c1
+$('#d1').nextUntil('.c1') #下面所有，直到.c1,不包括.c1
 
               
 $('.c1').prev()  #上一个
@@ -229,7 +264,7 @@ $('.c1').prev()  #上一个
 $('.c1').prevAll()
 
               
-$('.c1').prevUntil('#d2')
+$('.c1').prevUntil('#d2') 
 
               
 $('#d3').parent()#第一级父标签
@@ -241,8 +276,8 @@ $('#d3').parent().parent()
 
            
 $('#d3').parent().parent().parent()
-
-           
+  
+    
 $('#d3').parent().parent().parent().parent()
 
            
@@ -250,7 +285,7 @@ $('#d3').parent().parent().parent().parent().parent()
 
            
 $('#d3').parents()  #所有父标签
-
+$('#d3').parentsUntil('body')
               
 $('#d2').children()#儿子
 S.fn.init(3) [span, p, span, prevObject: S.fn.init(1)]
@@ -271,7 +306,7 @@ $('div span').not('#d3')
 
 ### 操作标签
 
-* 操作类
+##### 操作类
 
 ```python
 #操作类
@@ -285,7 +320,7 @@ classList.toggle()						toggleClass()
 
 ```
 
-* css操作
+##### css操作
 
 ```python
 #css操作
@@ -295,11 +330,22 @@ classList.toggle()						toggleClass()
 $('p').first().css('color','red').next().css('color','blue')
 #jQuery链式操作，使用jQuery可以做到一行代码操作很多标签
 #jQuery对象调用jQuery方法之后返回的还是一个jQUery对象，也就可以继续调用
+
+class MyClass(object):
+    def func1(self):
+		print('func1')
+        return self
+    def func2(self):
+		print('func2')
+        return self
+    
+obj=MyClass()
+obj.func1().func2()
 ```
 
 
 
-* 位置操作
+##### 位置操作
 
 ```python
 #位置操作
@@ -320,7 +366,7 @@ scrollLeft()
 
 
 
-* 尺寸
+##### 尺寸
 
 ```python
 #尺寸
@@ -336,7 +382,7 @@ $('p').outwidth()
 
 
 
-* 文本操作
+##### 文本操作
 
 ```python
 """
@@ -361,13 +407,14 @@ S.fn.init [div, prevObject: S.fn.init(1)]
 
 
 
-* 获取值操作
+##### 获取值操作
 
 ```python 
 """
 js         jQuery
 .value     .val()
 """ 
+
 $('#d1').val()
 'vfdghjmhnbv'
 $('#d1').val('520')  #括号内不加参数是获取，加了参数是设置
@@ -378,7 +425,7 @@ $(':checkbox').val(666)#所有的value值都改变成666
            
 ```
 
-* 属性操作
+##### 属性操作
 
 ```python
 """
@@ -413,9 +460,11 @@ $('#i2').prop('checked')
 true
 $('#i3').prop('checked',true)
 S.fn.init [input#i3]
+$('#i3').prop('checked',false)
+S.fn.init [input#i3]
 ```
 
-* 文档处理
+##### 文档处理
 
 ```python
 """
@@ -447,13 +496,16 @@ $pEle.insertBefore($('#d1'))
 $('#d1').remove()#将标签从DOM树中删除
 
 $('#d1').empty()#清空标签内部所有的内容
-，
+
 
 ```
 
 ### jQuery事件
 
+##### jQUery绑定事件的方式
+
 ```html
+//
 <body>
     <button id="d1">吻我</button>
     <button id="d2">亲我</button>
@@ -473,7 +525,7 @@ $('#d1').empty()#清空标签内部所有的内容
 </body>
 ```
 
-* 克隆事件
+##### 克隆事件
 
 ```html
 <head>
@@ -507,7 +559,7 @@ $('#d1').empty()#清空标签内部所有的内容
 </body>
 ```
 
-* 自定义模态框
+##### 自定义模态框
 
 ```html
 /*模态框内部本质就是给标签移除或添加hide属性*/
@@ -578,7 +630,7 @@ $('#d1').empty()#清空标签内部所有的内容
 </html>
 ```
 
-* 左侧菜单
+##### 左侧菜单
 
 ```html
 <!DOCTYPE html>
@@ -658,7 +710,7 @@ $('#d1').empty()#清空标签内部所有的内容
 </html>
 ```
 
-* 返回顶部
+##### 返回顶部
 
 ```html
 <!DOCTYPE html>
@@ -704,7 +756,7 @@ $('#d1').empty()#清空标签内部所有的内容
 </html>
 ```
 
-* 自定义登录校验
+##### 自定义登录校验
 
 ```html
 /*获取用户的密码和用户名的时候，如果用户没有填写，应该给用户提示*/
@@ -751,7 +803,7 @@ $('#d1').empty()#清空标签内部所有的内容
 </html>
 ```
 
-* input框实时监控
+##### input框实时监控
 
 ```html
 <body>
@@ -765,7 +817,7 @@ $('#d1').empty()#清空标签内部所有的内容
 </body>
 ```
 
-* hover事件
+##### hover事件
 
 ```html
 <body>
@@ -785,7 +837,7 @@ $('#d1').empty()#清空标签内部所有的内容
 </body>
 ```
 
-* 键盘按键按下事件
+##### 键盘按键按下事件
 
 ```html
 <!DOCTYPE html>
@@ -810,7 +862,7 @@ $('#d1').empty()#清空标签内部所有的内容
 </html>
 ```
 
-* 组织后续事件执行
+##### 阻止后续事件执行
 
 ```html
 <form action="">
@@ -830,11 +882,11 @@ $('#d1').empty()#清空标签内部所有的内容
     </script>
 ```
 
-* 组织事件冒泡
+##### 阻止事件冒泡
 
 ```html
 <div id="d1">div
-        <p id="d1">p
+        <p id="d2">p
             <span id="d3">span </span>
         </p>
     </div>
@@ -858,7 +910,7 @@ $('#d1').empty()#清空标签内部所有的内容
     </script>
 ```
 
-*  事件委托
+##### 事件委托
 
 ```html
  <button>兄弟</button>
@@ -876,12 +928,11 @@ $('#d1').empty()#清空标签内部所有的内容
     </script>
 ```
 
-* 页面加载
+##### 页面加载
 
 ```python
 /*等待页面加载完毕再执行代码*/
 """js中等待加载完毕执行代码"""
-
 window.onload=function(){
 	//js代码
 }
@@ -901,10 +952,10 @@ $(function(){
 
 ```
 
-* 动画效果
+##### 动画效果
 
 ```html
- <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1115%2F101021113337%2F211010113337-6-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663751282&t=87b9d8397d8eb270544fa1ab7ec2d6e6" 
+ <img src="https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665939600&t=6bf33a6c1b93d6ba296da1f60c8d99be" 
     alt="" width="500px" height="500px">
 
     <script>
@@ -919,10 +970,11 @@ $(function(){
     </script>
 ```
 
-补充
+### 补充
 
 ```js
-#each()
+// each()
+
 #第一种方式
 $('div').each(function(index){console.log(index)})
 VM196:1 0
@@ -946,6 +998,7 @@ VM262:1 6 <div>7</div>
 VM262:1 7 <div>8</div>
 VM262:1 8 <div>9</div>
 S.fn.init(9) [div, div, div, div, div, div, div, div, div, prevObject: S.fn.init(1)]
+
 #第二种方式              
 $.each([111,222,333,444],function(index,obj){console.log(index,obj)})
 VM529:1 0 111
@@ -953,8 +1006,10 @@ VM529:1 1 222
 VM529:1 2 333
 VM529:1 3 444
 (4) [111, 222, 333, 444]
+
   """ 有了each后就不用写for循环，更方便""" 
-#data()    
+// data()   
+
 """ 能够让标签帮我们存储数据，并且用户肉眼看不见   """
 $('div').data('info','回来吧，我原谅你了!')
 S.fn.init(10) [div#d1, div, div, div, div, div, div, div, div, div, prevObject: S.fn.init(1)]
@@ -971,3 +1026,4 @@ S.fn.init [div#d1, prevObject: S.fn.init(10)]
 $('div').first().data('info')
 undefined              
 ```
+
