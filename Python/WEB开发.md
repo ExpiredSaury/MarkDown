@@ -600,6 +600,7 @@ redirect
 ```
 
 ```python
+# views.py
 from django.shortcuts import render, HttpResponse, redirect
 
 
@@ -627,4 +628,486 @@ def ab_render(request):
     # 第二种传值:当你要传入的数据特别多的时候
     """locals会将所在的名称空间中所有的名字全部传递给html页面"""
     return render(request,'ab_render.html',locals())
+```
+
+##   静态文件配置
+
+```python
+#登录功能
+
+"""
+将html 文件默认放在templates文件夹下
+将网站所使用的静态文件默认放在static文件夹下
+
+静态文件
+	前端写好的，能够直接调用使用的都可以称为静态文件
+	网站写好的js文件
+	网站写好的css文件
+	网站用到的图片文件
+	第三方前端框架
+	...
+	拿来就可以直接使用的
+	
+"""
+
+#django默认不会自动创建static文件，需要手动创建
+一般情况下在static文件夹内会做进一步的划分处理
+	-static
+    	--js
+        --css
+        --img
+        其他第三方文件
+"""
+在浏览器中输入url能够看到对应的资源
+是因为后端提前开设了该资源的接口
+如果访问不到资源，说明后端没有开设该资源的接口
+
+"""   
+```
+
+![image-20221021173936220](E:\MarkDown\markdown\imgs\image-20221021173936220.png)
+
+![image-20221021174520951](E:\MarkDown\markdown\imgs\image-20221021174520951.png)
+
+* 引入了bootstrap的js文件和css文件，但是浏览器访问的时候并没有显示该有的样式，需**要开设该资源的接口**
+
+![image-20221021174448402](E:\MarkDown\markdown\imgs\image-20221021174448402.png)
+
+```python
+**************************************************************************************
+"""
+当在写django项目的时候，可能会出现后端代码修改了但是前端页面没有变化的情况
+	1. 在同一个窗口开了好几个django项目，一直在跑的其实是第一个django项目
+	2. 浏览器缓存的问题
+		右键点击检查，setting--network--disable cache 勾选上
+"""
+**************************************************************************************
+```
+
+![image-20221021181046077](E:\MarkDown\markdown\imgs\image-20221021181046077.png)
+
+![](E:\MarkDown\markdown\imgs\image-20221021181009410.png)
+
+```python
+STATIC_URL = 'static/'  # 类似于访问静态网页的令牌
+"""如果想要访问静态文件，就必须以static开头"""
+"""
+/static/bootstrap-3.4.1-dist/js/bootstrap.min.js
+
+/static/令牌
+去列表里面从上往下依次查找
+    bootstrap-3.4.1-dist/js/bootstrap.min.js
+    都没有的话才会报错
+
+"""
+# 静态文件配置
+
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    BASE_DIR / "static1",
+]
+
+# 静态文件动态解析
+{% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap-3.4.1-dist/js/bootstrap.min.js' %}"></script>
+    
+    
+# from 默认是get请求数据
+"""
+form 表单action参数
+	1. 不写。默认朝当前所在的url提交数据
+	2.全写
+	3.只写后缀 /login/
+
+"""
+
+# 在前期使用django提交post请求时，需要去配置文件中注释掉一行代码
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+```
+
+## request对象
+
+```python
+request.method #返回请求方式。并且是全大写的字符串形式
+request.POST #获取用户post请求提交 的普通数据，不包含文件
+	request.POST.get()  #只获取列表最后一个元素
+    request.POST.getlist() #直接将列表所有元素取出
+request.GET   # 获取用户提交的gest请求数据
+	request.GET.get()  #只获取列表最后一个元素
+    request.GET.getlist()  #直接将列表所有元素取出
+    
+"""
+get请求携带的数据是有大小数据的，大概好像只有4k左右
+post请求则没有限制
+"""    
+def login(request):
+    """
+    get请求和post请求应该有不同的处理机制
+    :param request:
+    :return:
+    """
+    # print(request.method)#返回请求方式。并且是全大写的字符串形式
+    # print(type(request.method))
+
+    # if request.method == 'GET':
+    #     return render(request, 'login.html')
+    # elif request.method == 'POST':
+    #     return HttpResponse('收到 !!!')
+
+    if request.method == 'POST':
+        return HttpResponse('收到')
+    return render(request, 'login.html')
+```
+
+## pycharm链接数据库（MySQL）
+
+pycharm可以充当很多数据库的客户端
+
+![image-20221022100125505](E:\MarkDown\markdown\imgs\image-20221022100125505.png)
+
+
+
+点击MySQL后,如果是**第一次使用pycharm中的MySQL**，那么需要**点击download下载对应驱动**
+
+
+
+![image-20221022100404882](E:\MarkDown\markdown\imgs\image-20221022100404882.png)
+
+
+
+如果提示下载失败的话，可以点击Driver，选择**MySQL for 5.1,**然后重新下载，**重新测试连接，成功**，测试链接成功后，点击apply，点击OK。！
+
+
+
+![image-20221022102748371](E:\MarkDown\markdown\imgs\image-20221022102748371.png)
+
+![image-20221022103600831](E:\MarkDown\markdown\imgs\image-20221022103600831.png)
+
+​      
+
+ **可以先通过==Navicat==添加数据**
+
+
+
+![image-20221022103653311](E:\MarkDown\markdown\imgs\image-20221022103653311.png)
+
+
+
+**在pycharm中点击刷新，即可看到创建的userinfo 表以及数据**
+
+
+
+![image-20221022103754208](E:\MarkDown\markdown\imgs\image-20221022103754208.png)
+
+![image-20221022103805763](E:\MarkDown\markdown\imgs\image-20221022103805763.png)
+
+**通过pycharm修改数据，然后submit提交同步到数据库**
+
+![image-20221022104045078](E:\MarkDown\markdown\imgs\image-20221022104045078.png)
+
+**回到Navicat，刷新一下，数据就有了**
+
+![image-20221022104129877](E:\MarkDown\markdown\imgs\image-20221022104129877.png)
+
+## Django链接MySQL
+
+```python
+# 默认用sqlite3
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+#django链接MySQL
+	1.第一步:配置文件中配置
+    
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db7',  # 数据库名
+        'USER': 'root',
+        'PASSWORD': '123456789',
+        'HOST': '127.0.0.1',
+        'POST': 3306,
+        'CHARSET': 'utf8'
+    }
+}
+
+    
+    2.第二步:代码声明
+    django默认用到是mysqldb模块连接mysql
+    但是该模块兼容性不好，需要手动改为pymysql
+    
+    需要告诉django不要用默认的mysqldb
+    #在项目名下的init或者任意应用名下的init文件总书写以下代码
+    import pymysql
+	pymysql.install_as_MySQLdb()
+```
+
+![image-20221022105927612](E:\MarkDown\markdown\imgs\image-20221022105927612.png)
+
+## Django ORM
+
+#### 1、创建表
+
+```python
+ORM:对象关系映射
+作用：能够让一个不会用sql语句的小白，也能通过python面向对象的代码简单快捷的操作数据库
+不足之处：封装成都太高，有时候sql效率偏低，需要自己写sql语句
+
+
+类				    表
+	
+对象					记录
+
+对象属性			记录某个字段对应的值
+```
+
+1. **第一步：先去models.py中书写一个类**
+
+```python
+# 应用下的models.py
+
+class User(models.Model):
+    # id int primary key auto_increment
+    id = models.AutoField(parmary_key=True)
+    # username varchar(32)
+    username = models.CharField(max_length=32)
+    # passwrod int
+    password = models.IntegerField()
+   
+
+**********************2.数据库迁移命令*********************************************************************
+ python manage.py makemigrations  将操作记录记录到小本本上（migrations文件夹）
+ python manage.py migrate   将操作真正同步到数据库中
+********************************************************************************************************
+
+```
+
+```python
+from django.db import models
+
+
+# Create your models here.
+
+class User(models.Model):
+    # id int primary key auto_increment
+    id = models.AutoField(primary_key=True,verbose_name='主键')
+    # username varchar(32)
+    username = models.CharField(max_length=32, verbose_name='用户名')
+
+    """
+    CharField必须指定max_length参数，不指定会直接报错
+    verhose_name该参数是所有字段都有的，就是用来对字段的解释
+    """
+    # passwrod int
+    password = models.IntegerField(verbose_name='密码')
+
+
+class Author(models.Model):
+    # 由于一张表中必须要有一个主键字段，并且一般情况下都叫id字段
+    # 所以orm当不定义主键字段的时候，orm会自动创建一个名为id字段
+    # 也就意味着后续再创建模型表的时候，如果主键字段名没有额外的叫法，那么主键字段可以省略不写
+
+    username = models.CharField(max_length=32)
+    password = models.IntegerField()
+```
+
+
+
+2. **第二步：数据库迁移命令**
+
+```python
+ python manage.py makemigrations  将操作记录记录到小本本上（migrations文件夹）
+```
+
+
+
+![image-20221022111412105](E:\MarkDown\markdown\imgs\image-20221022111412105.png)
+
+应用文件夹下的==migrations文件夹==下多了一个==0001._initial.py==日志文件
+
+![image-20221022111604561](E:\MarkDown\markdown\imgs\image-20221022111604561.png)
+
+```python
+ python manage.py migrate   将操作真正同步到数据库中
+```
+
+![image-20221022112226431](E:\MarkDown\markdown\imgs\image-20221022112226431.png)
+
+**数据库迁移的两条命令输入完成后，此时数据库中会出现很多张表**
+
+
+
+![image-20221022115814598](E:\MarkDown\markdown\imgs\image-20221022115814598.png)
+
+**一个Djanog项目可以有多个应用，那么多个应用之间可能会出现表明冲突的情况，那么加上前缀就可以完全避免冲突**        `app02_user`
+
+![image-20221022120128278](E:\MarkDown\markdown\imgs\image-20221022120128278.png)
+
+```python
+"""
+只要修改了models.py中跟数据库相关的代码，就必须重新执行数据迁移的两条命令
+"""
+```
+
+#### 2、字段的增删改查
+
+2. 1 **字段的增加**
+
+```python
+"""
+1.可以在终端内直接给出默认值
+	age=models.IntegerField(verbose_name='年龄')
+2.该字段可以为空
+	 info = models.CharField(max_length=32,verbose_name='信息', null=True)
+3.直接给字段设置默认值 
+    hobby = models.CharField(max_length=32,verbose_name='爱好', default='play')
+"""
+```
+
+**终端内直接给默认值操作如下图**
+
+![image-20221022124444920](E:\MarkDown\markdown\imgs\image-20221022124444920.png)
+
+==切记==，**只要动了数据库相关的代码就必须执行数据库迁移的两条命令**
+
+```python
+******************************************************************
+python manage.py makemigrations
+python manage.py migrate
+******************************************************************
+```
+
+2. 2字段的修改
+
+```python
+直接修改代码然后执行数据库迁移的两条命令即可
+```
+
+![image-20221022125639587](E:\MarkDown\markdown\imgs\image-20221022125639587.png)
+
+2. 3字段的删除
+
+```python
+直接注释掉对应的字段代码，然后执行数据迁移的两条命令即可
+执行完毕后，字段对应的数据都没有了
+
+"""
+在操作models.py时，一定要细心
+千万不要注释一些字段
+执行迁移命令之前一定要检查一下代码
+"""
+```
+
+#### 3、数据的增删改查
+
+3. 1查数据
+
+```python
+# views.py
+from app02 import  models
+res=models.User.objects.filter(username=username)
+"""
+返回值先看成是一个列表套数据对象的格式
+也支持索引取值，切片操作，但是不支持负数索引
+同样也不推荐使用索引方式取值
+"""
+ # 下面这条代码等价于 select * from user where username='zhao';
+user_obj=models.User.objects.filter(username=username).first()
+# user_obj=res[0]
+print(user_obj)
+print(user_obj.username)
+print(user_obj.password)
+
+filter括号内可以携带多个参数，参数与参数之间默认是and关系
+可以把filter联想成MySQL中的where
+
+user_obj=models.User.objects.filter(username=username,password=password).first()
+#select * from user where username='zhao' and password=132;
+```
+
+**登录功能**
+
+```python
+# views.py
+def login(request):
+   
+    if request.method == 'POST':
+        
+        # 获取用户的用户名和密码，然后利用orm操作数据库，校验数据是否正确
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        # 去数据库中查询数据
+        from app02 import models
+        # select * from user where username='zhao';
+        user_obj = models.User.objects.filter(username=username).first()
+
+        # < QuerySet[ < User: Userobject(1) >] >  [数据对象1，数据对象2......]
+        # print(res)
+        
+        # user_obj=res[0]
+        # print(user_obj)
+        # print(user_obj.username)
+        # print(user_obj.password)
+        if user_obj:
+            # 比对密码是否一致
+            if password == user_obj.password:
+                return HttpResponse('登录成功')
+            else:
+                return HttpResponse('密码错误')
+        else:
+            return HttpResponse('用户不存在')
+
+
+
+
+    return render(request, 'login.html')
+```
+
+3. 2 增加数据
+
+```python
+#第一种方法
+        from app02 import models
+        res = models.User.objects.create(username=username, password=password)
+        # 返回值就是当前被创建的对象本身
+        
+        print(res, res.username, res.password)
+        
+        
+ # 第二种方法
+        from app02 import models
+        user_obj = models.User(username=username, password=password)
+        user_obj.save()#保存数据
+```
+
+**注册功能**
+
+```python
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # 直接获取用户数据存入数据库
+        from app02 import models
+        res = models.User.objects.create(username=username, password=password)
+        # 返回值就是当前被创建的对象本身
+        print(res, res.username, res.password)
+
+    # 先给用户返回已给注册页面
+    return render(request, 'register.html')
 ```
