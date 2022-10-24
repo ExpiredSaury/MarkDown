@@ -1615,7 +1615,7 @@ def demo(request, *args,**kwargs):
 re_path(r'^index/(\d+)/',views.index,name='zs'),
 
 #前端
-<a href="{% url 'zs' 123 %}"></a>
+<a href="{% url 'zs' 1 %}"></a>
 
 #后端
 from django.shortcuts import reverse
@@ -1652,7 +1652,7 @@ def home(request):
 ```python
 """
 Django的每一个应用都可以有自己的templates文件夹，urls.py static文件夹
-正是基于上述的特点，Django能够非常好的做到分组开发，（每个人只写自己的app）
+正是基于上述的特点，Django能够非常好的做到多人分组开发，（每个人只写自己的app）
 
 
 当一个django项目中的url特别多，总路由urls.py代码就非常冗余，不易于维护，
