@@ -511,7 +511,7 @@ INSTALLED_APPS = [
 #创建出来的应用第一步先去配置文件中注册，
 
 ps:在用pycharm创建项目的时候，pycharm可以帮你创建一个app并自动注册
-******************************************************************
+*****************************************************************
 
 ```
 
@@ -538,9 +538,9 @@ ps:在用pycharm创建项目的时候，pycharm可以帮你创建一个app并自
         ---views.py     视图函数（视图层）
 ```
 
-#### 5、命令函与pycharm创建区别
+#### 5、命令行与pycharm创建区别
 
-1. 命令行创建不会自动创建templates文件夹，需要自己手动创建而pycharm会自动创建，并且还会在配置文件中配置对应的路径
+1. 命令行创建不会自动创建templates文件夹，需要自己手动创建而pycharm会自动创建，并且还要在配置文件中配置对应的路径
 
 ```python
 # pycharm创建
@@ -560,7 +560,9 @@ TEMPLATES = [
         },
     },
 ]
+```
 
+```python
 # 命令行创建
 TEMPLATES = [
     {
@@ -578,11 +580,16 @@ TEMPLATES = [
     },
 ]
 
+```
+
+```python
 """
-意味着用命令行创建django项目的时候，不单单需要手动创建templates文件夹，还需要配置我呢见中配置路径
+意味着用命令行创建django项目的时候，不单单需要手动创建templates文件夹，还需要在配置文件中配置路径
 'DIRS': [BASE_DIR / 'templates']
 """
 ```
+
+
 
 ## django小白必会三板斧
 
@@ -631,6 +638,8 @@ def ab_render(request):
 ```
 
 ##   静态文件配置
+
+#### **引入**
 
 ```python
 #登录功能
@@ -688,6 +697,8 @@ def ab_render(request):
 
 ![](E:\MarkDown\markdown\imgs\image-20221021181009410.png)
 
+#### ==**静态文件配置**==
+
 ```python
 STATIC_URL = 'static/'  # 类似于访问静态网页的令牌
 """如果想要访问静态文件，就必须以static开头"""
@@ -714,7 +725,7 @@ STATICFILES_DIRS = [
     <script src="{% static 'bootstrap-3.4.1-dist/js/bootstrap.min.js' %}"></script>
     
     
-# from 默认是get请求数据
+# form 默认是get请求数据
 """
 form 表单action参数
 	1. 不写。默认朝当前所在的url提交数据
@@ -739,10 +750,11 @@ MIDDLEWARE = [
 
 ```python
 request.method #返回请求方式。并且是全大写的字符串形式
-request.POST #获取用户post请求提交 的普通数据，不包含文件
+request.POST #获取用户post请求提交 的普通数据（键值对），不包含文件
 	request.POST.get()  #只获取列表最后一个元素
     request.POST.getlist() #直接将列表所有元素取出
-request.GET   # 获取用户提交的gest请求数据
+    
+request.GET   # 获取url问好后面携带的参数
 	request.GET.get()  #只获取列表最后一个元素
     request.GET.getlist()  #直接将列表所有元素取出
     
@@ -768,6 +780,23 @@ def login(request):
         return HttpResponse('收到')
     return render(request, 'login.html')
 ```
+
+ **在前期使用django提交post请求时，需要去配置文件中注释掉一行代码**
+
+```python
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+```
+
+
 
 ## pycharm链接数据库（MySQL）
 
@@ -821,6 +850,8 @@ pycharm可以充当很多数据库的客户端
 
 ## Django链接MySQL
 
+django不能创建库，需要自己手动创建，并指定
+
 ```python
 # 默认用sqlite3
 DATABASES = {
@@ -860,22 +891,24 @@ DATABASES = {
 
 ## Django ORM
 
-#### 1、创建表
+==orm不会创建库，只能创建到表的层面。需要自己手动敲命令创建库==
+
+#### 1、创建模型表
 
 ```python
-ORM:对象关系映射
+ORM:"""对象关系映射"""
 作用：能够让一个不会用sql语句的小白，也能通过python面向对象的代码简单快捷的操作数据库
 不足之处：封装成都太高，有时候sql效率偏低，需要自己写sql语句
 
 
-类				    表
+类				     表
 	
 对象					记录
 
 对象属性			记录某个字段对应的值
 ```
 
-1. **第一步：先去models.py中书写一个类**
+1. **第一步：先去models.py中书写一个模型类**
 
 ```python
 # 应用下的models.py
@@ -889,7 +922,7 @@ class User(models.Model):
     password = models.IntegerField()
    
 
-**********************2.数据库迁移命令*********************************************************************
+***************************************2.数据库迁移命令****************************************************
  python manage.py makemigrations  将操作记录记录到小本本上（migrations文件夹）
  python manage.py migrate   将操作真正同步到数据库中
 ********************************************************************************************************
@@ -897,6 +930,7 @@ class User(models.Model):
 ```
 
 ```python
+#应用下的modles.py
 from django.db import models
 
 
@@ -953,7 +987,7 @@ class Author(models.Model):
 
 ![image-20221022115814598](E:\MarkDown\markdown\imgs\image-20221022115814598.png)
 
-**一个Djanog项目可以有多个应用，那么多个应用之间可能会出现表明冲突的情况，那么加上前缀就可以完全避免冲突**        `app02_user`
+**一个Djanog项目可以有多个应用，那么多个应用之间可能会出现表明冲突的情况，那么加上前缀就可以完全避免冲突**    
 
 ![image-20221022120128278](E:\MarkDown\markdown\imgs\image-20221022120128278.png)
 
@@ -994,7 +1028,7 @@ python manage.py migrate
 2. 2字段的修改
 
 ```python
-直接修改代码然后执行数据库迁移的两条命令即可
+"""直接修改代码然后执行数据库迁移的两条命令即可"""
 ```
 
 ![image-20221022125639587](E:\MarkDown\markdown\imgs\image-20221022125639587.png)
@@ -1007,7 +1041,7 @@ python manage.py migrate
 
 """
 在操作models.py时，一定要细心
-千万不要注释一些字段
+
 执行迁移命令之前一定要检查一下代码
 """
 ```
@@ -1017,20 +1051,41 @@ python manage.py migrate
 3. 1查数据
 
 ```python
+#views.py
+def userlist(request):
+    # 查询出user用户表里的所有数据.
+    # 方式一
+    # data = models.User.objects.filter()
+    # print(data)
+
+    # 方式二：
+    user_queryset = models.User.objects.all()
+    # print(data)
+    return render(request, 'userlist.html', locals())
+```
+
+
+
+```python
 # views.py
 from app02 import  models
-res=models.User.objects.filter(username=username)
+
+#res=models.User.objects.filter(username=username)
+# user_obj=res[0]
+
 """
 返回值先看成是一个列表套数据对象的格式
 也支持索引取值，切片操作，但是不支持负数索引
 同样也不推荐使用索引方式取值
 """
+
  # 下面这条代码等价于 select * from user where username='zhao';
 user_obj=models.User.objects.filter(username=username).first()
-# user_obj=res[0]
+
 print(user_obj)
 print(user_obj.username)
 print(user_obj.password)
+
 
 filter括号内可以携带多个参数，参数与参数之间默认是and关系
 可以把filter联想成MySQL中的where
@@ -1039,10 +1094,15 @@ user_obj=models.User.objects.filter(username=username,password=password).first()
 #select * from user where username='zhao' and password=132;
 ```
 
+
+
+
+
 **登录功能**
 
 ```python
 # views.py
+
 def login(request):
    
     if request.method == 'POST':
@@ -1080,7 +1140,7 @@ def login(request):
 3. 2 增加数据
 
 ```python
-#第一种方法
+#第一种方法  create()
         from app02 import models
         res = models.User.objects.create(username=username, password=password)
         # 返回值就是当前被创建的对象本身
@@ -1088,15 +1148,18 @@ def login(request):
         print(res, res.username, res.password)
         
         
- # 第二种方法
+ # 第二种方法  对象.save()
         from app02 import models
+   		 #生成一个类对象
         user_obj = models.User(username=username, password=password)
+        #对象调用save方法
         user_obj.save()#保存数据
 ```
 
 **注册功能**
 
 ```python
+# views.py
 def register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -1111,3 +1174,787 @@ def register(request):
     # 先给用户返回已给注册页面
     return render(request, 'register.html')
 ```
+
+3. 3 修改数据
+
+```python
+  # 修改数据方式一
+        # 获取到用户想要删除 的数据id值
+   	 	delete_id = request.GET('user_id')
+     	models.User.objects.filter(id=edit_id).update(username=username, password=password)
+        """
+        将filter查询出来的列表中所有对象全部更新         批量更新
+        只修改被修改的字段
+        """
+  # 修改数据方式二
+		edit_obj = models.User.objects.filter(id=edit_id).first()
+        edit_obj.username = username
+        edit_obj.password = password
+        edit_obj.save()
+        """
+        方式二当字段特别多的时候效率很低
+        从头到尾将数据的所有字段全部更新一遍，无论该字段是否被修改
+        """
+```
+
+3. 4删除数据
+
+```python
+# 删除用户
+def delete_user(request):
+    # 获取到用户想要删除 的数据id值
+    delete_id = request.GET('user_id')
+
+    # 直接去数据库找到对应的数据删除即可
+    models.User.objects.filter(id=delete_id).delete()
+    """
+    批量删除
+    """
+    #跳转到展示页面
+    return redirect('/userlist/')
+
+真正删除数据是要有二次确认的，
+删除数据内部其实不是真正的删除，我们会给数据添加一个标识字段用来标识当前数据是否被删除，如果删除了，仅仅是将一个字段修改了一个状态
+```
+
+
+
+**==示例==：**
+
+```python
+#先将数据库中的数据全部展示到前端，然后给一个数据两个按钮，一个编辑，一个删除
+
+#编辑功能
+	#点击编辑按钮，朝后端发送编辑数据的请求
+   """如何告诉后端用户想要编辑哪条数据？
+   		将编辑按钮所在的那一行数据的主键值发送给后端
+   			利用url问号后面携带参数的方式
+   """ 
+    #后端查询出用户想要编辑的数据对象，展示到前端页面，供用户查看和编辑
+ #删除功能
+	将数据从前端页面删除
+```
+
+* 数据展示到前端页面
+
+```html
+<!-- userlist.html---> 
+
+<h2 class="text-center">数据展示</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-offset-2">
+            <table class="table table-striped table-hover ">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>username</th>
+                    <th>password</th>
+                    <th class="text-center">action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user_obj in user_queryset %}
+                    <tr>
+                        <td>{{ user_obj.id }}</td>
+                        <td>{{ user_obj.username }}</td>
+                        <td>{{ user_obj.password }}</td>
+                        <td class="text-center">
+                            <a href="/edit_user/?user_id={{ user_obj.id }}" class="btn btn-primary btn-xs">编辑</a>
+                            <a href="" class="btn btn-danger btn-xs">删除</a>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+```
+
+```python
+# views.py
+
+# 展示用户列表
+
+def userlist(request):
+    # 查询出user用户表里的所有数据.
+    # 方式一
+    # data = models.User.objects.filter()
+    # print(data)
+
+    # 方式二：
+    user_queryset = models.User.objects.all()
+    # print(data)
+    return render(request, 'userlist.html', locals())
+```
+
+* 编辑用户数据
+
+```html
+<!-- edit_user.html--->
+
+<h1 class="text-center">编辑</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <form action="" method="post">
+                <p>username:<input type="text" name="username" class="form-control" value="{{ edit_obj.username }}"></p>
+                <p>password:<input type="password" name="password" class="form-control" value="{{ edit_obj.password }}"></p>
+                <input type="submit" class="btn btn-info btn-block" value="编辑">
+
+            </form>
+        </div>
+    </div>
+</div>
+```
+
+```python
+#views.py
+from app03 import models
+def edit_user(request):
+    # 获取url问号后面的参数
+    edit_id = request.GET.get('user_id')
+    # 查询当前用户想要编辑的数据对象
+    edit_obj = models.User.objects.filter(id=edit_id).first()
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # 去数据库中修改对应的数据内容
+
+        # 修改数据方式一
+        # models.User.objects.filter(id=edit_id).update(username=username, password=password)
+        """
+        将filter查询出来的列表中所有对象全部更新         批量更新
+        只修改被修改的字段
+        """
+        # 修改数据方式二
+        edit_obj.username = username
+        edit_obj.password = password
+        edit_obj.save()
+        """
+        方式二当字段特别多的时候效率很低
+        从头到尾将数据的所有字段全部更新一遍，无论该字段是否被修改
+        """
+
+        # 跳转到数据的展示页面
+        return redirect('/userlist/')
+
+    # 将数据展示到页面上
+    return render(request, 'edit_user.html', locals())
+
+
+```
+
+* 删除数据
+
+```html
+<!-- userlist.html--->  
+
+<a href="/delete_user/user_id={{ user_obj.id }}" class="btn btn-danger btn-xs">删除</a>
+```
+
+```python
+#views.py
+# 删除用户
+def delete_user(request):
+    # 获取到用户想要删除 的数据id值
+    delete_id = request.GET('user_id')
+
+    # 直接去数据库找到对应的数据删除即可
+    models.User.objects.filter(id=delete_id).delete()
+    """
+    批量删除
+    """
+    #跳转到展示页面
+    return redirect('/userlist/')
+```
+
+#### 4、orm中创建表关系
+
+```python
+"""
+表与表关系
+	一对多
+		models.ForeignKey(to='Publish', on_delete=models.CASCADE)
+	多对多
+		models.ManyToManyField(to='Author')
+	一对一
+		models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)
+
+判断表关系方式：换位思考
+
+"""
+```
+
+```python
+# 创建表关系， 先将基表创建出来，然后在添加外键字段
+class Book(models.Model):
+    title = models.CharField(max_length=32, verbose_name='书名')
+    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='价格')
+    # 小数总共8位，小数点后占2位
+
+    """
+    图书和出版社是一对多，并且书是多的一方，所以外键字段放在书表里面
+    """
+    publish = models.ForeignKey(to='Publish', on_delete=models.CASCADE)  # 默认就是与出版社表的主键字段做外键关联
+    """
+    如果字段对应的是ForeignKey,那么orm会自动在字段的后面加_id
+    如果自己手动的加了_id,那么orm还是会在后面加_id
+    
+    """
+
+    """
+    图书 和作者 是多对多的关系，外键字段建在任意一方即可，推荐建在查询频率较高的一方，
+    
+    """
+    authors = models.ManyToManyField(to='Author')
+    """
+    authors是一个虚拟字段，主要是用来告诉orm，书籍表与作者表是多对多的关系
+    让orm自动创建第三章关系表
+    """
+
+
+class Publish(models.Model):
+    name = models.CharField(max_length=32, verbose_name='出版社')
+
+    addr = models.CharField(max_length=32, verbose_name='地址')
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=32, verbose_name='作者名')
+    age = models.IntegerField(verbose_name='年龄')
+
+    """
+    
+    作者与作者详情是一对一的关系，外键字段建立在任意放一方都可以，但是建议建立在查询频率较高的地方
+    
+    """
+    author_detail = models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)  # 级联删除
+    """
+    OneToOneFiel也会自动给字段加_id后缀，不需要自己加
+    """
+
+
+class AuthorDetail(models.Model):
+    phone = models.BigIntegerField(verbose_name='电话')
+    addr = models.CharField(max_length=32, verbose_name='作者地址')
+
+    
+    
+"""
+
+orm中如何定义表关系
+
+publish = models.ForeignKey(to='Publish', on_delete=models.CASCADE)
+author_detail = models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE) 
+authors = models.ManyToManyField(to='Author')
+
+
+
+ForeignKey与OneToOneField会自动在字段后面加_id后缀
+"""
+```
+
+
+
+## Django请求周期流程图（重要）
+
+![image-20221023130145467](E:\MarkDown\markdown\imgs\image-20221023130145467.png)
+
+
+
+```python
+# 扩展
+"""
+缓存数据库
+	提前将数据准备好，来了直接拿就可以，提高效率和响应时间
+	
+"""
+```
+
+## 路由层
+
+#### 1、路由匹配
+
+```python
+    #路由匹配
+    re_path('test/',views.test),
+    re_path('testadd/',views.testadd)
+    """
+    re_path第一个参数是正则表达式
+    
+	只要第一个参数正则表达式能够匹配到内容，那么就会立刻停止往下匹配，直接执行对应的视图函数
+	
+	在输入url会默认加斜杠，是应为django内部自动做了重定向
+    """
+```
+
+![image-20221023134245558](E:\MarkDown\markdown\imgs\image-20221023134245558.png)
+
+**django路由匹配 的时候其实可以匹配两次，第一次如果url后面没有加斜杠，django会让浏览器加斜杠在发送一次请求**
+
+```python
+# settings.py
+
+APPEND_SLASH = False# 取消自动加斜杠，默认是True
+"""取消了自动加斜杠后，再次访问浏览器就会报错"""
+```
+
+![image-20221023134109323](E:\MarkDown\markdown\imgs\image-20221023134109323.png)
+
+```python
+# urls.py
+
+from django.contrib import admin
+from django.urls import path, re_path
+from app03 import  views
+urlpatterns = [
+    #首页
+    re_path(r'^$',views.home),
+    #路由匹配
+    re_path(r'^test/$',views.test),
+    re_path(r'^testadd/$',views.testadd),
+    #尾页
+    # re_path(r'',views.error),
+]
+```
+
+#### 2、无名/有名分组
+
+无名
+
+```python
+"""
+分组：就是给某一个正则表达式用小括号括起来
+"""
+
+#urls.py
+re_path(r'^test/(\d+)',views.test),
+
+#views.py
+def test(request,xxx):
+    print(xxx)
+    return HttpResponse('test')
+#无名分组就是将括号内正则表达式匹配到的内容当作位置参数传递给后面的视图函数
+```
+
+有名
+
+```python
+"""
+可以给正则表达式起别名
+"""
+#urls.py
+ re_path(r'^testadd/(?P<year>\d+)', views.testadd),
+    
+#views.py
+def testadd(request, year):
+    print(year)
+    return HttpResponse('testadd')
+
+#有名分组就是将括号内正则表达式匹配到的内容当作关键字参数传递给后面的视图函数
+```
+
+
+
+```python
+# 无名有名 不能混用
+re_path(r'^demo/(\d+)/(?P<year>\d+)/',views.demo)
+def demo(request, xx, year):
+    print(xx, year)
+    return HttpResponse('无名有名混用')  报错，结果报错
+
+*************************************************************************************
+
+# 单个分组可以使用多次
+* 无名
+ re_path(r'^demo/(\d+)/(\d+)/',views.demo)
+ def demo(request, *args):
+    print(args)
+    return HttpResponse('demo')
+* 有名
+re_path(r'^demo/(?P<year>\d+)/(?P<month>\d+)/',views.demo)
+def demo(request, *args,**kwargs):
+    print(kwargs)
+    return HttpResponse('demo')
+
+```
+
+
+
+#### 3、反向解析
+
+```python
+#通过一些方法得到一个结果，该结果可以直接访问对应的url触发视图函数
+
+# 1.先给路由和视图函数起别名
+ re_path(r'^func/',views.func,name='zs'),
+    
+# 2.反向解析
+	#后端反向解析
+    	from django.shortcuts import reverse
+    	def home(request):
+            print(reverse('zs'))
+            return render(request,'home.html')
+    #前端反向解析
+    	<a href="{% url 'zs' %}">111</a>
+        
+        
+"""别名不能出现冲突！！！"""
+```
+
+#### 4、无名有名反向解析
+
+```python
+#无名分组的反向解析
+re_path(r'^index/(\d+)/',views.index,name='zs'),
+
+#前端
+<a href="{% url 'zs' 123 %}"></a>
+
+#后端
+from django.shortcuts import reverse
+def home(request):
+    print(reverse('zs',args=(1,)))  #/index/1/
+    return render(request,'home.html')
+
+"""
+数字 一般放的是数据的主键值， 来做数据的编辑和删除
+"""
+```
+
+```python
+# 有名分组反向解析
+	re_path(r'^func/(?P<year>\d+)/',views.func,name='li'),
+
+#前端
+    <a href="{% url 'li' year=123 %}"></a>
+    #简单写法
+    <a href="{% url 'li' 123 %}"></a>
+
+
+#后端
+    def home(request):
+
+        print(reverse('li',kwargs={'year':123}))
+        #简单写法
+        # print(reverse('li', args=(123,)))
+        return render(request, 'home.html')
+```
+
+#### 5、路由分发
+
+```python
+"""
+Django的每一个应用都可以有自己的templates文件夹，urls.py static文件夹
+正是基于上述的特点，Django能够非常好的做到分组开发，（每个人只写自己的app）
+
+
+当一个django项目中的url特别多，总路由urls.py代码就非常冗余，不易于维护，
+这个时候就可以利用路由分发，减轻总路由压力
+
+
+利用路由分发之后，总路由不再干路由与视图函数的直接对应关系
+而是做一个分发处理
+	识别当前url属于哪个应用下的，直接分发给对应的应用去处理
+	
+"""
+
+
+#总路由
+
+from app01 import urls as app01_urls
+from app02 import urls as app02_urls
+from django.urls import path, re_path, include
+urlpatterns = [
+    # 1.第一种方式 路由分发
+    #re_path(r'^app01/', include(app01_urls)),  # 只要re_path前缀是app01开头的，全部交给app01处理
+    #re_path(r'^app02/', include(app02_urls)),   # 只要re_path前缀是app02开头的，全部交给app02处理
+    
+    # 2.第二宗方式 路由分发，不用导模块，
+    re_path(r'^app01/',include('app01.urls')),
+    re_path(r'^app02/',include('app02.urls'))
+    #总路由里面的re_path不能加$结尾
+]
+
+
+
+
+#子路由
+
+#app01下urls.py
+from django.urls import path, re_path
+from app01 import views
+
+urlpatterns = [
+    re_path(r'^register/',views.register)
+]
+#app02下urls.py
+from django.urls import path, re_path
+from app02 import views
+
+urlpatterns = [
+    re_path(r'^register/',views.register)
+]
+
+```
+
+#### 6、名称空间
+
+```python
+# 当多个应用出现了相同的别名，反向解析不能自动识别应用前缀
+
+#名称空间
+	#总路由
+        path('app01/', include('app01.urls', namespace='app01')),
+        path('app02/', include('app02.urls', namespace='app02'))
+        
+     #解析的时候
+    	#后端
+        	#app01下的urls.py
+            urlpatterns = [re_path(r'^register/',views.register,name='reg')]
+            #app02下的urls.py
+            urlpatterns = [re_path(r'^register/',views.register,name='reg')]
+
+        #前端
+        	{% url 'app01:reg' %}
+			{% url 'app02:reg' %}
+            
+            
+#只要保证名字不冲突，就没有必要使用名称空间
+
+"""
+一般情况下，有多个app的时候，在起别名时会加上app的前缀
+这样就能确保多个app之间名字不冲突
+
+"""
+
+#加前缀
+urlpatterns = [
+    re_path(r'^register/',views.register,name='app02_reg')
+]
+urlpatterns = [
+    re_path(r'^register/',views.register,name='app01_reg')
+]
+
+```
+
+
+
+#### 7、伪静态
+
+```python
+"""
+将一个动态网页为伪装成静态网页
+
+伪装的目的在于增大网站的 seo查询力度
+并且增加搜友引擎收藏本网站的概率
+
+搜索引擎本质上就是一个巨大的爬虫引擎
+
+
+	
+"""
+```
+
+## 虚拟环境
+
+```python
+"""
+
+在正常开发中，会给每一个项目配置一个该项目独有的解释器资源
+该环境内只有该项目用到的模块，用不到的一概不装
+
+
+
+虚拟环境
+	每创建一个虚拟环境就类似于重新下载了一个纯净的python解释器，但是虚拟机环境不要创建太多，是需要消耗硬盘空间的
+	
+在开发中会给每一个项目配置一个requirements.txt文件
+里面书写该项目用到的所有模块即版本
+只需要输入一条命令即可一键安装所有模块即版本
+    pip install pipreqs
+    pipreqs . --encoding=utf8 --force
+
+"""
+```
+
+```python
+--encoding=utf8 ：为使用utf8编码
+
+--force ：强制执行，当 生成目录下的requirements.txt存在时覆盖 
+
+. /: 在哪个文件生成requirements.txt 文件
+```
+
+
+
+## Django版本区别
+
+```python
+"""
+1.django1.x路由层使用url方法
+	django2.x 3.x 4.x 路由层使用path方法
+	url()第一个参数支持正则
+	path()第一个参数不支持正则，写生么就匹配什么
+	
+	
+	不习惯使用path 也可以改成re_path()，只是需要导入，
+	from django.urls import re_path
+	就可以使用正则
+	
+	
+	re_path 等价于1.x 里面的 url
+	
+2.虽然path不支持正则，但是内部支持5中转换器
+path('index/<int:id>',views.index)将第二个路由里面的内容先转成整型，以关键字的形式传递给后面的视图函数
+def index(request,id):
+	print(id,type(id))
+	return HttpResponse('index')
+
+str,匹配除了路径分隔符，（/）之外的非空字符串，这是默认形式
+int,匹配正整数，除了0
+slug,匹配字母，数字，以及横杠，下滑线等组成的字符串
+uuid，匹配格式化的uuid，如 0212451-4578-451w-5a6e-4611313
+path，匹配任何非空字符串，包含了路径分隔符（/）
+
+
+3.除了有默认的五个转换器之外，还支持自定义转换器
+
+4.模型层，1.x外键默认都是级联更新删除的,但是2.x,3.x,4.x都是需要手动添加参数
+models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)
+"""
+```
+
+## 视图层
+
+#### 1、三板斧
+
+```python
+"""
+HttpResponse
+	返回字符串类型
+render
+	返回html页面，并且返回给浏览器之前还可以给html文件传值
+redirect
+	重定向
+"""
+# 视图函数必须要返回一个HttpResponse对象，研究三者的源码即可得出结论
+
+
+# render简单内部原理
+def inder(request):
+    from django.template import Template,Context
+    res=Template('<h1>{{ user }}</h1>')
+    con=Context({'user':{'username':'zhao','password':123}})
+    ret=res.render(con)
+    print(ret)
+    return HttpResponse(ret)
+```
+
+
+
+#### 2、JsonResponse对象
+
+```python
+"""
+json格式数据有什么用？：
+	前后端数据交互的时候需要使用json作为过渡，实现跨语言传输数据
+
+前端系列化                      python系列化
+	JSON.stringify()			json.dumps()
+	JSON.parse()				json.loads()
+"""
+
+from django.http import JsonResponse
+
+
+def ab_json(request):
+    user_dic = {'username': '我是谁', 'password': 123, 'hobby': 'JayChou'}
+    l=[111,222,33,444]
+    # 先转成json格式字符串
+    # json_str=json.dumps(user_dic,ensure_ascii=False)
+    # #将该字符串返回
+    # return HttpResponse(json_str)
+
+    # return JsonResponse(user_dic, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse(l,safe=False)
+默认只能序列化字典，序列化其他需要加safe参数
+```
+
+#### 3、form表单上传文件及后端如何操作
+
+```python
+"""
+from 表单上传文件类型的数据
+	1. method必须指定post
+	2.enctype必须换成form-data
+"""
+
+def ab_file(request):
+    if request.method == 'POST':
+        print(request.POST)  # 只能获取普通的键值对数据
+        print(request.FILES)  # 获取文件数据
+        file_obj = request.FILES.get('myfile')
+        print(file_obj.name)
+        with open(file_obj.name, 'wb') as f:
+            for line in file_obj:  # chunks方法加与不加都是一样的效果
+                f.write(line)
+    return render(request, 'form.html')
+
+```
+
+#### 4、request对象方法
+
+```python
+"""
+request.method
+request.GET
+request.POST
+request.FILES
+
+request.path		#只能获取路由
+request.path_info   #只能获取路由
+request.get_full_path() #能够获取路由以及问号后面的参数
+request.body   #原生的浏览器发过来的二进制数据
+
+"""
+print(request.path)#/app01/ab_file/
+print(request.path_info)#/app01/ab_file/
+print(request.get_full_path())#/app01/ab_file/?username=lisi
+```
+
+#### 5、FBV与CBV
+
+```python
+#视图函数既可以是函数也可以是类
+
+#FBV
+	#FBV路由
+    path('index/',views.index),
+    #views.py
+    def index(request):
+        return HttpResponse('index')
+
+#CBV
+    #CBV路由  
+    path('login/',views.MyLogin.as_view())
+    
+    #views.py
+    class MyLogin(View):
+    def get(self, request):
+        return render(request,'form.html')
+
+    def post(self, request):
+        return HttpResponse('post方法')
+
+    """
+    CBV特点：能够根据请求方式的不同直接匹配到对应的方法执行
+    """
+```
+
