@@ -1683,8 +1683,6 @@ urlpatterns = [
 ]
 
 
-
-
 #子路由
 
 #app01下urls.py
@@ -1792,8 +1790,6 @@ urlpatterns = [
 . /: 在哪个文件生成requirements.txt 文件
 ```
 
-
-
 ## Django版本区别
 
 ```python
@@ -1870,22 +1866,39 @@ json格式数据有什么用？：
 	JSON.stringify()			json.dumps()
 	JSON.parse()				json.loads()
 """
+Django后端给前端返回json格式的数据
+	1. 手动利用json模块
+    2.利用JsonResponse
+```
 
-from django.http import JsonResponse
+* **方式一:  json模块**
 
-
+```python
+#方式一:json模块
 def ab_json(request):
     user_dic = {'username': '我是谁', 'password': 123, 'hobby': 'JayChou'}
-    l=[111,222,33,444]
+
     # 先转成json格式字符串
     # json_str=json.dumps(user_dic,ensure_ascii=False)
     # #将该字符串返回
     # return HttpResponse(json_str)
+```
 
+* **方式二 :JsonResponse对象**
+
+```python
+ #方式二 :JsonResponse对象
+from django.http import JsonResponse
+def ab_json(request):
+    user_dic = {'username': '我是谁', 'password': 123, 'hobby': 'JayChou'}
+    l=[111,222,33,444]
     # return JsonResponse(user_dic, json_dumps_params={'ensure_ascii': False})
     return JsonResponse(l,safe=False)
+
 默认只能序列化字典，序列化其他需要加safe参数
 ```
+
+
 
 #### 3、form表单上传文件及后端如何操作
 
@@ -1895,6 +1908,14 @@ from 表单上传文件类型的数据
 	1. method必须指定post
 	2.enctype必须换成form-data
 """
+
+<form action="" method="post" enctype="multipart/form-data">
+    <p>username:<input type="text" name="username"></p>
+    <p>file:<input type="file" name="myfile"></p>
+    <input type="submit">
+
+</form>
+
 
 def ab_file(request):
     if request.method == 'POST':
@@ -1947,6 +1968,7 @@ print(request.get_full_path())#/app01/ab_file/?username=lisi
     
     #views.py
     class MyLogin(View):
+        #只要是有处理业务逻辑的视图函数，形参里面都应该有request
     def get(self, request):
         return render(request,'form.html')
 
@@ -1957,4 +1979,352 @@ print(request.get_full_path())#/app01/ab_file/?username=lisi
     CBV特点：能够根据请求方式的不同直接匹配到对应的方法执行
     """
 ```
+
+#### 6、CBV源码剖析
+
+## 模版层
+
+#### 1、模板语法传值
+
+{{}}变量相关
+
+{%%}逻辑相关
+
+```html
+#templates文件夹下的login.html
+<body>
+<p>{{ n }}</p>
+<p>{{ f }}</p>
+<p>{{ s }}</p>
+<p>{{ b }}</p>
+<p>{{ l }}</p>
+<p>{{ d }}</p>
+<p>{{ t }}</p>
+<p>{{ se }}</p>
+<p>传递函数名会自动加括号调用， 但是模板语法不支持给函数传额外的参数:{{ func }}</p>
+
+<p>传递类的时候也会自动加括号调用（实例化）:{{ MyClass }}</p>
+<p>{{ obj }}</p>
+<p>内部能够自动判断出当前的变量是否可以加括号调用，如果可以就会自动加括号执行， 一般情况针对的是函数名和类名</p>
+
+<p>{{ obj.get_self }}</p>
+<p>{{ obj.get_class }}</p>
+<p>{{ obj.get_func }}</p>
+
+    
+<p>{{ d.username }}</p>
+<p>{{ l.0 }}</p>
+<p>{{ d.hobby.3.info }}</p>
+</body>
+
+
+
+Django模板语法的取值就固定格式，只能采用"句点符"
+
+可以点索引，可以点键，两者也可以混用
+
+```
+
+```python
+#views.py
+
+def index(request):
+    # 模板语法可以传递的后端数据类型
+    n = 123
+    f = 11.1
+    s = '1231'
+    b = True
+    l = ['123', '45', '哈哈']
+    t = (111, 22, 33, 44)
+   	d = {'usernaem': 'lisi', 'age': 18,'hobby':[111,222,333,{'info':'NB'}]}
+    se = {'123', '133', 'ef'}
+
+    def func():
+        print('我i被执行了')
+        return '函数'
+
+    class MyClass(object):
+        def get_self(self):
+            return 'self'
+
+        @staticmethod
+        def get_func(self):
+            return 'func'
+
+        @classmethod
+        def get_class(cls):
+            return 'cls'
+        
+        #对象被展示到html页面上，就类似于执行答应操作，也会触发__str__方法
+        def __str__(self):
+            return '__str__'
+
+    obj = MyClass()
+
+    return render(request, 'index.html', locals())
+    # return render(request, 'index.html', {})#一个个传
+
+```
+
+#### 2、模板语法之过滤器（过滤器最多只能有两个参数）
+
+```python
+"""
+类似于模板语法内置的 内置方法
+django内置有60多个过滤器
+
+"""
+#基本语法
+{{数据|过滤器:参数}}
+
+
+#转义
+    #前端
+    |safe
+    #后端
+    from django.utils.safestring import  mark_safe
+    res=mark_safe('<h1>静静</h1>')
+"""
+前端代码不一定非要在前端页面书写，也可以先在侯丹写好，然后传递给前端页面
+"""
+```
+
+* 常间过滤器
+
+```html
+<h1>过滤器</h1>
+<p>统计长度:{{ s|length }}</p>
+<p>默认值:{{ b|default:'nothing!!!' }}</p>
+<p>文件大小:{{ file_size|filesizeformat }}</p>
+<p>日期格式化:{{ current_time|date:'Y-m-d H:i:s' }}</p>
+<p>切片操作:{{ l|slice:'0:4:2' }}</p>
+<p>切取字符:{{ info|truncatechars:9 }}</p>
+<p>切取单词(按照空格切):{{ word|truncatewords:9 }}</p>
+<p>切取中文(按照空格切):{{ info|truncatewords:9 }}</p>
+<p>移除特定的字符:{{ msg|cut:" " }} </p>
+<p>拼接:{{ l|join:'$' }}</p>
+<p>拼接操作（加法）:{{ n|add:10 }}</p>
+<p>拼接操作（加法）:{{ s|add:msg }}</p>
+<p>取消转义:{{ hhh }}</p>
+<p>转义:{{ hhh|safe }}</p>
+<p>转义:{{ sss|safe }}</p>
+<p>转义:{{ res }}</p>
+```
+
+```python
+def index(request):
+    # 模板语法可以传递的后端数据类型
+    n = 123
+    f = 11.1
+    s = '1231'
+    b = True
+    l = ['123', '45', '哈哈', '1414141']
+    t = (111, 22, 33, 44)
+    d = {'usernaem': 'lisi', 'age': 18, 'hobby': [111, 222, 333, {'info': 'NB'}]}
+    se = {'123', '133', 'ef'}
+    file_size = 123131211
+
+    def func():
+        print('我i被执行了')
+        return '函数'
+
+    class MyClass(object):
+        def get_self(self):
+            return 'self'
+
+        @staticmethod
+        def get_func(self):
+            return 'func'
+
+        @classmethod
+        def get_class(cls):
+            return 'cls'
+
+        # 对象被展示到html页面上，就类似于执行答应操作，也会触发__str__方法
+        def __str__(self):
+            return '__str__'
+
+    obj = MyClass()
+
+    file_size = 123131211
+    current_time = datetime.datetime.now()
+    info = '奥克兰房间里卡机分厘卡即使对方考虑按时间可了收到v不过他的风格公司v的是v打发发士大夫阿发发发是歌舞团和经济仍维持v房间啊'
+
+
+    word='my name is  zhao my age is 18 and i  am from china'
+    msg='i love you '
+    hhh='<h1>蛇姐</h1>'
+    sss='<script>alert(123)</script>'
+
+    from django.utils.safestring import  mark_safe
+
+    res=mark_safe('<h1>静静</h1>')
+
+    return render(request, 'index.html', locals())
+
+    # return render(request, 'index.html', {})#一个个传
+```
+
+
+
+#### 3、模板语法之标签
+
+*  for循环
+
+```python
+# for循环
+{% for foo in l %}
+    #<p>{{ forloop }}</p>
+     <p>{{ foo }}</p>  # 一个个元素
+{% endfor %}
+
+"""
+{'parentloop': {}, 'counter0': 0, 'counter': 1, 'revcounter': 4, 'revcounter0': 3, 'first': True, 'last': False}
+"""
+```
+
+* if判断
+
+```python
+#if判断
+{% if b %}
+    <p>buddy</p>
+{% elif s %}
+    <p>ssss</p>
+{% else %}
+    <p>guy</p>
+{% endif %}
+```
+
+* for与if混合使用
+
+```python
+#for与if混合使用
+{% for foo in l %}
+    {% if forloop.first %}
+        <p>第一次循环</p>
+    {% elif forloop.last %}
+        <p>最后一次循环</p>
+    {% else %}
+        <p>{{ foo }}</p>
+    {% endif %}
+{% empty %}
+    <p>for循环可迭代对象内部没有元素，根本无法循环</p>
+{% endfor %}
+```
+
+* 处理字典其他方法
+
+```python
+#处理字典其他方法
+{% for key in d.keys %}
+    <p>{{ key }}</p>
+
+{% endfor %}
+{% for value in d.values %}
+    <p>{{ value }}</p>
+{% endfor %}
+{% for item in d.items %}
+    <p>{{ item }}</p>
+  
+```
+
+* with起别名
+
+```python
+ #with起别名
+{% with  d.hobby.3.info as zs %}
+    <p>{{ zs }}</p>
+    在with语法内就可以通过as后面的别名快速的使用到前面非常复杂的数据
+    <p>{{ d.hobby.3.info }}</p>
+{% endwith %}
+```
+
+#### 4、自定义过滤器，标签以及inclusion_tag
+
+* 自定义过滤器
+
+```python
+ 
+    """
+    三步走：
+    	1. 必须要在应用下创建一个名字叫templatetags文件夹
+    	2.在该文件夹内创建任意名称的py文件
+    	3.在该py文件内必须先书写两句话
+            from django import template
+
+            register = template.Library()
+    """
+
+    
+{% load tag %}
+<p>{{ n|tag:666 }}</p>
+
+
+@register.filter(name='tag')
+def my_sum(v1, v2):
+    return v1, v2
+```
+
+* 自定义标签
+
+```python
+标签多个参数彼此之间空格隔开
+<p>{% plus 'zhao' 123 456 789 %}</p>
+
+
+# 自定义标签(参数可以有多个)
+@register.simple_tag(name='plus')
+def index(a, b, c, d):
+    return '%s-%s-%s-%s' % (a, b, c, d)
+```
+
+* 自定义inclusion_tag
+
+```python
+内部原理
+	先定义一个方法
+    在页面上调用该方法，并且可以传值
+    该方法会生成一些数据然后传递给一个html页面
+    之后将渲染好的结果放到调用的位置
+    
+# 自定义inclusion_tag
+#mytag.py
+@register.inclusion_tag('left_menu.html')
+def left(n):
+    data = ['第{}项'.format(i) for i in range(n)]
+    # 第一种
+    # return {'data':data}
+    # 第二种
+    return locals()  # 把data传递给left_menu.html    
+
+
+#left_menu.html
+<ul>
+    {% for datum in data %}
+        <li>{{ datum }}</li>
+
+    {% endfor %}
+
+</ul>
+
+#index.html
+{% left 10 %}
+
+
+#当html页面某一个地方的页面需要传参数能够动态的渲染出来，并且在多个页面上都需要使用该局部，那么就考虑该局部页面做成inclusion_tag形式
+(bbs中会使用到)
+```
+
+![image-20221024224003718](E:\MarkDown\markdown\imgs\image-20221024224003718.png)
+
+![image-20221024224030160](E:\MarkDown\markdown\imgs\image-20221024224030160.png)
+
+![image-20221024224053678](E:\MarkDown\markdown\imgs\image-20221024224053678.png)
+
+#### 5、模板的继承
+
+
+
+#### 6、模板的导入
 
