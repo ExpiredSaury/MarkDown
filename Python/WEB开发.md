@@ -103,6 +103,8 @@ if __name__ == '__main__':
     server.serve_forever()  # 启动服务端
 ```
 
+* 代码优化
+
 ```python
 # -*- coding: UTF-8 -*- 
 # @Date ：2022/10/17 16:14
@@ -362,7 +364,7 @@ pip install django==4.0
 
 ## django基本操作
 
-#### 1、**命令行操作**
+### 1、**命令行操作**
 
 ---
 
@@ -412,7 +414,7 @@ python manage.py startapp app01
 
 ![image-20221021095924761](E:\MarkDown\markdown\imgs\image-20221021095924761.png)
 
-#### 2、pycharm操作
+### 2、pycharm操作
 
 ---
 
@@ -480,7 +482,7 @@ file---new project  ,选择左侧第二个Django即可
 
 ![image-20221021102901754](E:\MarkDown\markdown\imgs\image-20221021102901754.png)
 
-#### 3、应用
+### 3、应用
 
 ```python
 """
@@ -519,7 +521,7 @@ ps:在用pycharm创建项目的时候，pycharm可以帮你创建一个app并自
 
 ![image-20221021104644697](E:\MarkDown\markdown\imgs\image-20221021104644697.png)
 
-#### 4、主要文件介绍
+### 4、主要文件介绍
 
 ```python
 -mysite项目文件夹
@@ -538,7 +540,7 @@ ps:在用pycharm创建项目的时候，pycharm可以帮你创建一个app并自
         ---views.py     视图函数（视图层）
 ```
 
-#### 5、命令行与pycharm创建区别
+### 5、命令行与pycharm创建区别
 
 1. 命令行创建不会自动创建templates文件夹，需要自己手动创建而pycharm会自动创建，并且还要在配置文件中配置对应的路径
 
@@ -639,7 +641,7 @@ def ab_render(request):
 
 ##   静态文件配置
 
-#### **引入**
+### **引入**
 
 ```python
 #登录功能
@@ -697,7 +699,7 @@ def ab_render(request):
 
 ![](E:\MarkDown\markdown\imgs\image-20221021181009410.png)
 
-#### ==**静态文件配置**==
+### ==**静态文件配置**==
 
 ```python
 STATIC_URL = 'static/'  # 类似于访问静态网页的令牌
@@ -893,7 +895,7 @@ DATABASES = {
 
 ==orm不会创建库，只能创建到表的层面。需要自己手动敲命令创建库==
 
-#### 1、创建模型表
+### 1、创建模型表
 
 ```python
 ORM:"""对象关系映射"""
@@ -997,9 +999,9 @@ class Author(models.Model):
 """
 ```
 
-#### 2、字段的增删改查
+### 2、字段的增删改查
 
-2. 1 **字段的增加**
+##### 2. 1、 **字段的增加**
 
 ```python
 """
@@ -1025,7 +1027,7 @@ python manage.py migrate
 ******************************************************************
 ```
 
-2. 2字段的修改
+##### 2. 2、字段的修改
 
 ```python
 """直接修改代码然后执行数据库迁移的两条命令即可"""
@@ -1033,7 +1035,7 @@ python manage.py migrate
 
 ![image-20221022125639587](E:\MarkDown\markdown\imgs\image-20221022125639587.png)
 
-2. 3字段的删除
+##### 2. 3、字段的删除
 
 ```python
 直接注释掉对应的字段代码，然后执行数据迁移的两条命令即可
@@ -1046,9 +1048,9 @@ python manage.py migrate
 """
 ```
 
-#### 3、数据的增删改查
+### 3、数据的增删改查
 
-3. 1查数据
+##### 3. 1、 查数据
 
 ```python
 #views.py
@@ -1137,7 +1139,7 @@ def login(request):
     return render(request, 'login.html')
 ```
 
-3. 2 增加数据
+#####   3. 2 、增加数据
 
 ```python
 #第一种方法  create()
@@ -1175,7 +1177,7 @@ def register(request):
     return render(request, 'register.html')
 ```
 
-3. 3 修改数据
+##### 3. 3 、修改数据
 
 ```python
   # 修改数据方式一
@@ -1197,7 +1199,7 @@ def register(request):
         """
 ```
 
-3. 4删除数据
+##### 3. 4、 删除数据
 
 ```python
 # 删除用户
@@ -1479,7 +1481,7 @@ ForeignKey与OneToOneField会自动在字段后面加_id后缀
 
 ## 路由层
 
-#### 1、路由匹配
+### 1、路由匹配
 
 ```python
     #路由匹配
@@ -1524,7 +1526,7 @@ urlpatterns = [
 ]
 ```
 
-#### 2、无名/有名分组
+### 2、无名/有名分组
 
 无名
 
@@ -1587,7 +1589,7 @@ def demo(request, *args,**kwargs):
 
 
 
-#### 3、反向解析
+### 3、反向解析
 
 ```python
 #通过一些方法得到一个结果，该结果可以直接访问对应的url触发视图函数
@@ -1608,7 +1610,7 @@ def demo(request, *args,**kwargs):
 """别名不能出现冲突！！！"""
 ```
 
-#### 4、无名有名反向解析
+### 4、无名有名反向解析
 
 ```python
 #无名分组的反向解析
@@ -1647,7 +1649,7 @@ def home(request):
         return render(request, 'home.html')
 ```
 
-#### 5、路由分发
+### 5、路由分发
 
 ```python
 """
@@ -1702,7 +1704,7 @@ urlpatterns = [
 
 ```
 
-#### 6、名称空间
+### 6、名称空间
 
 ```python
 # 当多个应用出现了相同的别名，反向解析不能自动识别应用前缀
@@ -1744,7 +1746,7 @@ urlpatterns = [
 
 
 
-#### 7、伪静态
+### 7、伪静态
 
 ```python
 """
@@ -1829,7 +1831,7 @@ models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)
 
 ## 视图层
 
-#### 1、三板斧
+### 1、三板斧
 
 ```python
 """
@@ -1855,7 +1857,7 @@ def inder(request):
 
 
 
-#### 2、JsonResponse对象
+### 2、JsonResponse对象
 
 ```python
 """
@@ -1900,7 +1902,7 @@ def ab_json(request):
 
 
 
-#### 3、form表单上传文件及后端如何操作
+### 3、form表单上传文件及后端如何操作
 
 ```python
 """
@@ -1930,7 +1932,7 @@ def ab_file(request):
 
 ```
 
-#### 4、request对象方法
+### 4、request对象方法
 
 ```python
 """
@@ -1950,7 +1952,7 @@ print(request.path_info)#/app01/ab_file/
 print(request.get_full_path())#/app01/ab_file/?username=lisi
 ```
 
-#### 5、FBV与CBV
+### 5、FBV与CBV
 
 ```python
 #视图函数既可以是函数也可以是类
@@ -1980,15 +1982,15 @@ print(request.get_full_path())#/app01/ab_file/?username=lisi
     """
 ```
 
-#### 6、CBV源码剖析
+### 6、CBV源码剖析
 
 ## 模版层
 
-#### 1、模板语法传值
+### 1、模板语法传值
 
-{{}}变量相关
+* 变量相关：{{ }}
 
-{%%}逻辑相关
+* 逻辑相关：{% %}
 
 ```html
 #templates文件夹下的login.html
@@ -2066,7 +2068,7 @@ def index(request):
 
 ```
 
-#### 2、模板语法之过滤器（过滤器最多只能有两个参数）
+### 2、模板语法之过滤器（过滤器最多只能有两个参数）
 
 ```python
 """
@@ -2076,6 +2078,17 @@ django内置有60多个过滤器
 """
 #基本语法
 {{数据|过滤器:参数}}
+|length
+|default
+|filesizeformat  文件大小
+|date:'Y-m-d H:i:s'
+|slice:'0:6:2'
+|truncatechars(包含三个点)
+|tucncatewords（不包含三个点，按空格切）
+|add  数字加，字符串拼接
+|cut
+|join
+|safe
 
 
 #转义
@@ -2085,7 +2098,7 @@ django内置有60多个过滤器
     from django.utils.safestring import  mark_safe
     res=mark_safe('<h1>静静</h1>')
 """
-前端代码不一定非要在前端页面书写，也可以先在侯丹写好，然后传递给前端页面
+前端代码不一定非要在前端页面书写，也可以先在后端写好，然后传递给前端页面
 """
 ```
 
@@ -2167,7 +2180,7 @@ def index(request):
 
 
 
-#### 3、模板语法之标签
+### 3、模板语法之标签
 
 *  for循环
 
@@ -2213,7 +2226,7 @@ def index(request):
 {% endfor %}
 ```
 
-* 处理字典其他方法
+* 处理字典方法
 
 ```python
 #处理字典其他方法
@@ -2240,7 +2253,7 @@ def index(request):
 {% endwith %}
 ```
 
-#### 4、自定义过滤器，标签以及inclusion_tag
+### 4、自定义过滤器，标签以及inclusion_tag
 
 * 自定义过滤器
 
@@ -2248,7 +2261,7 @@ def index(request):
  
     """
     三步走：
-    	1. 必须要在应用下创建一个名字叫templatetags文件夹
+    	1. 必须要在应用下创建一个名字必须叫templatetags文件夹
     	2.在该文件夹内创建任意名称的py文件
     	3.在该py文件内必须先书写两句话
             from django import template
@@ -2263,7 +2276,7 @@ def index(request):
 
 @register.filter(name='tag')
 def my_sum(v1, v2):
-    return v1, v2
+    return v1 + v2
 ```
 
 * 自定义标签
@@ -2322,9 +2335,203 @@ def left(n):
 
 ![image-20221024224053678](E:\MarkDown\markdown\imgs\image-20221024224053678.png)
 
-#### 5、模板的继承
+### 5、模板的继承
+
+```python
+"""
+同一个html页面，想要重复使用大部分样式，只是局部修改
+"""
+
+
+#模板的继承，先选好要继承的模板页面
+{% extends 'home.html' %}
+
+#继承了之后子页面跟模板页面长得一摸一样，需要在模板页面上提前规划可以被修改的区域
+                    {% block 名字 %}
+
+
+                    {% endblock %}
+
+```
+
+![image-20221025153951035](E:\MarkDown\markdown\imgs\image-20221025153951035.png)
+
+```python
+#然后子页面可以声明想要修改哪块划定了的区域
+{% block 名字 %}
+	子页面内容
+    
+    子版页面除了可以写自己的代码之外，还可以继续使用模板的内容
+    {{ block.super }} 
+{% endblock %}
+```
 
 
 
-#### 6、模板的导入
+![image-20221025152808944](E:\MarkDown\markdown\imgs\image-20221025152808944.png)
+
+```python
+        
+#一般情况下模板页面上应该至少有三块可以被修改的区域
+ 1. css区域
+ 2. html区域
+ 3. js区域
+    
+    
+每一个子页面都可以有自己独有的html代码，css代码，js代码
+```
+
+![image-20221025153413108](E:\MarkDown\markdown\imgs\image-20221025153413108.png)
+
+![image-20221025153715030](E:\MarkDown\markdown\imgs\image-20221025153715030.png)
+
+* **一般情况下，模板页面上划定的区域越多，那么该模板的扩展性就越高，但是如果太多，就还不如自己写**
+
+### 6、模板的导入
+
+
+
+```python
+"""
+将页面的某一个局部当作模块形式
+哪个地方需要就可以直接导入使用
+"""
+
+{% include 'demo.html' %}"
+```
+
+![image-20221025155047637](E:\MarkDown\markdown\imgs\image-20221025155047637.png)
+
+![image-20221025155207250](E:\MarkDown\markdown\imgs\image-20221025155207250.png)
+
+## 模型层
+
+
+
+### 1、测试脚本
+
+```python
+"""
+当你只是想想测试django中的某一个 py文件内容，那么你可以不用书写前后端交互的形式，而是直接写一个测试脚本即可
+
+脚本代码无论写在应用下的tests.py还是写在自己单独开设的py文件都可以
+"""
+#测试环境准备
+	#去manage.py中拷贝部分代码，然后自己写两行代码
+
+import os
+
+def main():
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'day06.settings')
+    import django
+    django.setup()
+	#在代码块的下main就可以测试django里的单个py文件了
+if __name__ == '__main__':
+    main()
+```
+
+### 2、单表操作 	
+
+```python
+"""
+Django自带的sqlite3对日期格式不是很敏感，处理的时候容易出错
+"""
+    # 增
+	#models.User.objects.create(name='zhao',age=18,register_time='2002-1-21')
+    # import datetime
+    # ctime = datetime.datetime.now()
+    # user_dic = models.User(name='lisi', age=19, register_time=ctime)
+    # user_dic.save()
+    # 删
+    # res = models.User.objects.filter(pk=2).delete()
+    # print(res)
+    # user_obj=models.User.objects.filter(pk=1).first()
+    # user_obj.delete()
+    # 修改
+    # models.User.objects.filter(pk=2).update(name='张三')
+```
+
+### 3、常见13种单表查询方法
+
+```python
+all()  #查询所有数据
+	 models.User.objects.all()
+    
+filter()  #带有过滤条件的查询
+	models.User.objects.filter()
+    models.User.objects.filter(pk=2)
+    
+get()  #直接那对象，但是条件不存在会报错
+	user_pbj = models.User.objects.get(pk=4)
+
+first()	#拿queryset第一个元素
+	user_obj=models.User.objects.filter(pk=1).first()
+    models.User.objects.all().first()
+
+last()	#拿queryset最后一个元素
+	models.User.objects.all().last()
+
+values() #可以指定获取的数据字段  返回结果：列表套字典的形式
+	models.User.objects.values('name')
+    
+values_list() #返回结果：列表套元组
+	 res=models.User.objects.values_list('name','age')
+    
+distinct()  #去重一定要是一摸一样的数据才能去重，如果带有主键那么肯定不一样
+	res=models.User.objects.values('name','age').distinct()
+    
+order_by() #排序
+	res=models.User.objects.order_by('age') print(res) #默认升序
+    res=models.User.objects.order_by('-age') print(res) #降序
+    
+reverse() #反转  反转的前提是已经排过序了 order_by().reverse()
+	res=models.User.objects.order_by('age').reverse()
+    
+count() #统计当前数据的个数
+	res=models.User.objects.count()
+    
+exclude() #排除...
+	res=models.User.objects.exclude(name='zhao')
+
+exists()  #判断是否存在,返回布尔值
+	res=models.User.objects.exists()
+    res=models.User.objects.filter(pk=2).exists()
+	
+```
+
+### 4、Django终端打印SQL语句
+
+```python
+#方式一，只能用于queryset对象
+    res = models.User.objects.values_list('name', 'age')
+    print(res.query)  # 查看内部封装的sql语句
+    """
+    上述查看sql语句的方式，只能用于queryset对象
+    只有queryset对象才能够.query查看内部的sql语句
+    """
+#方式二,所有的sql语句都能看
+    #去配置文件中配置以下代码
+    
+    LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+    }
+}
+```
+
+
+
+![image-20221026180126520](E:\MarkDown\markdown\imgs\image-20221026180126520.png)
 
