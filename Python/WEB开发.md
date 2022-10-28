@@ -217,6 +217,8 @@ def get_time(env):
     return data
 ```
 
+
+
 * **将一个字典传递给html文件，并且可以在文件上方便快捷的操作字典数据**
 
 ```python
@@ -237,6 +239,10 @@ def get_dict(env):
     res = tmp.render(user=user_dic)  # 给这个页面传递了一个值，页面上通过变量名user就能够拿到user_dict
     return res
 ```
+
+**前端获取后端结果**
+
+![image-20221028155919554](E:\MarkDown\markdown\imgs\image-20221028155919554.png)
 
 * **后端获取数据库中数据展示到前端页面**
 
@@ -265,6 +271,39 @@ def get_user(env):
     res=tmp.render(user_list=data_list)
     return res
 
+```
+
+**前端获取数据库传过来的值**
+
+```html
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h1 class="text-center">用户数据</h1>
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>username</th>
+                    <th>password</th>
+                    <th>hobby</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in user_list %}
+                <tr>
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.password}}</td>
+                    <td>{{user.hobby}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
 ```
 
 ## 模板语法之jinja2模块
@@ -368,26 +407,29 @@ pip install django==4.0
 
 ---
 
-1. 1.==创建django项目==
+##### 1. 1.==创建django项目==
 
 ```python
 
 """先切换到对应的盘，然后再创建"""
 django-admin startproject 项目名
 
-	项目名文件夹
-    	manage.py
-    	项目名文件夹
-        	__init__.py
-            settings.py
-            urls.py
-            wsgi.py
-            asgi.py
+#目录结构
+
+    ├── mysite #项⽬⽬录
+    |
+    │  ├── __init__.py #包标志
+    │  ├── settings.py #项⽬配置⽂件
+    │  ├── urls.py #路由映射表
+    │  └── wsgi.py #wsgi接⼝
+    └── manage.py #项⽬管理命令
+    
+manage.py:是Django⽤于管理本项⽬的命令⾏⼯具，之后进⾏站点运⾏，数据库⾃动⽣成等都是通过本⽂件完成。
 ```
 
 ---
 
-1. 2.==启动django项目==
+##### 1. 2.==启动django项目==
 
 
 
@@ -398,7 +440,28 @@ django-admin startproject 项目名
 """
     
 python manage.py runserver
+python manage.py runserver 9000 #可以指定端口
+
 ```
+
+测试服务器默认端⼝是8000，仅限于本地连接。打开浏览器输⼊：
+
+```python
+http://localhost:8000 
+# 或者
+http://127.0.0.1:8000 
+```
+
+如果要让远程客户端连接需要修改配置⽂件，其中0.0.0.0:9000是可选的，0.0.0.0 说明任何ip都可以访问。
+
+```markdown
+# 修改setting.py中的这⼀⾏
+ALLOWED_HOSTS = ['*']
+```
+
+
+
+可以看到自己的网站,就表示运行启动成功！
 
 ![image-20221021095003878](E:\MarkDown\markdown\imgs\image-20221021095003878.png)
 
@@ -406,7 +469,9 @@ python manage.py runserver
 
 ---
 
-1 .3.==创建应用==
+##### 1. 3.==创建应用==
+
+⼀个django项⽬中可以包含多个应⽤,可以使⽤以下命令建⽴应⽤：
 
 ```python
 python manage.py startapp app01
@@ -414,11 +479,29 @@ python manage.py startapp app01
 
 ![image-20221021095924761](E:\MarkDown\markdown\imgs\image-20221021095924761.png)
 
+修改项⽬的配置⽂件setting.py
+
+```markdown
+INSTALLED_APPS = [
+ 'django.contrib.admin',
+ 'django.contrib.auth',
+ 'django.contrib.contenttypes',
+ 'django.contrib.sessions',
+ 'django.contrib.messages',
+ 'django.contrib.staticfiles',
+ 'app01.apps.App02Config'  # 安装⾃⼰的应⽤,全写
+  # 'app01'#简写
+  
+]
+```
+
+
+
 ### 2、pycharm操作
 
 ---
 
-2. 1.==创建django项目==
+##### 2. 1.==创建django项目==
 
 
 
@@ -430,9 +513,7 @@ file---new project  ,选择左侧第二个Django即可
 
 ![image-20221021101652876](E:\MarkDown\markdown\imgs\image-20221021101652876.png)
 
----
-
-2. 2.==启动django项目==
+##### 2. 2.==启动django项目==
 
 
 
@@ -450,7 +531,7 @@ file---new project  ,选择左侧第二个Django即可
 
 ---
 
-2. 3.==创建应用==
+##### 2. 3.==创建应用==
 
 
 
@@ -472,7 +553,7 @@ file---new project  ,选择左侧第二个Django即可
 
 ---
 
-2. 4.==还可以修改端口号==
+##### 2. 4.==还可以修改端口号==
 
 
 
@@ -513,11 +594,11 @@ INSTALLED_APPS = [
 #创建出来的应用第一步先去配置文件中注册，
 
 ps:在用pycharm创建项目的时候，pycharm可以帮你创建一个app并自动注册
-*****************************************************************
+***********************************************************
 
 ```
 
-![image-20221021104740266](E:\MarkDown\markdown\imgs\image-20221021104740266.png)
+![image-20221028172420141](E:\MarkDown\markdown\imgs\image-20221028172420141.png)
 
 ![image-20221021104644697](E:\MarkDown\markdown\imgs\image-20221021104644697.png)
 
@@ -539,6 +620,79 @@ ps:在用pycharm创建项目的时候，pycharm可以帮你创建一个app并自
         ---tests.py		测试文件
         ---views.py     视图函数（视图层）
 ```
+
+**项目配置文件：**
+
+```markdown
+# 项⽬根⽬录 manage.py所在⽬录
+BASE_DIR =BASE_DIR = Path(__file__).resolve().parent.parent  # 当前项目路径
+
+# 调试模式
+DEBUG = True  # 上线之后改为False
+
+# 允许访问的主机
+ALLOWED_HOSTS = []  # 上线之后可以写*
+
+# 注册的app（app就是功能模块)
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'app02.apps.App02Config'  # 全写
+    # 'app02'#简写
+]
+
+
+# html文件存放路径配置
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates']
+        ,
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+# 数据库配置
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db1',  # 数据库名
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': '127.0.0.1',
+        'POST': 3306,
+        'CHARSET': 'utf8'
+    }
+}
+
+# 数据库默认是sqlite3
+DATABASES = {
+ 'default': {
+ 'ENGINE': 'django.db.backends.sqlite3',
+ 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), 
+ }
+}
+
+# 国际化
+LANGUAGE_CODE = 'zh-hans' #语⾔编码
+TIME_ZONE = 'Asia/Shanghai' #时区
+```
+
+
+
+
 
 ### 5、命令行与pycharm创建区别
 
@@ -634,6 +788,7 @@ def ab_render(request):
     user_dic = {'username': 'zhao', 'age': 18}
     # 第一种传值：更加精确，节省资源
     # return render(request, 'ab_render.html', {'data': user_dic,'date':123})
+    
     # 第二种传值:当你要传入的数据特别多的时候
     """locals会将所在的名称空间中所有的名字全部传递给html页面"""
     return render(request,'ab_render.html',locals())
@@ -737,6 +892,10 @@ form 表单action参数
 """
 
 # 在前期使用django提交post请求时，需要去配置文件中注释掉一行代码
+'django.middleware.csrf.CsrfViewMiddleware'
+
+
+#settings.py
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -763,7 +922,13 @@ request.GET   # 获取url问好后面携带的参数
 """
 get请求携带的数据是有大小数据的，大概好像只有4k左右
 post请求则没有限制
-"""    
+""" 
+```
+
+
+
+```python
+   
 def login(request):
     """
     get请求和post请求应该有不同的处理机制
@@ -816,7 +981,7 @@ pycharm可以充当很多数据库的客户端
 
 
 
-如果提示下载失败的话，可以点击Driver，选择**MySQL for 5.1,**然后重新下载，**重新测试连接，成功**，测试链接成功后，点击apply，点击OK。！
+==如果提示下载失败的话，可以点击Driver，选择**MySQL for 5.1,**然后重新下载，**重新测试连接，成功**，测试链接成功后，点击apply，点击OK。！==
 
 
 
@@ -910,7 +1075,7 @@ ORM:"""对象关系映射"""
 对象属性			记录某个字段对应的值
 ```
 
-1. **第一步：先去models.py中书写一个模型类**
+1. **第一步：先去应用下的models.py中书写一个模型类**
 
 ```python
 # 应用下的models.py
@@ -924,7 +1089,7 @@ class User(models.Model):
     password = models.IntegerField()
    
 
-***************************************2.数据库迁移命令****************************************************
+************************************2.数据库迁移命令**************************************************
  python manage.py makemigrations  将操作记录记录到小本本上（migrations文件夹）
  python manage.py migrate   将操作真正同步到数据库中
 ********************************************************************************************************
@@ -966,7 +1131,7 @@ class Author(models.Model):
 2. **第二步：数据库迁移命令**
 
 ```python
- python manage.py makemigrations  将操作记录记录到小本本上（migrations文件夹）
+ python manage.py makemigrations   #⽣成数据库迁移⽂件
 ```
 
 
@@ -978,7 +1143,8 @@ class Author(models.Model):
 ![image-20221022111604561](E:\MarkDown\markdown\imgs\image-20221022111604561.png)
 
 ```python
- python manage.py migrate   将操作真正同步到数据库中
+ python manage.py migrate  #⽣成数据库表 
+#将操作真正同步到数据库中
 ```
 
 ![image-20221022112226431](E:\MarkDown\markdown\imgs\image-20221022112226431.png)
@@ -989,7 +1155,7 @@ class Author(models.Model):
 
 ![image-20221022115814598](E:\MarkDown\markdown\imgs\image-20221022115814598.png)
 
-**一个Djanog项目可以有多个应用，那么多个应用之间可能会出现表明冲突的情况，那么加上前缀就可以完全避免冲突**    
+**一个Djanog项目可以有多个应用，那么多个应用之间可能会出现表名冲突的情况，那么加上前缀就可以完全避免冲突**    
 
 ![image-20221022120128278](E:\MarkDown\markdown\imgs\image-20221022120128278.png)
 
@@ -1095,10 +1261,6 @@ filter括号内可以携带多个参数，参数与参数之间默认是and关�
 user_obj=models.User.objects.filter(username=username,password=password).first()
 #select * from user where username='zhao' and password=132;
 ```
-
-
-
-
 
 **登录功能**
 
@@ -1221,7 +1383,7 @@ def delete_user(request):
 
 
 
-**==示例==：**
+##### **==3.5、示例==：**
 
 ```python
 #先将数据库中的数据全部展示到前端，然后给一个数据两个按钮，一个编辑，一个删除
@@ -1289,7 +1451,7 @@ def userlist(request):
 
     # 方式二：
     user_queryset = models.User.objects.all()
-    # print(data)
+    
     return render(request, 'userlist.html', locals())
 ```
 
@@ -1479,11 +1641,37 @@ ForeignKey与OneToOneField会自动在字段后面加_id后缀
 """
 ```
 
-## 路由层
+## ==路由层==
+
+当⽤户在您的Web应⽤程序上发出⻚⾯请求时，Django会获取url中请求路径（端 ⼝之后的部分），然后通过urls.py⽂件查找与路径相匹配的视图，然后返回HTML 响应或404未找到的错误（如果未找到）。在urls.py中，最重要的是 **`urlpatterns` 列表。这是您定义URL和视图之间映射的地⽅。映射是URL模式中的path对象**
 
 ### 1、路由匹配
 
 ```python
+from django.conf.urls import patterns, include
+from app import views
+urlpatterns = [
+ path('hello/', views.hello, name='hello'),
+ path('blog/', include('blog.urls')),
+]
+```
+
+==path对象有四个参数==
+
+*  模式串：匹配⽤户请求路径的字符串（和flask⼀样） 
+
+* 视图函数：匹配上⽤户指定请求路径后调⽤的是视图函数名 kwargs：
+
+* 可选参数，需要额外传递的参数，是⼀个字典 
+
+* 名称（name）：给路由命名，在代码中可以使⽤name进⾏反向解析（由 name获取⽤户请求路劲）。
+
+  ---
+
+另外，如果path中模式串如果不能满⾜你路由规则，还可以使⽤re_path对象， re_path对象中模式串是正则表达式，其他三个参数和path对象⼀致.
+
+```python
+   
     #路由匹配
     re_path('test/',views.test),
     re_path('testadd/',views.testadd)
@@ -1495,6 +1683,8 @@ ForeignKey与OneToOneField会自动在字段后面加_id后缀
 	在输入url会默认加斜杠，是应为django内部自动做了重定向
     """
 ```
+
+Django检查url模式之前会移除模式前的`/`，所以url模式前⾯的`/`可以不写，但如果 在地址栏⾥请求的时候不带尾斜杠，则会引起重定向，重定向到带尾斜杠的地址， 所以请求的时候要带尾斜杠。
 
 ![image-20221023134245558](E:\MarkDown\markdown\imgs\image-20221023134245558.png)
 
@@ -1508,6 +1698,12 @@ APPEND_SLASH = False# 取消自动加斜杠，默认是True
 ```
 
 ![image-20221023134109323](E:\MarkDown\markdown\imgs\image-20221023134109323.png)
+
+---
+
+`re_path`中模式包含了⼀ 个上尖括号(`^`)和⼀个美元符号(`$`)。这些都是正则符号，**上尖括号表示从字符串开 头匹配**。**美元符号表示匹配字符串的结尾**，这两个符号和到⼀起就表示模式必须完 全匹配路径，⽽不是包含⼀部分。⽐如对于模式：
+
+`r'^hello/$' `如果不包含美元符，也就是` r'^hello/' `，任何以/hello/的url都可以 匹配，例如：/hello/world/、/hello/1/2/等，同样如果不以上尖括号开头，则任何 以hello/做结尾的url都可以匹配。
 
 ```python
 # urls.py
@@ -1526,9 +1722,35 @@ urlpatterns = [
 ]
 ```
 
+==模式匹配的时候要注意：== 
+
+* Django从上往下进⾏模式匹配，⼀旦匹配成功就不会往下继续匹配了 ⼀个视图函数可以有多个模式匹配 
+* 模式前⾯不需要加`/ `
+* 如果匹配不上，则会引起异常，Django会调⽤错误处理视图处理（关闭调试模式）
+
+
+
+在path中使⽤<参数名>表示所传参数，视图函数中的参数名必须和<>中参数名⼀ 致。参数可以是以下类型：
+
+```python
+str：如果没有指定参数类型，默认是字符串类型。字符串参数可以匹配除/和
+空字符外的其他字符串
+int：匹配0和正整数，视图函数的参数将得到⼀个整型值
+slug：匹配由数字、字⺟、-和_组成的字符串参数
+path：匹配任何⾮空字符串，包括/。
+```
+
+
+
+
+
 ### 2、无名/有名分组
 
-无名
+在re_path中，（）部分是正则的组， django在进⾏url匹配时，就会⾃动把匹配 成功的内容，作为参数传递给视图函数。
+
+
+
+**无名**
 
 ```python
 """
@@ -1545,11 +1767,13 @@ def test(request,xxx):
 #无名分组就是将括号内正则表达式匹配到的内容当作位置参数传递给后面的视图函数
 ```
 
-有名
+**有名**
 
 ```python
 """
 可以给正则表达式起别名
+
+对正则表达式分组进⾏命名
 """
 #urls.py
  re_path(r'^testadd/(?P<year>\d+)', views.testadd),
@@ -1562,7 +1786,11 @@ def testadd(request, year):
 #有名分组就是将括号内正则表达式匹配到的内容当作关键字参数传递给后面的视图函数
 ```
 
+**匹配/分组算法：**
 
+* 在⼀个匹配模式中要么使⽤命名分组，要么使⽤⽆命名分组，不能同时使⽤ 
+* 请求的URL被看做是⼀个普通的Python 字符串， URLconf在其上查找并匹 配。进⾏匹配时将不包括GET或POST请求⽅式的参数以及域名。换句话讲， 对同⼀个URL的⽆论是POST请求、GET请求、或HEAD请求⽅法等等 —— 都 将路由到相同的函数。 
+* 每个捕获的参数都作为⼀个普通的Python 字符串传递给视图，⽆论正则表达 式使⽤的是什么匹配⽅式。
 
 ```python
 # 无名有名 不能混用
@@ -1829,7 +2057,11 @@ models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)
 """
 ```
 
-## 视图层
+## ==视图层==
+
+视图响应的过程：
+
+ 当⽤户从浏览器发起⼀次请求时，⾸先django获取⽤户的请求，然后通过路由 （urls）将请求分配到指定的是视图函数。视图函数负责进⾏相应的业务处理，处 理完毕后把结果（可能是json、html等）浏览器
 
 ### 1、三板斧
 
@@ -1984,7 +2216,7 @@ print(request.get_full_path())#/app01/ab_file/?username=lisi
 
 ### 6、CBV源码剖析
 
-## 模版层
+## ==模版层==
 
 ### 1、模板语法传值
 
@@ -2404,7 +2636,7 @@ def left(n):
 
 ![image-20221025155207250](E:\MarkDown\markdown\imgs\image-20221025155207250.png)
 
-## 模型层
+## ==模型层==
 
 
 
@@ -2436,20 +2668,26 @@ if __name__ == '__main__':
 """
 Django自带的sqlite3对日期格式不是很敏感，处理的时候容易出错
 """
-    # 增
-	#models.User.objects.create(name='zhao',age=18,register_time='2002-1-21')
-    # import datetime
-    # ctime = datetime.datetime.now()
-    # user_dic = models.User(name='lisi', age=19, register_time=ctime)
-    # user_dic.save()
-    # 删
-    # res = models.User.objects.filter(pk=2).delete()
-    # print(res)
-    # user_obj=models.User.objects.filter(pk=1).first()
-    # user_obj.delete()
-    # 修改
-    # models.User.objects.filter(pk=2).update(name='张三')
+class User(models.Model):
+    name = models.CharField(max_length=32, verbose_name='姓名')
+    age = models.IntegerField()
+    register_time = models.DateField()  # 年月日
+    """
+    DateTime     
+    DateTimeField
+        两个重要参数，
+                    auto_now   :每次操纵数据的时候，该字段会自动将 当前时间更新
+                    auto_now_add  :在创建数据的时候，会自动将当前创建时间记录下来，之后只要不修改，那么就一直不变
+                    
+    """
+    
 ```
+
+```python
+
+```
+
+
 
 ### 3、常见13种单表查询方法
 
@@ -2534,4 +2772,242 @@ exists()  #判断是否存在,返回布尔值
 
 
 ![image-20221026180126520](E:\MarkDown\markdown\imgs\image-20221026180126520.png)
+
+### 5、多表操作
+
+#### 5. 1、表准备
+
+```python
+from django.db import models
+
+
+# Create your models here.
+
+class User(models.Model):
+    name = models.CharField(max_length=32, verbose_name='姓名')
+    age = models.IntegerField()
+    register_time = models.DateField()  # 年月日
+    """
+    DateTime     
+    DateTimeField
+        两个重要参数，
+                    auto_now   :每次操纵数据的时候，该字段会自动将 当前时间更新
+                    auto_now_add  :在创建数据的时候，会自动将当前创建时间记录下来，之后只要不修改，那么就一直不变
+                    
+    """
+
+
+class Book(models.Model):
+    title = models.CharField(max_length=32)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    publish_data = models.DateField(auto_now_add=True)
+    # 一对多
+    publish = models.ForeignKey(to='Publish', on_delete=models.CASCADE)
+
+    # 多对多
+    author = models.ManyToManyField(to='Author')
+
+
+class Publish(models.Model):
+    name = models.CharField(max_length=32)
+    addr = models.CharField(max_length=32)
+    email = models.EmailField()  # 本质还是varchar(254)
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=32)
+    age = models.IntegerField()
+
+    # 一对一
+    author_detail = models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)
+
+
+class AuthorDetail(models.Model):
+    phone = models.BigIntegerField()  # 电话号码用BigIntegerField()或者用CharFiled()
+    addr = models.CharField(max_length=32)
+
+    
+    
+"""切记执行表的迁移命令"""    
+```
+
+#### 5. 2、一对多外键增删改查
+
+```python
+ #tests.py
+    # 一对多的外键增删改查
+    # 增
+    # 1直接写实际字段 id
+    # models.Book.objects.create(title='西游记', price=81.8, publish_id=1)
+    # models.Book.objects.create(title='聊斋', price=61.8, publish_id=2)
+    # models.Book.objects.create(title='老子', price=66.8, publish_id=1)
+    # 2虚拟字段  对象
+    # publish_obj = models.Publish.objects.filter(pk=2).first()
+    # models.Book.objects.create(title='红楼梦',price=80,publish=publish_obj)
+
+    # 删
+    # models.Publish.objects.filter(pk=1).delete()  # 级联删除
+
+    # 修改
+    # models.Book.objects.filter(pk=1).update(publish_id=2)
+    # publish_obj = models.Publish.objects.filter(pk=1).first()
+    # models.Book.objects.filter(pk=1).update(publish=publish_obj)
+
+```
+
+#### 5. 3、多对多外键增删改查
+
+```python
+#tests.py
+
+    """多对多 增删改查  就是在操作第三张表"""
+
+    # 如何给数据添加作者
+    # book_obj = models.Book.objects.filter(pk=2).first()
+    # print(book_obj.author) #就类似于你已经找到了第三张关系表了
+    # book_obj.author.add(1)  # 书籍id为1的书籍绑定一个主键为1的作者
+    # book_obj.author.add(2,3)
+
+    # author_obj = models.Author.objects.filter(pk=1).first()
+    # author_obj1 = models.Author.objects.filter(pk=2).first()
+    # author_obj2 = models.Author.objects.filter(pk=3).first()
+    # book_obj.author.add(author_obj)
+    # book_obj.author.add(author_obj1,author_obj2)
+    """
+    add 给第三张关系表添加数据，括号内既可以传数字，也可以传对象，并且都支持多个
+    """
+
+    # 删
+    book_obj = models.Book.objects.filter(pk=2).first()
+
+    # book_obj.author.remove(2)
+    # book_obj.author.remove(1,3)
+
+    # author_obj = models.Author.objects.filter(pk=1).first()
+    # author_obj1 = models.Author.objects.filter(pk=2).first()
+    # book_obj.author.remove(author_obj,author_obj1)
+    """
+    remove 括号内既可以传数字，也可以传对象，并且都支持多个
+    """
+
+    # 修改
+    # book_obj.author.set([1, 3])  # 括号内必须给一个可迭代对象
+    # author_obj=models.Author.objects.filter(pk=2).first()
+    # author_obj1=models.Author.objects.filter(pk=3).first()
+    # book_obj.author.set([author_obj,author_obj1])
+    """
+    set 括号内必须传一个可迭代对象，括号内既可以传数字，也可以传对象，并且都支持多个，
+        先删除后新增
+    """
+
+    # 清空
+    # 在第三张表中，清空某个书籍与作者的绑定关系
+    book_obj.author.clear()
+    """
+    clear 括号内不加任何参数
+    """
+    
+```
+
+#### 5. 4、正反向概念
+
+```python
+
+外键字段在我手上，那么我查你就是正向
+外键字段不在我手上，我查你就是反向
+
+book>>>外键字段在书那（正向）>>>publish
+pupblish >>>外键字段在书那（反向）>>>book
+
+"""
+正向查询按字段
+反向查询按表名小写
+
+"""
+```
+
+#### 5. 5、多表查询
+
+##### 1. 子查询（基于对象的跨表查询）
+
+```python
+   # 基于对象的跨表查询
+    # 1.查询书籍主键为1的出版社
+    # book_obj = models.Book.objects.filter(pk=1).first()
+    # # 书查出版社》》正向
+    # res = book_obj.publish
+    # print(res.name)
+    # print(res.addr)
+
+    # 2.查询书籍主键为1的作者
+    # book_obj = models.Book.objects.filter(pk=1).first()
+    # 书查作者 正向
+    # res=book_obj.author   #app01.Author.None
+    # res=book_obj.author.all()#<QuerySet [<Author: Author object (1)>, <Author: Author object (3)>]>
+    # print(res)
+
+    # 3查询作者zhao的电话号码
+    # author_obj = models.Author.objects.filter(name='zhao').first()
+    # res = author_obj.author_detail
+    # print(res.phone)
+    # print(res.addr)
+
+
+    在书写orm语句的时候，跟写sql 语句是一样的
+    不要企图一次性写完，如果比较复杂，就写一点看一点
+    
+    正向什么时候需要加.all()
+        当结果可能有多个，就需要加.all()
+        如果是一个则直接拿到数据对象
+   
+    # 4查询出版社是东方出版社出版的书
+    # publish_obj = models.Publish.objects.filter(name='东方出版社').first()
+    # 出版社查书 反向
+    # res = publish_obj.book_set.all()
+    # print(res)
+
+    # 5.查询作者是zhao写过的书
+    # author_obj = models.Author.objects.filter(name='zhao').first()
+    # 作者查书，，反向
+    # ress = author_obj.book_set.all()
+    # print(ress)
+
+    # 6手机号是110的作者姓名
+    # author_detail_obj = models.AuthorDetail.objects.filter(phone=110).first()
+    # res=author_detail_obj.author
+    # print(res.name)
+
+ 
+    基于对象
+        反向查询的时候    
+            当你的查询结果可以有多个的时候，就必须加_set.all()
+            当结果只有一个的时候，就不许需要加_set.all()
+        
+  
+```
+
+##### 2.联表查询（基于双下划线的跨表查询）
+
+```python
+# 1.查询zhao的手机号
+     """反向"""
+# res = models.AuthorDetail.objects.filter(author__name='zhao')  # 拿作者姓名是zhao的作者详情
+# res = models.AuthorDetail.objects.filter(author__name='zhao').values('phone','author__name')  # 拿作者姓名是zhao的作者详情
+# print(res)
+
+# 2查询书籍主键为1的出版社名称和书的名称
+         """反向"""
+# res=models.Publish.objects.filter(book__pk=1).values('name','book__title')
+# print(res)
+
+# 3查询书籍主键为1的作者姓名
+"""反向"""
+# res=models.Author.objects.filter(book__pk=1).values('name')
+# print(res)
+
+# 4查询书籍主键是1的作者的手机号
+# book author authordetail
+#res = models.Book.objects.filter(pk=1).values('author__author_detail__phone')
+#print(res)    
+```
 
