@@ -856,6 +856,8 @@ def ab_render(request):
 
 ### ==**静态文件配置**==
 
+* 网站通常需要提供额外的文件，如图像、JavaScript或CSS。在Django中，我们将这些文件称为“`静态文件`”
+
 ```python
 STATIC_URL = 'static/'  # 类似于访问静态网页的令牌
 """如果想要访问静态文件，就必须以static开头"""
@@ -876,11 +878,19 @@ STATICFILES_DIRS = [
     BASE_DIR / "static1",
 ]
 
+方法1：
+
+<link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">   直接跟static后面的路径即可，这里的static并不是我们创建的目录名称，而是令牌名字
+
 # 静态文件动态解析
 {% load static %}
     <link rel="stylesheet" href="{% static 'bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
     <script src="{% static 'bootstrap-3.4.1-dist/js/bootstrap.min.js' %}"></script>
-    
+
+方法2：动态解析static令牌，这样的好处是当我们需要更换令牌的名字的时候，不需要每个html文件更改了，只需要在setting.py里面更改即可，会动态的解析到静态文件的名称。语法如下：
+
+{% load static %}
+<link rel="stylesheet" href="{% static "bootstrap-3.4.1-dist/css/bootstrap.min.css" %} ">    
     
 # form 默认是get请求数据
 """
@@ -906,6 +916,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 ```
+
+### 静态文件css，js样式加载不出来解决
+
+```python
+在要编辑的html文件中，删除掉第一行的<!DOCTYPE html>就可以解决
+```
+
+
 
 ## request对象
 
@@ -1209,6 +1227,7 @@ python manage.py migrate
 
 """
 在操作models.py时，一定要细心
+
 
 执行迁移命令之前一定要检查一下代码
 """
@@ -1527,7 +1546,7 @@ def edit_user(request):
 # 删除用户
 def delete_user(request):
     # 获取到用户想要删除 的数据id值
-    delete_id = request.GET('user_id')
+    delete_id = request.GET.get('user_id')
 
     # 直接去数据库找到对应的数据删除即可
     models.User.objects.filter(id=delete_id).delete()
@@ -2640,7 +2659,7 @@ def left(n):
 
 
 
-### 1、测试脚本
+### 1、==测试脚本==
 
 ```python
 """
@@ -2648,21 +2667,33 @@ def left(n):
 
 脚本代码无论写在应用下的tests.py还是写在自己单独开设的py文件都可以
 """
-#测试环境准备
-	#去manage.py中拷贝部分代码，然后自己写两行代码
 
+#测试环境准备
+	# 1.去manage.py中拷贝部分代码，
+    #2.
+        #import django
+        #django.setup()
+
+    
+    
+#tests.py    
 import os
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'day06.settings')
     import django
     django.setup()
+    
 	#在代码块的下main就可以测试django里的单个py文件了
+    from app01 import models
+    ......
 if __name__ == '__main__':
     main()
 ```
 
-### 2、单表操作 	
+### 2、==单表操作==
+
+#### 2. 1、表准备
 
 ```python
 """
@@ -2683,13 +2714,85 @@ class User(models.Model):
     
 ```
 
-```python
+#### 2. 2、操作
 
+```python
+#增
+1.create()
+2.对象.save()
+
+#查
+1.all()  #查所有
+2.filter() #筛选条件，括号内多个参数之间逗号隔开，并且默认是and的关系
+3.get() #筛选条件，条件不存在直接报错，不推荐使用
+
+#改
+1.update  #queryset对象帮你封装的批量更新
+2.对象.save()
+
+#删
+1.delete() #queryset对象帮你封装的批量删除
+2.对象.delete()
+
+"""在实际项目中，数据是不可能真正删除的，一般情况下都用一个字段来标记是否删除"""
 ```
 
 
 
-### 3、常见13种单表查询方法
+```python
+#tests.py
+
+from django.test import TestCase
+
+# Create your tests here.
+import os
+
+
+def main():
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'day06.settings')
+    import django
+    django.setup()
+
+    from app01 import models
+    增
+    #方法一
+    # models.User.objects.create(name='zhao',age=18,register_time='2002-1-21')
+   
+	#方法二
+	# import datetime
+    # ctime = datetime.datetime.now()
+    # user_dic = models.User(name='lisi', age=19, register_time=ctime)
+    # user_dic.save()
+    
+     删
+    #方法一
+    # res = models.User.objects.filter(pk=2).delete()
+    # print(res)
+    """
+        pk会 自动查找到当前表的主键字段，指代的就是当前表的主键字段
+        用了pk就不需要知道当前表的主键字段到底叫什么了
+        
+    """
+	#方法二
+    # user_obj=models.User.objects.filter(pk=1).first()
+    # user_obj.delete()
+    
+    修改
+    # models.User.objects.filter(pk=2).update(name='张三')
+    
+    #user_obj = models.User.objects.get(pk=4)
+    #user_obj.name='lisi'
+    #user_obj.save()
+    """
+    get方法返回的直接就是当前数据对象
+    但是不推荐使用，
+        一旦数据不存在，该方法直接报错
+        而filter不会报错，返回空
+    """
+   
+```
+
+#### 2.3、常见13种单表查询方法
 
 ```python
 all()  #查询所有数据
@@ -2699,7 +2802,7 @@ filter()  #带有过滤条件的查询
 	models.User.objects.filter()
     models.User.objects.filter(pk=2)
     
-get()  #直接那对象，但是条件不存在会报错
+get()  #直接拿数据对象，但是条件不存在会报错
 	user_pbj = models.User.objects.get(pk=4)
 
 first()	#拿queryset第一个元素
@@ -2709,18 +2812,18 @@ first()	#拿queryset第一个元素
 last()	#拿queryset最后一个元素
 	models.User.objects.all().last()
 
-values() #可以指定获取的数据字段  返回结果：列表套字典的形式
+values() #可以指定获取的数据字段  返回结果：列表套字典的形式 select name,age from ...
 	models.User.objects.values('name')
     
-values_list() #返回结果：列表套元组
+values_list() #返回结果：列表套元组的形式
 	 res=models.User.objects.values_list('name','age')
     
 distinct()  #去重一定要是一摸一样的数据才能去重，如果带有主键那么肯定不一样
 	res=models.User.objects.values('name','age').distinct()
     
 order_by() #排序
-	res=models.User.objects.order_by('age') print(res) #默认升序
-    res=models.User.objects.order_by('-age') print(res) #降序
+	res=models.User.objects.order_by('age')  #默认升序
+    res=models.User.objects.order_by('-age') #降序
     
 reverse() #反转  反转的前提是已经排过序了 order_by().reverse()
 	res=models.User.objects.order_by('age').reverse()
@@ -2737,7 +2840,41 @@ exists()  #判断是否存在,返回布尔值
 	
 ```
 
-### 4、Django终端打印SQL语句
+```python
+values()
+    # res = models.User.objects.values('name')
+    # print(res)
+    # values_list()
+    
+values_list()
+    # res = models.User.objects.values_list('name', 'age')
+    # print(res.query)  # 查看内部封装的sql语句
+    """
+    上述查看sql语句的方式，只能用于queryset对象
+    只有queryset对象才能够.query查看内部的sql语句
+    """
+    
+order_by()
+    # res=models.User.objects.order_by('age')
+    # print(res)
+    
+reverse()    
+    res=models.User.objects.order_by('age').reverse()
+    print(res)
+    
+count()    
+    res=models.User.objects.count()
+    print(res)
+    
+exclude    
+    # models.User.objects.exclude(name='zhao')
+    # res = models.User.objects.all().first()
+    # print(res)
+```
+
+
+
+### 3、Django终端打印SQL语句
 
 ```python
 #方式一，只能用于queryset对象
@@ -2747,6 +2884,7 @@ exists()  #判断是否存在,返回布尔值
     上述查看sql语句的方式，只能用于queryset对象
     只有queryset对象才能够.query查看内部的sql语句
     """
+    
 #方式二,所有的sql语句都能看
     #去配置文件中配置以下代码
     
@@ -2773,29 +2911,57 @@ exists()  #判断是否存在,返回布尔值
 
 ![image-20221026180126520](E:\MarkDown\markdown\imgs\image-20221026180126520.png)
 
-### 5、多表操作
+### 4、==神奇的双下划线==
+
+```python
+"""神奇的双下划线"""
+#年龄大于18
+res=models.User.objects.filter(age__gt=18)
+
+#年龄小于18
+res=models.User.objects.filter(age__lt=18)
+
+#年龄小于等于18
+res=models.User.objects.filter(age__lte=18)
+
+#年龄大于等于18
+res=models.User.objects.filter(age__gte=18)
+
+# 年龄在18 获取 32获取40
+res=models.User.objects.filter(age__in=[18,32,40])
+
+#年龄在18到40岁之间
+res=models.User.objects.filter(age__range=[18,40])
+print(res)
+
+# 查询名利里含有o的数据 模糊查询   区分大小写
+res = models.User.objects.filter(name__contains='o')
+print(res)
+
+# 忽略大小写
+res=models.User.objects.filter(name__icontains='p') #'ignore'
+
+# 以什么开头
+res = models.User.objects.filter(name__startswith='j')
+
+# 以什么结尾
+res = models.User.objects.filter(name__endswith='j')
+
+
+res=models.User.objects.filter(register_time__month='1')
+res=models.User.objects.filter(register_time__day='12')
+res=models.User.objects.filter(register_time__week_day='1')
+res=models.User.objects.filter(register_time__year='2000')
+```
+
+### 5、==多表操作==
 
 #### 5. 1、表准备
 
 ```python
 from django.db import models
 
-
 # Create your models here.
-
-class User(models.Model):
-    name = models.CharField(max_length=32, verbose_name='姓名')
-    age = models.IntegerField()
-    register_time = models.DateField()  # 年月日
-    """
-    DateTime     
-    DateTimeField
-        两个重要参数，
-                    auto_now   :每次操纵数据的时候，该字段会自动将 当前时间更新
-                    auto_now_add  :在创建数据的时候，会自动将当前创建时间记录下来，之后只要不修改，那么就一直不变
-                    
-    """
-
 
 class Book(models.Model):
     title = models.CharField(max_length=32)
@@ -2831,7 +2997,7 @@ class AuthorDetail(models.Model):
 """切记执行表的迁移命令"""    
 ```
 
-#### 5. 2、一对多外键增删改查
+#### 5. 2、一对多外键增删改
 
 ```python
  #tests.py
@@ -2841,6 +3007,7 @@ class AuthorDetail(models.Model):
     # models.Book.objects.create(title='西游记', price=81.8, publish_id=1)
     # models.Book.objects.create(title='聊斋', price=61.8, publish_id=2)
     # models.Book.objects.create(title='老子', price=66.8, publish_id=1)
+    
     # 2虚拟字段  对象
     # publish_obj = models.Publish.objects.filter(pk=2).first()
     # models.Book.objects.create(title='红楼梦',price=80,publish=publish_obj)
@@ -2855,7 +3022,19 @@ class AuthorDetail(models.Model):
 
 ```
 
-#### 5. 3、多对多外键增删改查
+#### 5. 3、多对多外键增删改
+
+```python 
+add  给第三张关系表添加数据，括号内既可以传数字，也可以传对象，并且都支持多个
+
+remove  括号内既可以传数字，也可以传对象，并且都支持多个
+
+set	  括号内必须传一个可迭代对象，括号内既可以传数字，也可以传对象，并且都支持多个，   先删除后新增
+
+clear 清空对应的关系数据 括号内不加任何参数   
+```
+
+
 
 ```python
 #tests.py
@@ -2892,6 +3071,7 @@ class AuthorDetail(models.Model):
 
     # 修改
     # book_obj.author.set([1, 3])  # 括号内必须给一个可迭代对象
+    
     # author_obj=models.Author.objects.filter(pk=2).first()
     # author_obj1=models.Author.objects.filter(pk=3).first()
     # book_obj.author.set([author_obj,author_obj1])
@@ -2919,10 +3099,10 @@ class AuthorDetail(models.Model):
 book>>>外键字段在书那（正向）>>>publish
 pupblish >>>外键字段在书那（反向）>>>book
 
+
 """
 正向查询按字段
 反向查询按表名小写
-
 """
 ```
 
@@ -2953,12 +3133,14 @@ pupblish >>>外键字段在书那（反向）>>>book
     # print(res.addr)
 
 
+    """
     在书写orm语句的时候，跟写sql 语句是一样的
     不要企图一次性写完，如果比较复杂，就写一点看一点
     
-    正向什么时候需要加.all()
+    正向什么时候需要加.all()????
         当结果可能有多个，就需要加.all()
         如果是一个则直接拿到数据对象
+     """
    
     # 4查询出版社是东方出版社出版的书
     # publish_obj = models.Publish.objects.filter(name='东方出版社').first()
@@ -2977,37 +3159,360 @@ pupblish >>>外键字段在书那（反向）>>>book
     # res=author_detail_obj.author
     # print(res.name)
 
- 
+    
+ """
     基于对象
         反向查询的时候    
             当你的查询结果可以有多个的时候，就必须加_set.all()
             当结果只有一个的时候，就不许需要加_set.all()
         
-  
+ """
 ```
 
 ##### 2.联表查询（基于双下划线的跨表查询）
 
 ```python
-# 1.查询zhao的手机号
-     """反向"""
-# res = models.AuthorDetail.objects.filter(author__name='zhao')  # 拿作者姓名是zhao的作者详情
-# res = models.AuthorDetail.objects.filter(author__name='zhao').values('phone','author__name')  # 拿作者姓名是zhao的作者详情
-# print(res)
+  """基于双下划线的跨表查询"""
+    
+    # 1.查询zhao的手机号
+    # res = models.Author.objects.filter(name='zhao').values('author_detail__phone')
+    # print(res)
+    """反向"""
+    # res = models.AuthorDetail.objects.filter(author__name='zhao')  # 拿作者姓名是zhao的作者详情
+    # res = models.AuthorDetail.objects.filter(author__name='zhao').values('phone','author__name')  # 拿作者姓名是zhao的作者详情
+    # print(res)
 
-# 2查询书籍主键为1的出版社名称和书的名称
-         """反向"""
-# res=models.Publish.objects.filter(book__pk=1).values('name','book__title')
-# print(res)
+    # 2查询书籍主键为1的出版社名称和书的名称
+    # res = models.Book.objects.filter(pk=1).values('title', 'publish__name')
+    # print(res)
+    """反向"""
+    # res=models.Publish.objects.filter(book__pk=1).values('name','book__title')
+    # print(res)
 
-# 3查询书籍主键为1的作者姓名
-"""反向"""
-# res=models.Author.objects.filter(book__pk=1).values('name')
-# print(res)
+    # 3查询书籍主键为1的作者姓名
+    # res=models.Book.objects.filter(pk=1).values('author__name')
+    # print(res)
+    """反向"""
+    # res=models.Author.objects.filter(book__pk=1).values('name')
+    # print(res)
 
-# 4查询书籍主键是1的作者的手机号
-# book author authordetail
-#res = models.Book.objects.filter(pk=1).values('author__author_detail__phone')
-#print(res)    
+    # 4查询书籍主键是1的作者的手机号
+    # book author authordetail
+    # res = models.Book.objects.filter(pk=1).values('author__author_detail__phone')
+    # print(res)  
+    """反向"""
+    # res1=models.Author.objects.filter(book__id=1).values('author_detail__phone')
+    # print(res1)
 ```
+
+### 6、聚合查询
+
+```python
+"""聚合查询   aggregate"""
+
+"""聚合函数通常都是配合分组一起使用的"""
+from django.db.models import Max, Min, Sum, Count, Avg
+
+# 只要是跟数据库相关的模块，
+	#基本上都在，django.db.models里面,
+    #如果没有那么就应该在django.db里面
+    
+# 统计书的平均价格
+# res=models.Book.objects.aggregate(Avg('price'))
+# print(res)
+res = models.Book.objects.aggregate(Max('price'), Min('price'), Sum('price'), Avg('price'))
+print(res)
+```
+
+### 7、分组查询
+
+```p
+"""分组查询 annotate"""
+"""
+    MySQL分组之后默认只能获取到分组的依据，组内其他字段都无法直接获取了， 
+        严格模式
+            ONLY_FULL_GROUP_BY
+    
+    
+"""
+# 1统计每一本书的作者个数
+from django.db.models import Max, Min, Sum, Count, Avg
+# res = models.Book.objects.annotate()  # models后面点什么，就是按什么分组
+# res = models.Book.objects.annotate(author_number=Count('author__id')).values('title','author_number')
+# res1 = models.Book.objects.annotate(author_number=Count('author')).values('title','author_number')
+"""
+author_number是自己定义的字段，用来存储统计出来的每本书对应的作者个数
+"""
+# print(res1)
+# 2统计每个出版社卖的最便宜的书的价格
+# res = models.Publish.objects.annotate(bargain=Min('book__price')).values('name','bargain')
+# print(res)
+
+# 3统计不止一个作者的图书
+# 1.先按照图书分组，求每一本书对应的作者个数
+# 2过滤出不止一个作者的图书
+# res = models.Book.objects.annotate(author_num=Count('author')).filter(author_num__gt=1).values('title', 'author_num')
+
+"""只要你的orm 语句得出的结果还是一个queryset对象那么就可以无限制的点queryset方法"""
+# print(res)
+
+# 4查询每个作者出版的书的总价格
+# res = models.Author.objects.annotate(sum_price=Sum('book__price')).values('name', 'sum_price')
+# print(res)
+
+"""
+如果向按照指定的字段分组
+    models.Book.objects.values('price').annotate()
+"""
+
+"""
+如果分组查询报错，
+    需要修改数据严格模式
+"""
+```
+
+### 8、F与Q查询
+
+#### 8. 1、F查询
+
+```python
+ """F查询"""
+      """能够直接获取到表中某个字段对应的数据"""
+        
+    # 1.查询卖出数大于库存数的书籍
+  
+    from django.db.models import F
+    res = models.Book.objects.filter(maichu__gt=F('kucun'))
+    print(res)
+
+    # 2将所有书籍的价格提升50块
+    res = models.Book.objects.update(price=F('price') + 50)
+    print(res)
+
+    # 3将所有数的名称后面加上爆款两个字
+    """
+    在操作字符类型的数据的时候，F不能够直接做到字符串的拼接
+    """
+    from django.db.models import Value
+    from django.db.models.functions import Concat
+    res = models.Book.objects.update(title=Concat(F('title'), Value('爆款')))
+    print(res)
+```
+
+#### 8. 2、Q查询
+
+```python
+ """Q查询"""
+    from django.db.models import Q
+    # 1查询卖出数大于200或者价格小于50的书籍
+    # res = models.Book.objects.filter(Q(maichu__gt=200),Q(price__lt=50))
+    # print(res)
+    """Q包裹，逗号分割还是and关系，"""
+    # res = models.Book.objects.filter(Q(maichu__gt=200)|Q(price__lt=50)) #| or关系
+    """竖杠就是or关系"""
+    # res = models.Book.objects.filter(~Q(maichu__gt=200) | Q(price__lt=50))  # ~ not关系
+    """~就是not关系"""
+    # print(res)
+
+    
+    """Q高阶用法  能够将查询条件变成字符串的形式"""
+    q = Q()
+    q.connector='or'
+    q.children.append(('maichu__gt', 200))
+    q.children.append(('price__lt', 50))
+    res = models.Book.objects.filter(q)  # filter内支持直接放q对象，默认还是and关系
+    print(res)
+```
+
+
+
+###  9、Django中开启事务
+
+```python
+"""
+MySQL中：
+    事务
+        ACID
+            A:原子性	不可分割的最小单位
+            C:一致性	跟原子性是相辅相成的
+            I:隔离性	事务之间互相不干扰
+            D:持久性	事务一旦确认永久生效
+
+        事务的回滚
+            roollback
+        事务的提交
+            commit
+
+"""
+#django中如何开启事务
+    from django.db import transaction
+    try:
+        with transaction.atomic():
+            # sql语句
+            # with代码块内书写的所有orm操作都是属于同一个事务
+            pass
+    except Exception as e:
+        print(e)
+```
+
+
+
+### 10、orm中常用字段及参数
+
+```python
+AutoField	
+	主键字段 primary_key=True
+CharField	
+	max_length字符长度  verbose字符的注释  对应到数据库是varchar
+
+IntegerField  	    int
+BigIntegerField  	bigint
+
+DecimalField  
+	max_digits=8, decimal_places=2
+    
+EmailField  varchar(254)
+
+DateField         date
+DateTimeField	  datetime
+	auto_now :每次修改数据都会自动更新当前时间
+    auto_now_add:只在创建数据的时候记录时间，后续不会修改
+
+    
+BooleanField  布尔类型
+	该字段传布尔值(False/True)，数据库里存0/1
+    
+TextField   文本类型
+	该字段可以存大段内容（文章、博客....），没有字数限制
+FileField
+    	upload_to='/data'  给该字段传一个文件对象，会自动将文件保存到/data目录下，然后将文件路径保存到数据库中/data/a.txt
+
+
+"""其他字段参考博客"""
+https://www.cnblogs.com/Dominic-Ji/p/9203990.html
+
+
+
+
+
+
+```
+
+* Django还支持自定义字段类型
+
+```python
+class MyCharField(models.Field):
+    def __init__(self, max_length, *args, **kwargs):
+        self.max_length = max_length
+        super().__init__(max_length=max_length, *args, **kwargs)#一定要是关键字的形式传入
+
+    def db_type(self, connection):
+        """
+        返回真正的数据类型及各种约束条件
+        :param connection:
+        :return:
+        """
+        return 'char(%s)' % self.max_length
+   
+
+#自定义字段使用
+myfield=MyCharField(max_length=16,null=True)
+```
+
+### 11、数据库查询优化
+
+```python
+only与defer  正好相反
+select_related与prefetch_related  跟跨表操作有关
+```
+
+
+
+```python
+"""
+
+orm语句的特点：惰性查询，如果仅仅只是书写了orm语句，在后面没有用到该语句所查询出来的参数，那么orm 会自动识别，直接不执行
+"""
+```
+
+#### **only**
+
+```python
+    res=models.Book.objects.only('title')
+    # res=models.Book.objects.all()
+    # print(res)
+    for i in res:
+        # print(i.title) #点击only括号内的字段，不会走数据库
+        print(i.price) #点击only括号外的字段，会重新走数据库查询而all不需要
+```
+
+![image-20221029164727597](E:\MarkDown\markdown\imgs\image-20221029164727597.png)
+
+
+
+---
+
+![image-20221029164841977](E:\MarkDown\markdown\imgs\image-20221029164841977.png)
+
+#### **defer**
+
+```python
+#tests.py
+
+res=models.Book.objects.defer('title')
+    for i in res:
+        print(i.price)
+        """defer与only刚好相反
+                defer括号内放到字段不在查询出来的对象里面，查询该字段需要重新走数据
+                而如果查询的是非括号内的字段，则不需要走数据库
+            """
+```
+
+
+
+![image-20221029164310790](E:\MarkDown\markdown\imgs\image-20221029164310790.png)
+
+---
+
+![image-20221029164520153](E:\MarkDown\markdown\imgs\image-20221029164520153.png)
+
+---
+
+#### select_related
+
+```python
+    res = models.Book.objects.select_related('publish')  # INNER JOIN
+    """
+    select_related内部直接将book表与publish表连接起来，然后一次性将大表里面的所有数据全部封装给查询出来的对象
+    这个时候对象无论是点击book表的数据还是publish数据都无需再走数据查询了
+    
+    
+    select_related括号内只能放外键字段  
+        只能放一对一 ，一对多，
+        不能放多对多
+    
+    """
+    # print(res)
+    for i in res:
+        print(i.publish.name)
+
+```
+
+
+
+#### prefetch_related
+
+```python
+    res=models.Book.objects.prefetch_related('publish')  #子查询
+    """
+    prefetch_related该方法内部是子查询
+        将子查询查询出来的所有结果也封装到对象中，
+        给你的感觉好像也是一次查询数据库
+    """
+    for i in res:
+        print(i.publish.name)
+
+```
+
+## 
 
