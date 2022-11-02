@@ -531,6 +531,8 @@ file---new project  ,选择左侧第二个Django即可
 
 ![image-20221021102142570](E:\MarkDown\markdown\imgs\image-20221021102142570.png)
 
+**如下图所示**：**启动成功**
+
 ![image-20221021102225879](E:\MarkDown\markdown\imgs\image-20221021102225879.png)
 
 ---
@@ -545,13 +547,15 @@ file---new project  ,选择左侧第二个Django即可
      (2)tools----run manage.py task提示
 ```
 
-
+---
 
 ![image-20221021102406290](E:\MarkDown\markdown\imgs\image-20221021102406290.png)
 
 - 有自动提示功能
 
 ![image-20221021102504743](E:\MarkDown\markdown\imgs\image-20221021102504743.png)
+
+**如下图所示：应用创建成功**
 
 ![image-20221021102553348](E:\MarkDown\markdown\imgs\image-20221021102553348.png)
 
@@ -564,6 +568,8 @@ file---new project  ,选择左侧第二个Django即可
 ![image-20221021102801948](E:\MarkDown\markdown\imgs\image-20221021102801948.png)
 
 ![image-20221021102835863](E:\MarkDown\markdown\imgs\image-20221021102835863.png)
+
+**如下图所示：端口修改成功！**
 
 ![image-20221021102901754](E:\MarkDown\markdown\imgs\image-20221021102901754.png)
 
@@ -866,6 +872,7 @@ def ab_render(request):
 STATIC_URL = 'static/'  # 类似于访问静态网页的令牌
 """如果想要访问静态文件，就必须以static开头"""
 """
+
 /static/bootstrap-3.4.1-dist/js/bootstrap.min.js
 
 /static/令牌
@@ -1232,9 +1239,9 @@ python manage.py migrate
 """
 在操作models.py时，一定要细心
 
-
 执行迁移命令之前一定要检查一下代码
 """
+
 ```
 
 ### 3、数据的增删改查
@@ -1254,8 +1261,6 @@ def userlist(request):
     # print(data)
     return render(request, 'userlist.html', locals())
 ```
-
-
 
 ```python
 # views.py
@@ -1448,7 +1453,7 @@ def delete_user(request):
                         <td>{{ user_obj.password }}</td>
                         <td class="text-center">
                             <a href="/edit_user/?user_id={{ user_obj.id }}" class="btn btn-primary btn-xs">编辑</a>
-                            <a href="" class="btn btn-danger btn-xs">删除</a>
+                            <a href="/delete_user/user_id={{ user_obj.id }}" class="btn btn-danger btn-xs">删除</a>
                         </td>
                     </tr>
 
@@ -1561,7 +1566,7 @@ def delete_user(request):
     return redirect('/userlist/')
 ```
 
-#### 4、orm中创建表关系
+#### 4、orm中创建表关系（==外键==）
 
 ```python
 """
@@ -1775,6 +1780,8 @@ path：匹配任何⾮空字符串，包括/。
 
 **无名**
 
+* 无名分组就是将括号内正则表达式匹配到的内容当作位==**置参数**==传递给后面的视图函数
+
 ```python
 """
 分组：就是给某一个正则表达式用小括号括起来
@@ -1787,10 +1794,12 @@ re_path(r'^test/(\d+)',views.test),
 def test(request,xxx):
     print(xxx)
     return HttpResponse('test')
-#无名分组就是将括号内正则表达式匹配到的内容当作位置参数传递给后面的视图函数
+#
 ```
 
 **有名**
+
+* 有名分组就是将括号内正则表达式匹配到的内容当作==**关键字参数**==传递给后面的视图函数
 
 ```python
 """
@@ -1806,7 +1815,7 @@ def testadd(request, year):
     print(year)
     return HttpResponse('testadd')
 
-#有名分组就是将括号内正则表达式匹配到的内容当作关键字参数传递给后面的视图函数
+
 ```
 
 **匹配/分组算法：**
@@ -1919,7 +1928,7 @@ Django的每一个应用都可以有自己的templates文件夹，urls.py static
 """
 
 
-#总路由
+"""总路由"""
 
 from app01 import urls as app01_urls
 from app02 import urls as app02_urls
@@ -1936,7 +1945,7 @@ urlpatterns = [
 ]
 
 
-#子路由
+"""子路由"""
 
 #app01下urls.py
 from django.urls import path, re_path
@@ -1945,6 +1954,7 @@ from app01 import views
 urlpatterns = [
     re_path(r'^register/',views.register)
 ]
+
 #app02下urls.py
 from django.urls import path, re_path
 from app02 import views
@@ -2084,7 +2094,7 @@ models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)
 
 视图响应的过程：
 
- 当⽤户从浏览器发起⼀次请求时，⾸先django获取⽤户的请求，然后通过路由 （urls）将请求分配到指定的是视图函数。视图函数负责进⾏相应的业务处理，处 理完毕后把结果（可能是json、html等）浏览器
+ 当⽤户从浏览器发起⼀次请求时，⾸先django获取⽤户的请求，然后通过路由 （urls）将请求分配到指定的视图函数。视图函数负责进⾏相应的业务处理，处 理完毕后把结果（可能是json、html等）浏览器
 
 ### 1、三板斧
 
@@ -2097,6 +2107,7 @@ render
 redirect
 	重定向
 """
+
 # 视图函数必须要返回一个HttpResponse对象，研究三者的源码即可得出结论
 
 
@@ -2195,7 +2206,8 @@ request.method
 request.GET
 request.POST
 request.FILES
-
+request.is_ajax() 判断当前请求是否是ajax请求，返回布尔值
+	
 request.path		#只能获取路由
 request.path_info   #只能获取路由
 request.get_full_path() #能够获取路由以及问号后面的参数
@@ -2226,11 +2238,11 @@ print(request.get_full_path())#/app01/ab_file/?username=lisi
     #views.py
     class MyLogin(View):
         #只要是有处理业务逻辑的视图函数，形参里面都应该有request
-    def get(self, request):
-        return render(request,'form.html')
+        def get(self, request):
+            return render(request,'form.html')
 
-    def post(self, request):
-        return HttpResponse('post方法')
+        def post(self, request):
+            return HttpResponse('post方法')
 
     """
     CBV特点：能够根据请求方式的不同直接匹配到对应的方法执行
@@ -2323,7 +2335,9 @@ def index(request):
 
 ```
 
-### 2、模板语法之过滤器（过滤器最多只能有两个参数）
+### 2、过滤器
+
+**（过滤器最多只能有两个参数）**
 
 ```python
 """
@@ -2844,6 +2858,8 @@ exists()  #判断是否存在,返回布尔值
 	
 ```
 
+代码：
+
 ```python
 values()
     # res = models.User.objects.values('name')
@@ -3214,7 +3230,8 @@ pupblish >>>外键字段在书那（反向）>>>book
 ```python
 """聚合查询   aggregate"""
 
-"""聚合函数通常都是配合分组一起使用的"""
+"""聚合函数通常都是配合分组一起使用的,也可以单独使用，需要借助于aggregate"""
+
 from django.db.models import Max, Min, Sum, Count, Avg
 
 # 只要是跟数据库相关的模块，
@@ -3307,6 +3324,9 @@ author_number是自己定义的字段，用来存储统计出来的每本书对�
 
 ```python
  """Q查询"""
+    """能够改变多个查询条件之间的关系：与或非"""
+    
+    
     from django.db.models import Q
     # 1查询卖出数大于200或者价格小于50的书籍
     # res = models.Book.objects.filter(Q(maichu__gt=200),Q(price__lt=50))
@@ -3348,6 +3368,7 @@ MySQL中：
             commit
 
 """
+
 #django中如何开启事务
     from django.db import transaction
     try:
@@ -3499,6 +3520,7 @@ res=models.Book.objects.defer('title')
     # print(res)
     for i in res:
         print(i.publish.name)
+    
 
 ```
 
@@ -3518,5 +3540,700 @@ res=models.Book.objects.defer('title')
 
 ```
 
+## 图书管理系统搭建
 
+## choices参数（数据库字段设计常见）
+
+
+
+```python
+#models.py
+
+from django.db import models
+
+
+# Create your models here.
+
+class User(models.Model):
+    username = models.CharField(max_length=32)
+    age = models.IntegerField()
+    # 性别
+    gender_choices = (
+        (1, '男'),
+        (2, '女'),
+        (3, '其他'),
+    )
+    gender = models.IntegerField(choices=gender_choices)
+    """
+    该gender字段存的还是数字，但是如果存的数字再上面元组列举的范围之内，
+    那么就可以获取到数字对应的真正内容
+    
+    1 gender如果字段存的数字不在上述元组列举的范围内容
+        
+    2 如果在，获取对应的中文信息
+    """
+    score_choices = (
+        ('A', '优秀'),
+        ('B', '良好'),
+        ('C', '及格'),
+        ('D', '不合格'),
+    )
+    # 保证字段类型跟列举出来的元组的第一个数据类型一致即可
+    score = models.CharField(max_length=32, choices=score_choices, null=True)
+```
+
+```python
+#tests.py
+
+from django.test import TestCase
+
+# Create your tests here.
+import os
+import sys
+
+
+def main():
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'day08.settings')
+    import django
+    django.setup()
+    from app01 import models
+    #存
+    # models.User.objects.create(score='A', username='zhao', age=19, gender=1)
+    # models.User.objects.create(score='B', username='xiaoyu', age=18, gender=2)
+    # models.User.objects.create(score='C', username='张三', age=22, gender=3)
+    """存的时候没有列举出来的数字也能存"""
+    # models.User.objects.create(score='D', username='tony', age=50, gender=4)
+
+    # 取
+    user_obj = models.User.objects.filter(pk=1).first()
+    print(user_obj.gender)
+    # 只要是choices参数字段，如果想要获取对应信息，固定写法，get_字段名_display()
+    print(user_obj.get_gender_display())
+    print(user_obj.get_score_display())
+    user_obj2 = models.User.objects.filter(pk=4).first()
+    # 如果没有对应关系，那么字段是什么就展示什么
+    print(user_obj2.score)
+    print(user_obj2.get_gender_display())
+    print(user_obj2.get_score_display())
+
+
+
+if __name__ == '__main__':
+    main()
+```
+
+## MTV与MVC模型
+
+```python
+# MTV:django是MTV模型
+M: 	  models 
+T:    templates
+V:    views
+# MVC:django本质也是MVC
+M:	  models
+V:    views
+C:    controler(urls.py)
+```
+
+
+
+## 多对多关系的三种创建方式
+
+* ==全自动==
+
+```python
+#全自动:利用orm自动帮我们创建第三张关系表
+class Book(models.Model):
+    name=models.CharField(max_length=32)
+    authors=models.ManyToManyField(to='Author')
+class Author(models.Model):
+    name=models.CharField(max_length=32)
+
+    """
+   优点：代码不需要自己写，还支持orm提供的第三张关系表的方法:(add,remove,clear,set)
+   缺点：第三张关系表扩展性极差，（不能额外的添加字段）
+    """
+    
+
+
+```
+
+* 纯手动
+
+```python
+class Book(models.Model):
+    name=models.CharField(max_length=32)
+    
+class Author(models.Model):
+    name=models.CharField(max_length=32)
+    
+class BookToAuthor(models.Model):
+    book_id=models.ForeignKey(to='Book',on_delete=models.CASCADE)
+    author_id=models.ForeignKey(to='Author',on_delete=models.CASCADE)
+    
+    """
+    优点:第三张关系表完全取决于自己进行额外的拓展
+    缺点:需要写代码较多，不能使用orm提供的简单方法:(add,remove,clear)
+    
+    
+    不建议使用该方式
+    """
+```
+
+
+
+* ==半自动==
+
+```python
+class Book(models.Model):
+    name = models.CharField(max_length=32)
+    authors = models.ManyToManyField(to='Author',
+                                     through='BookToAuthor',
+                                     through_fields=('book', 'author')
+                                     )
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=32)
+
+
+class BookToAuthor(models.Model):
+    book = models.ForeignKey(to='Book', on_delete=models.CASCADE)
+    author = models.ForeignKey(to='Author', on_delete=models.CASCADE)
+
+    
+   """through_fields字段先后顺序:
+        第三张表查询对应的表，需要用到哪个字段就把哪个字段放前面，
+        也就是说，当前表是谁，就把对应的关联字段放前面
+        
+        
+        
+        
+        半自动可以使用orm的正反向查询，但是没有办法使用add,remove,clear,set这四个方法
+    """
+
+
+# 总结:
+    只需要掌握全自动和半自动，半自动扩展性高，一般都采用半自动，
+```
+
+## ==Ajax（重点）==
+
+* **异步提交**
+* **局部刷新**
+
+```python
+"""
+
+案例：github注册示例，
+	动态获取用户名，实时的跟后端确认并实时展示到前端（局部刷新）
+
+发送请求方式 
+	1 浏览器地址栏直接输入url回车     GET请求
+	2 a标签href属性				   GET请求
+	3 form表单					POST请求/GET请求
+	4 ajax						 POST请求/GET请求
+	
+"""
+```
+
+### 1、简介
+
+AJAX（Asynchronous Javascript And XML）翻译成中文就是“异步的Javascript和XML”。即使用Javascript语言与服务器进行异步交互，传输的数据为XML（当然，传输的数据不只是XML）。
+
+**AJAX 不是新的编程语言，而是一种使用现有标准的新方法。**
+
+==AJAX 最大的优点是在不重新加载整个页面的情况下，可以与服务器交换数据并更新部分网页内容。（这一特点给用户的感受是在不知不觉中完成请求和响应过程）==
+
+AJAX 不需要任何浏览器插件，但需要用户允许JavaScript在浏览器上执行。
+
+- 同步交互：客户端发出一个请求后，需要等待服务器响应结束后，才能发出第二个请求；
+- 异步交互：客户端发出一个请求后，无需等待服务器响应结束，就可以发出第二个请求。
+
+```python
+Ajax只学习jQuery封装好之后的版本，所以在前端页面使用ajax的时候需要确保导入jQuery
+```
+
+### 2、Ajax语法
+
+```python
+案例引入：
+
+"""
+页面有三个input框
+    在前两个框中输入数字，点击按钮，朝后端发送到ajax请求
+    后端计算出结果，再返回给前端动态展示到第三个input框
+    （整个过程不允许有刷新，也不能再前端计算）
+
+"""
+```
+
+```python
+# index.html
+
+<body>
+<input type="text" id="d1">+
+<input type="text" id="d2">=
+<input type="text" id="d3">
+<p>
+    <button id="btn">Click</button>
+</p>
+<script>
+    //给按钮绑定点击事件
+    $('#btn').click(function () {
+        //朝后端发送ajax请求
+        $.ajax({
+
+            //1 指定朝哪个后端发送ajax请求
+            url: '',//不写朝当前地址提交,跟action三种书写方式一致
+            //2 请求方式
+            type: 'post',//不指定，默认就是get
+            //3 数据
+            data: {'d1': $('#d1').val(), 'd2': $('#d2').val()},
+            //4 回调函数:当后端给你返回结果的时候会自动触发 args接收后端的返回结果
+            datatyp: true, //会自动反序列化
+            success: function (args) {
+                $('#d3').val(args)//通过DOM操作，动态渲染到第三个Input框
+                console.log(typeof (args))
+                
+            }
+        })
+
+
+    })
+</script>
+</body>
+
+"""
+针对后端，如果是用HttpResponse返回的json数据，前端回调函数不会自动反序列化，
+如果后端直接用的JsonResponse返回的数据，回调函数会自动反序列化
+
+
+HttpResponse解决方式
+	1 自己再前端用JSON.parse()
+	2.在ajax里配置一个参数
+		dataType:'JSON'  
+    """
+
+```
+
+**当利用ajax进行前后端交互的时候，后端无论返回什么，都只会被回调函数接收，而不再影响这个浏览器页面**。
+
+```python
+# views.py
+
+from django.shortcuts import render, HttpResponse
+
+from django.http import JsonResponse
+
+# Create your views here.
+def ab_ajax(request):
+    if request.method == 'POST':
+        # print(request.POST)
+        # d1 = request.POST.get('d1')
+        # d2 = request.POST.get('d2')
+        # # 先转成整型
+        # d3 = int(d1) + int(d2)
+        # print(d3)
+        d={'code':100,'msg':666}
+        # return HttpResponse(d3)
+        # return HttpResponse(json.dumps(d))
+        return HttpResponse(JsonResponse(d))
+    return render(request, 'index.html')
+```
+
+```python
+# urls.py
+
+from django.contrib import admin
+from django.urls import path
+from app01 import  views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    #ajax相关
+    path('ab_ajax/',views.ab_ajax)
+]
+```
+
+### 3、前后端传输数据的编码格式(contentType)
+
+```python
+# 主要研究 post请求数据的编码格式
+"""
+get请求数据就是直接放在url后面的  
+	url?username=zhao&password=123
+"""
+
+#可以朝后端发送post的请求方式
+	"""
+	1. form表单
+	2. Ajax请求
+	"""
+    
+# 前后端传输数据的编码格式
+	"""
+	urlencoded
+	fromdata
+	json
+	"""
+```
+
+#### 3.0、代码书写
+
+```python
+# index.html
+
+<form action="" method="post" >
+    <p>username:<input type="text" name="username" id="" class="form-control"></p>
+    <p>password:<input type="text" name="password" id="" class="form-control"></p>
+    <p>file:<input type="file" name="file" id=""></p>
+    <input type="submit" name="" id="" class="btn btn-primary">
+    <input type="button" name="" id="d1" class="btn btn-danger" value="click">
+</form>
+
+
+<script>
+    $('#d1').click(function (){
+        $.ajax({
+            utl:'',
+            type:'post',
+            data:{'username':'tony','age':19},
+            success:function (args){
+
+        }
+        })
+    })
+</script>
+```
+
+```python
+# views.py
+
+from django.shortcuts import render
+
+# Create your views here.
+def index(request):
+    if request.method =='POST':
+        print(request.POST)
+        print(request.FILES)
+    return render(request,'index.html')
+```
+
+```python
+# urls.py 
+
+from django.contrib import admin
+from django.urls import path
+from app01 import  views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    #前后端编码格式研究
+    path('index/',views.index)
+]
+
+```
+
+
+
+#### 3.1、form表单
+
+```python
+默认的编码格式是urlencoded
+数据格式：username=zhao&password=123
+django后端针对符合urlencoded编码格式的数据会自动的帮你解析封装到request.POST中
+	username=zhao&password=123  >>> request.POST
+   
+如果把编码格式改成formdata，那么针对普通的键值对还是解析到request.POST中而将文件解析到request.FILES中
+
+
+form表单没有办法发送json格式
+```
+
+* **默认的编码格式**
+
+![image-20221102200546457](E:/MarkDown/markdown/imgs/image-20221102200546457.png)
+
+* **数据格式**
+
+![image-20221102201124294](E:/MarkDown/markdown/imgs/image-20221102201124294.png)
+
+![image-20221102201322322](E:/MarkDown/markdown/imgs/image-20221102201322322.png)
+
+
+
+* **django后端针对符合urlencoded编码格式的数据会自动的帮你解析封装到request.POST中**
+
+
+
+![image-20221102202334553](E:/MarkDown/markdown/imgs/image-20221102202334553.png)
+
+![image-20221102203015897](E:/MarkDown/markdown/imgs/image-20221102203015897.png)
+
+
+
+* **如果把编码格式改成formdata，那么针对普通的键值对还是解析到request.POST中,而将文件解析到request.FILES中**
+
+
+
+![image-20221102202407309](E:/MarkDown/markdown/imgs/image-20221102202407309.png)
+
+![image-20221102202618109](E:/MarkDown/markdown/imgs/image-20221102202618109.png)
+
+![image-20221102202655337](E:/MarkDown/markdown/imgs/image-20221102202655337.png)
+
+#### 3.2、ajax
+
+```python
+默认编码格式也是urlencoded
+数据格式也是:username=tony&age=19
+django后端针对符合urlencoded编码格式的数据会自动的帮你解析封装到request.POST中
+	username=zhao&password=123  >>> request.POST
+```
+
+![image-20221102204855809](E:/MarkDown/markdown/imgs/image-20221102204855809.png)
+
+* **编码格式**
+
+![image-20221102203718139](E:/MarkDown/markdown/imgs/image-20221102203718139.png)
+
+* **数据格式**
+
+![image-20221102203825877](E:/MarkDown/markdown/imgs/image-20221102203825877.png)
+
+* **django后端针对符合urlencoded编码格式的数据会自动的帮你解析封装到request.POST中**
+
+![image-20221102204038587](E:/MarkDown/markdown/imgs/image-20221102204038587.png)
+
+### 4、ajax发送json格式数据
+
+```python
+"""
+前后端传输数据的时候一定要确保编码格式跟数据真正的格式是一致的
+
+{"username":"zhao","age":19} 在request.POST里肯定找不到
+"""
+
+request对象补充
+	request.is_ajax()
+	判断当前请求是否是ajax请求，返回布尔值
+    
+django对json格式的数据不会做任何的处理
+```
+
+代码:
+
+```python
+# views.py
+def ab_json(request):
+    # print(request.is_ajax())  # 判断当前请求是否是ajax请求，返回布尔值
+    if request.is_ajax():
+        # print(request.POST)
+        # print(request.body)
+        # 针对json格式数据需要自己手动处理
+        json_bytes = request.body  # 二进制数据
+        # json_str = json_bytes.decode('utf-8')  # 将二进制转成字符串
+        # json_dic = json.loads(json_str)
+        """json.loads括号内如果传入了一个二进制数据，那么内部可以自动解码再反序列化"""
+        json_dic = json.loads(json_bytes)
+        print(json_dic, type(json_dic))
+
+    return render(request, 'ab_json.html')
+
+```
+
+```html
+<!--ab_json.html-->
+
+<body>
+<button class="btn btn-danger" id="d1">click me !!</button>
+
+<script>
+    $('#d1').click(function () {
+        $.ajax({
+            url: '',
+            type: 'post',
+            data: JSON.stringify({'username': 'zhao', 'age': 19}),
+            contentType: 'application/json',//指定编码格式
+            success: function () {
+
+
+            }
+        })
+    })
+</script>
+</body>
+```
+
+```python
+# urls.py
+
+from django.contrib import admin
+from django.urls import path
+from app01 import  views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    #ajax发送json格式的数据
+    path('ab_json/',views.ab_json)
+]
+```
+
+==ajax发送json格式数据需要注意以下几点==：
+
+1. `contentType`参数指定成`application/json`
+2. 确保是真正的json格式数据,`JSON.stringify()`
+3. django后端不会自动处理json格式，需要去`request.body`中获取数据并处理
+
+---
+
+* 指定编码格式
+
+![image-20221102205741523](E:/MarkDown/markdown/imgs/image-20221102205741523.png)
+
+![image-20221102205908090](E:/MarkDown/markdown/imgs/image-20221102205908090.png)
+
+* 但是此时要发送的数据并不是json格式,**需要转成json格式**
+* 前端使用`JSON.stringify()`将想要发送的数据转成json格式的数据
+
+```python
+data: JSON.stringify({'username': 'zhao', 'age': 19}),
+```
+
+
+
+![image-20221102210141395](E:/MarkDown/markdown/imgs/image-20221102210141395.png)
+
+* 查看json格式数据
+
+```python
+{"username":"zhao","age":19}
+```
+
+![image-20221102210354092](E:/MarkDown/markdown/imgs/image-20221102210354092.png)
+
+* 在`request.POST`中找不到数据
+
+![image-20221102210714716](E:/MarkDown/markdown/imgs/image-20221102210714716.png)
+
+* 去request.body中获取数据，转成json格式
+
+![image-20221102213208899](E:/MarkDown/markdown/imgs/image-20221102213208899.png)
+
+```bash
+json.loads() 括号内如果传入了一个二进制数据，那么内部可以自动解码再反序列化
+```
+
+![image-20221102213336984](E:/MarkDown/markdown/imgs/image-20221102213336984.png)
+
+### 5、ajax发送文件数据
+
+```python
+"""ajax发送文件需要借助于js内置对象FormData"""
+
+```
+
+```html
+<p>username:<input type="text" id="d1"></p>
+<p>password:<input type="text" id="d2"></p>
+<p><input type="file" id="d3"></p>
+<button class="btn btn-info" id="d4">Click Me !!!</button>
+
+
+<script>
+
+    //点击按钮朝后端发送普通键值对和文件数据
+    $('#d4').on('click', function () {
+        //1. 需要先利用FormData生成一个内置对象
+        let formDataObj = new FormData();
+        //2. 添加普通的键值对
+        formDataObj.append('username', $('#d1').val());
+        formDataObj.append('password', $('#d2').val());
+        //3. 添加文件对象
+        formDataObj.append('myfile', $('#d3')[0].files[0])
+        //4. 将对象基于ajax发送给后端
+        $.ajax({
+            url: '',
+            type: 'post',
+            data: formDataObj,//直接将对象放在data后面即可
+            //ajax发送文件必须指定两个参数
+            contentType: false, //不需要使用任何编码，django后端能自动识别formdata对象
+            processData: false, //告诉浏览器不要对数据进行任何处理
+
+            success: function (args) {
+
+            }
+        })
+    })
+</script>
+```
+
+```python
+# views.py
+
+def ab_file(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            print(request.POST)
+            print(request.FILES)
+    return render(request, 'ab_file.html')
+
+```
+
+```python
+# urls.py
+
+from django.contrib import admin
+from django.urls import path
+from app01 import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    # ajax发送文件
+    path('ab_file/', views.ab_file),
+]
+```
+
+![image-20221102221448232](E:/MarkDown/markdown/imgs/image-20221102221448232.png)
+
+**总结：**
+
+1. ajax发文件需要利用内置对象Form Data
+
+```html
+       let formDataObj = new FormData();
+        //2. 添加普通的键值对
+        formDataObj.append('username', $('#d1').val());
+        formDataObj.append('password', $('#d2').val());
+        //3. 添加文件对象
+        formDataObj.append('myfile', $('#d3')[0].files[0])
+```
+
+2. 需要指定两个关键性参数
+
+```python
+contentType: false, //不需要使用任何编码，django后端能自动识别formdata对象
+processData: false, //告诉浏览器不要对数据进行任何处理
+```
+
+3. django后端能自动识别FormData对象，能够将内部的普通键值自动封装到request.POST中，文件数据能自动解析封装到request.FILES中
+
+### 6、Ajax结合sweetalert实现删除按钮的二次确认
+
+```python
+```
+
+
+
+## Django自带的序列化组件(为drf做铺垫)
+
+```python
+```
+
+
+
+## 批量插入
+
+```python
+```
 
