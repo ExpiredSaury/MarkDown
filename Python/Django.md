@@ -2360,7 +2360,7 @@ django内置有60多个过滤器
 |safe
 
 
-#转义
+# 转义
     #前端
     |safe
     #后端
@@ -3544,7 +3544,7 @@ res=models.Book.objects.defer('title')
 
 ## choices参数（数据库字段设计常见）
 
-
+当数据可以被列举完，能够供用户选择的时候，能够考虑用choices参数，好比性别，成绩，学历，婚否等等
 
 ```python
 #models.py
@@ -3859,6 +3859,7 @@ urlpatterns = [
 
 ```python
 # 主要研究 post请求数据的编码格式
+
 """
 get请求数据就是直接放在url后面的  
 	url?username=zhao&password=123
@@ -3878,7 +3879,7 @@ get请求数据就是直接放在url后面的
 	"""
 ```
 
-#### 3.0、代码书写
+#### 3.0、代码
 
 ```python
 # index.html
@@ -3992,19 +3993,33 @@ django后端针对符合urlencoded编码格式的数据会自动的帮你解析�
 
 ![image-20221102204855809](E:/MarkDown/markdown/imgs/image-20221102204855809.png)
 
+
+
 * **编码格式**
+
+  
 
 ![image-20221102203718139](E:/MarkDown/markdown/imgs/image-20221102203718139.png)
 
+
+
 * **数据格式**
+
+
 
 ![image-20221102203825877](E:/MarkDown/markdown/imgs/image-20221102203825877.png)
 
+
+
 * **django后端针对符合urlencoded编码格式的数据会自动的帮你解析封装到request.POST中**
+
+
 
 ![image-20221102204038587](E:/MarkDown/markdown/imgs/image-20221102204038587.png)
 
 ### 4、ajax发送json格式数据
+
+==前后端传输数据的时候一定要确保**编码格式**跟**数据格式**是**一致**的==
 
 ```python
 """
@@ -4018,28 +4033,10 @@ request对象补充
 	判断当前请求是否是ajax请求，返回布尔值
     
 django对json格式的数据不会做任何的处理
-```
-
-代码:
-
-```python
-# views.py
-def ab_json(request):
-    # print(request.is_ajax())  # 判断当前请求是否是ajax请求，返回布尔值
-    if request.is_ajax():
-        # print(request.POST)
-        # print(request.body)
-        # 针对json格式数据需要自己手动处理
-        json_bytes = request.body  # 二进制数据
-        # json_str = json_bytes.decode('utf-8')  # 将二进制转成字符串
-        # json_dic = json.loads(json_str)
-        """json.loads括号内如果传入了一个二进制数据，那么内部可以自动解码再反序列化"""
-        json_dic = json.loads(json_bytes)
-        print(json_dic, type(json_dic))
-
-    return render(request, 'ab_json.html')
 
 ```
+
+**代码:**
 
 ```html
 <!--ab_json.html-->
@@ -4065,6 +4062,27 @@ def ab_json(request):
 ```
 
 ```python
+# views.py
+
+def ab_json(request):
+    # print(request.is_ajax())  # 判断当前请求是否是ajax请求，返回布尔值
+    if request.is_ajax():
+        # print(request.POST)
+        # print(request.body)
+        # 针对json格式数据需要自己手动处理
+        json_bytes = request.body  # 二进制数据
+        # json_str = json_bytes.decode('utf-8')  # 将二进制转成字符串
+        # json_dic = json.loads(json_str)
+        """json.loads括号内如果传入了一个二进制数据，那么内部可以自动解码再反序列化"""
+        json_dic = json.loads(json_bytes)
+        print(json_dic, type(json_dic))
+
+    return render(request, 'ab_json.html')
+```
+
+
+
+```python
 # urls.py
 
 from django.contrib import admin
@@ -4086,7 +4104,7 @@ urlpatterns = [
 
 ---
 
-* 指定编码格式
+* **指定编码格式**
 
 ![image-20221102205741523](E:/MarkDown/markdown/imgs/image-20221102205741523.png)
 
@@ -4115,12 +4133,12 @@ data: JSON.stringify({'username': 'zhao', 'age': 19}),
 
 ![image-20221102210714716](E:/MarkDown/markdown/imgs/image-20221102210714716.png)
 
-* 去request.body中获取数据，转成json格式
+* 去`request.body`中获取数据，转成`json`格式
 
-![image-20221102213208899](E:/MarkDown/markdown/imgs/image-20221102213208899.png)
+![image-20221103171457707](E:/MarkDown/markdown/imgs/image-20221103171457707.png)
 
-```bash
-json.loads() 括号内如果传入了一个二进制数据，那么内部可以自动解码再反序列化
+```python
+json.loads() 括号内如果传入了一个二进制数据，那么内部可以 自动解码再反序列化
 ```
 
 ![image-20221102213336984](E:/MarkDown/markdown/imgs/image-20221102213336984.png)
@@ -4196,9 +4214,9 @@ urlpatterns = [
 
 ![image-20221102221448232](E:/MarkDown/markdown/imgs/image-20221102221448232.png)
 
-**总结：**
+#### **总结：**
 
-1. ajax发文件需要利用内置对象Form Data
+1. ajax发文件需要利用内置对象`FormData`
 
 ```html
        let formDataObj = new FormData();
@@ -4216,24 +4234,657 @@ contentType: false, //不需要使用任何编码，django后端能自动识别f
 processData: false, //告诉浏览器不要对数据进行任何处理
 ```
 
-3. django后端能自动识别FormData对象，能够将内部的普通键值自动封装到request.POST中，文件数据能自动解析封装到request.FILES中
+3. django后端能自动识别`FormData`对象，能够将内部的普通键值自动封装到`request.POST`中，文件数据能==自动解析封装==到`request.FILES`中
 
 ### 6、Ajax结合sweetalert实现删除按钮的二次确认
 
-```python
+
+
+```html
+<style>
+        div.sweet-alert h2 {
+            padding-top: 15px;
+        }
+</style>
+
+
+<h1 class="text-center">数据展示</h1>
+<table class="table table-hover table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>username</th>
+        <th>age</th>
+        <th>gender</th>
+        <th>describe</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user_obj in user_queryset %}
+        <tr>
+            <td>{{ user_obj.pk }}</td>
+            <td>{{ user_obj.age }}</td>
+            <td>{{ user_obj.username }}</td>
+            <td>{{ user_obj.gender }}</td>
+            <td>
+                <button class="btn btn-toolbar btn-xs">编辑</button>
+                <!--注意，绑定ajax事件在for循环中不能加id，每for循环一次出现一个按钮，
+                  如果绑定id就意味着for循环后出现的按钮id值一致，使用class=del
+                    我们需要实现用户点击删除按钮，后端能够知道用户到底要删那条数据，
+                    后端怎么知道？主键。
+                   自定义属性
+
+                   ----->
+
+                <button class="btn btn-danger btn-xs del" delete_id="{{ user_obj.pk }}">删除</button>
+            </td>
+
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+
+<script>
+    $('.del').on('click', function () {
+        //先将当前标签对象存储，用变量指代当前被点击对象
+        let currentBtn = $(this);
+        //二次确认弹框
+        swal({
+                title: "确定删除？?",
+                text: "确定要删吗！！!",
+                type: "warning",
+                showCancelButton: true,    //延时效果
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "我就要删!",
+                cancelButtonText: "算了 算了 不删了",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            //isConfirm 判断用户有没有点击二次确认删除按钮
+            function (isConfirm) {
+                if (isConfirm) {
+                    // 朝后端发送ajax请求删除数据之后，后端判断是否有数据，再谈下面的提示框，
+                    $.ajax({
+                        // 向当前页面发送ajax请求，并携带需要产出数据的主键值,传递主键值第一种方式
+                        {#url:'/delete/user/' + currentBtn.attr('delete_id'),#}
+                        // 传递主键值第二种方式，放在请求体中
+                        url: '/delete/user',
+                        type: 'post',
+                        data: {'delete_id': currentBtn.attr('delete_id')},
+                        success: function (args) {
+                            //判断响应状态码做不同的处理。
+                            if (args.code === 1000) {
+                                swal("已删除!", args.msg, "success");
+                                // 2.利用DOM操作，动态刷新
+                                // 当前端点击删除，后端找到标签所在行，通过DOM操作删除此行，
+                                // delete_id 上一个标签是td,再上一个标签为tr,需要删的是当前标签delete_id所在的这一行。
+
+                                // currentBtn指代的是当前被操作对象，parent()拿到父标签，两个parent()拿到父标签的父标签
+                                currentBtn.parent().parent().remove()  //实时刷新
+                            } else {
+                                swal("出现问题", "..", "info");
+                            }
+                        }
+                    })
+
+                } else {
+                    swal("您已取消", "...........", "error");
+                }
+            });
+    })
+</script>
 ```
 
+```python
+# views.py
 
+def delete_user(request):
+    """
+    前后端在使用ajax进行交互的时候，后端通常给ajax回调函数返回一个字典格式的数据
+    字典返回到前端就是一个自定义对象，前端可以通过.的方式拿到想要的数据
+    :param request:
+    :return:
+    """
+    if request.is_ajax():
+        if request.method == 'POST':
+            # code:1000 为响应状态码
+            back_dic = {'code': 1000, 'msg': ''}
+            # 取到前端返回用户想要删除数据的主键值
+            delete_id = request.POST.get('delete_id')
+            models.User.objects.filter(pk=delete_id).delete()
+            back_dic['msg'] = '数据已删除'
+            # 需要告诉前端操作的结果
+            return JsonResponse(back_dic)
+
+```
+
+效果图：
+
+![image-20221104224139637](E:/MarkDown/markdown/imgs/image-20221104224139637.png)
 
 ## Django自带的序列化组件(为drf做铺垫)
 
-```python
-```
-
-
-
-## 批量插入
+(drf：django restframework)
 
 ```python
+#在前端获取到、后端用户表里所有的数据，并且是列表套字典的格式
 ```
 
+```python
+# views.py
+
+from django.http import JsonResponse
+
+def ab_ser(request):
+    user_queryset = models.User.objects.all()
+    user_list = []
+    for user_obj in user_queryset:
+        tmp = {
+            'pk': user_obj.pk,
+            'username': user_obj.username,
+            'age': user_obj.age,
+            'gender': user_obj.get_gender_display()
+        }
+        user_list.append(tmp)
+    return JsonResponse(user_list, safe=False)
+```
+
+```html
+<body>
+{% for user_obj in user_queryset %}
+    <p>{{ user_obj }}</p>
+{% endfor %}
+
+</body>
+```
+
+**前端显示结果：**
+
+![image-20221103175900052](E:/MarkDown/markdown/imgs/image-20221103175900052.png)
+
+```python
+"""
+[
+  {"pk": 1,"username": "zhao","age": 19,"gender": "male"},
+  {"pk": 2,"username": "lisi","age": 20,"gender": "female"},
+  {"pk": 3,"username": "wangwu","age": 18,"gender": "others"},
+  {"pk": 4,"username": "tony","age": 22,"gender": 4}
+]
+
+"""
+
+前后端分离项目
+	作为后端开发，只需要写代码将数据返回
+    能够序列化返回给前端即可
+    	再写一个接口文档，告诉前端每个字段代表的意思即可
+```
+
+### 借助于内置序列化模块`serializers`
+
+```python
+from django.core import serializers
+
+
+def ab_ser(request):
+    user_queryset = models.User.objects.all()
+    # user_list = []
+    # for user_obj in user_queryset:
+    #     tmp = {
+    #         'pk': user_obj.pk,
+    #         'username': user_obj.username,
+    #         'age': user_obj.age,
+    #         'gender': user_obj.get_gender_display()
+    #     }
+    #     user_list.append(tmp)
+    # return JsonResponse(user_list, safe=False)
+
+    # 序列化
+    res = serializers.serialize('json', user_queryset)  # 自动将数据变成json格式的数据，并且内部非常的全面
+    return HttpResponse(res)
+```
+
+效果：
+
+```python
+[
+  {
+    "model": "app01.user",
+    "pk": 1,
+    "fields": {"username": "zhao","age": 19,"gender": 1}
+  },
+  {
+    "model": "app01.user",
+    "pk": 2,
+    "fields": {"username": "lisi","age": 20,"gender": 2}
+  },
+  {
+    "model": "app01.user",
+    "pk": 3,
+    "fields": {"username": "wangwu","age": 18,"gender": 3}
+  },
+  {
+    "model": "app01.user",
+    "pk": 4,
+    "fields": {"username": "tony","age": 22,"gender": 4}
+  }
+]
+
+#后端开发写接口就是利用序列化组件渲染数据，然后写一个接口文档，
+```
+
+![image-20221104205336198](E:/MarkDown/markdown/imgs/image-20221104205336198.png)
+
+## 批量插入    bulk_create()
+
+```python
+# urls.py
+
+from django.contrib import admin
+from django.urls import path
+from app01 import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    #批量插入
+    path('ab_pl',views.ab_pl)
+]
+
+```
+
+```python
+#views.py
+
+def ab_pl(request):
+    # 先给Book表插入一千条数据
+    for i in range(1000):
+        models.Book.objects.create(title='第%s本书' % i)
+
+    # 再将所有的数据查询并展示到前端页面
+    book_queryset = models.Book.objects.all()
+    return render(request,'ab_pl.html',locals())
+```
+
+```python
+# models.py
+
+class Book(models.Model):
+    title = models.CharField(max_length=32)
+
+```
+
+```html
+{% for book_obj in book_queryset %}
+    <p>{{ book_obj.title }}</p>
+{% endfor %}
+```
+
+上述代码插入数据，需要一定时间，效率低下
+
+### bulk_create()
+
+```python
+def ab_pl(request):
+    
+    """批量插入"""
+    book_list = []
+    for i in range(1000):
+        book_obj = models.Book(title='第%s本书' % i)
+        book_list.append(book_obj)
+        
+    models.Book.objects.bulk_create(book_list)  
+    return render(request, 'ab_pl.html', locals())
+
+
+"""
+    当想要批量插入数据时候，使用orm提供的bulk_create()能够大大的减少操作时间
+
+"""
+```
+
+## 自定义分页器
+
+### 1、分页推导
+
+* 1. queryset对象支持切片操作
+
+* 2. 确定用户访问的页码  url?page=1
+
+  ```python
+  current_page=request.GET.get('page',1)
+  ```
+
+* 3. 前端获取到 的都是字符串数据，需要类型转换
+
+  ```python
+      current_page = request.GET.get('page', 1)  
+      try:
+          current_page = int(current_page)
+      except Exception:
+          current_page = 1
+  ```
+
+* 4. 规划每页展示多少条数据
+
+  ```python
+  per_page_num=10
+  ```
+
+* 5. 切片的起始位置和终止位置
+
+  ```python
+  start_page =(current_page - 1 ) * per_page_num
+  end_page=current_page * per_page_num
+  ```
+
+* 6. 当前数据的总条数
+
+  ```python
+  book_queryset.count()
+  ```
+
+* 7. 确定多少页码才能展示完所有的数据
+
+  ```python
+  * 利用python内置函数`divmod()`
+  * page_couny,more =divmod(all_count,per_page_num)
+  * if more:
+    * page_count += 1
+  ```
+
+* 8. 前端没有`range`方法
+
+  ```python
+  # 前端代码不一定非要在前端书写，也可以在后端生成，传递给前端
+  
+  
+  for i in range(current_page - 5, current_page + 6):
+    if xxx == i:
+     	page_html += '<li class="active"><a href="?page=%s">%s</a></li>' % (i, i)
+    else:
+      page_html += '<li><a href="?page=%s">%s</a></li>' % (i, i)
+  ```
+
+ * 9. 针对展示的页码需要规划好需要展示多少个页码
+
+   ```python
+   # 在制作页面的个数的时候，一般都是奇数个，    符合中国人对称美的标准
+   
+   当前页减5
+   当前页加6
+   
+   current_page - 5, current_page + 6
+   
+   可以给标签加选中的样式，高亮显示
+   
+   ```
+
+* 10. 针对页码小于6的情况，需要做处理，不能再减，否则页码出现负数
+
+  ```python
+  if current_page < 6:
+          current_page = 6
+  ```
+
+**自定义分页器推导代码如下：**
+
+```python
+def ab_pl(request):
+    """分页"""
+
+    # 想访问那一页
+    current_page = request.GET.get('page', 1)  # 如果获取不到当前页码就展示第一页
+   
+	# 数据类型转换
+    try:
+        current_page = int(current_page)
+    except Exception:
+        current_page = 1
+
+    # 每页展示多少条
+    per_page_num = 10
+    
+    # 起始位置
+    start_page = (current_page - 1) * per_page_num
+    
+    # 终止位置
+    end_page = current_page * per_page_num
+
+    book_list = models.Book.objects.all()
+    # 计算出需要多少页
+    all_count = book_list.count()
+    page_count, more = divmod(all_count, per_page_num)
+    if more:
+        page_count += 1
+    page_html = ''
+    xxx=current_page
+    if current_page < 6:
+        current_page = 6
+
+    for i in range(current_page - 5, current_page + 6):
+        if xxx == i:
+            page_html += '<li class="active"><a href="?page=%s">%s</a></li>' % (i, i)
+        else:
+            page_html += '<li><a href="?page=%s">%s</a></li>' % (i, i)
+    book_queryset = book_list[start_page:end_page]
+    return render(request, 'ab_pl.html', locals())
+
+
+"""
+per_page_num = 10
+current_page             start_page             end_page
+    1                       0                       10
+    2                       10                      20  
+    3                       20                      30
+    4                       30                      40
+
+
+
+per_page_num = 5
+current_page             start_page             end_page
+    1                       0                       5
+    2                       5                       10
+    3                       10                      15
+    4                       15                      20
+    
+
+
+start_page =(current_page - 1 ) * per_page_num
+end_page=current_page * per_page_num
+"""
+```
+
+```html
+<body>
+{% for book_obj in book_queryset %}
+    <p>{{ book_obj.title }}</p>
+
+{% endfor %}
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li>
+            <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {{ page_html|safe }}
+        
+        {#    <li><a href="?page=1">1</a></li>#}
+        {#    <li><a href="?page=2">2</a></li>#}
+        {#    <li><a href="?page=3">3</a></li>#}
+        {#    <li><a href="#">4</a></li>#}
+        {#    <li><a href="#">5</a></li>#}
+        
+        <li>
+            <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+</body>
+```
+
+效果图:
+
+
+
+![image-20221104223106449](E:/MarkDown/markdown/imgs/image-20221104223106449.png)
+
+### 2、分页器代码封装
+
+```python
+"""
+
+当需要使用非django内置的第三方功能或者组件代码的时候
+一般会在项目根目录下创建一个名为 utils文件夹，在该文件夹内对模块进行功能性划分
+		utils也可以在应用下创建
+"""
+```
+
+自定义分页器是基于bootstrap样式来的，需要提前导入
+
+```python
+utils文件夹下mypage.py文件
+
+class Pagination(object):
+    def __init__(self, current_page, all_count, per_page_num=2, pager_count=11):
+        """
+        封装分页相关数据
+        :param current_page: 当前页
+        :param all_count:    数据库中的数据总条数
+        :param per_page_num: 每页显示的数据条数
+        :param pager_count:  最多显示的页码个数
+        """
+        try:
+            current_page = int(current_page)
+        except Exception as e:
+            current_page = 1
+ 
+        if current_page < 1:
+            current_page = 1
+ 
+        self.current_page = current_page
+ 
+        self.all_count = all_count
+        self.per_page_num = per_page_num
+ 
+        # 总页码
+        all_pager, tmp = divmod(all_count, per_page_num)
+        if tmp:
+            all_pager += 1
+        self.all_pager = all_pager
+ 
+        self.pager_count = pager_count
+        self.pager_count_half = int((pager_count - 1) / 2)
+ 
+    @property
+    def start(self):
+        return (self.current_page - 1) * self.per_page_num
+ 
+    @property
+    def end(self):
+        return self.current_page * self.per_page_num
+ 
+    def page_html(self):
+        # 如果总页码 < 11个：
+        if self.all_pager <= self.pager_count:
+            pager_start = 1
+            pager_end = self.all_pager + 1
+        # 总页码  > 11
+        else:
+            # 当前页如果<=页面上最多显示11/2个页码
+            if self.current_page <= self.pager_count_half:
+                pager_start = 1
+                pager_end = self.pager_count + 1
+ 
+            # 当前页大于5
+            else:
+                # 页码翻到最后
+                if (self.current_page + self.pager_count_half) > self.all_pager:
+                    pager_end = self.all_pager + 1
+                    pager_start = self.all_pager - self.pager_count + 1
+                else:
+                    pager_start = self.current_page - self.pager_count_half
+                    pager_end = self.current_page + self.pager_count_half + 1
+ 
+        page_html_list = []
+        # 添加前面的nav和ul标签
+        page_html_list.append('''
+                    <nav aria-label='Page navigation>'
+                    <ul class='pagination'>
+                ''')
+        first_page = '<li><a href="?page=%s">首页</a></li>' % (1)
+        page_html_list.append(first_page)
+ 
+        if self.current_page <= 1:
+            prev_page = '<li class="disabled"><a href="#">上一页</a></li>'
+        else:
+            prev_page = '<li><a href="?page=%s">上一页</a></li>' % (self.current_page - 1,)
+ 
+        page_html_list.append(prev_page)
+ 
+        for i in range(pager_start, pager_end):
+            if i == self.current_page:
+                temp = '<li class="active"><a href="?page=%s">%s</a></li>' % (i, i,)
+            else:
+                temp = '<li><a href="?page=%s">%s</a></li>' % (i, i,)
+            page_html_list.append(temp)
+ 
+        if self.current_page >= self.all_pager:
+            next_page = '<li class="disabled"><a href="#">下一页</a></li>'
+        else:
+            next_page = '<li><a href="?page=%s">下一页</a></li>' % (self.current_page + 1,)
+        page_html_list.append(next_page)
+ 
+        last_page = '<li><a href="?page=%s">尾页</a></li>' % (self.all_pager,)
+        page_html_list.append(last_page)
+        # 尾部添加标签
+        page_html_list.append('''
+                                           </nav>
+                                           </ul>
+                                       ''')
+        return ''.join(page_html_list)
+```
+
+**后端**
+
+```python
+# views.py
+
+def page(request):
+    book_queryset = models.Book.objects.all()
+    current_page = request.GET.get('page', 1)
+    all_count = book_queryset.count()
+    # 1. 实例化，传值生成对象
+    page_obj = Pagination(current_page=current_page, all_count=all_count)
+    # 2. 直接对总数居进行切片操作
+    page_queryset = book_queryset[page_obj.start:page_obj.end]
+    # 3. 将page_queryset传递到页面，
+    return render(request, 'page.html', locals())
+```
+
+**前端**
+
+```html
+<body>
+{% for book_obj in page_queryset %}
+    <p>{{ book_obj.title }}</p>
+
+{% endfor %}
+
+{# 利用自定义分页器直接显示分页器样式 #}
+{{ page_obj.page_html|safe }}
+</body>
+```
+
+效果图:
+
+
+
+![image-20221104223029555](E:/MarkDown/markdown/imgs/image-20221104223029555.png)
+
+## 校验性组件：from组件
