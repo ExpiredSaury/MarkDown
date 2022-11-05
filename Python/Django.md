@@ -431,6 +431,8 @@ django-admin startproject 项目名
 manage.py:是Django⽤于管理本项⽬的命令⾏⼯具，之后进⾏站点运⾏，数据库⾃动⽣成等都是通过本⽂件完成。
 ```
 
+![image-20221105205022192](E:/MarkDown/markdown/imgs/image-20221105205022192.png)
+
 ---
 
 ##### 1. 2.==启动django项目==
@@ -932,64 +934,6 @@ MIDDLEWARE = [
 
 ```python
 在要编辑的html文件中，删除掉第一行的<!DOCTYPE html>就可以解决
-```
-
-
-
-## request对象
-
-```python
-request.method #返回请求方式。并且是全大写的字符串形式
-request.POST #获取用户post请求提交 的普通数据（键值对），不包含文件
-	request.POST.get()  #只获取列表最后一个元素
-    request.POST.getlist() #直接将列表所有元素取出
-    
-request.GET   # 获取url问好后面携带的参数
-	request.GET.get()  #只获取列表最后一个元素
-    request.GET.getlist()  #直接将列表所有元素取出
-    
-"""
-get请求携带的数据是有大小数据的，大概好像只有4k左右
-post请求则没有限制
-""" 
-```
-
-
-
-```python
-   
-def login(request):
-    """
-    get请求和post请求应该有不同的处理机制
-    :param request:
-    :return:
-    """
-    # print(request.method)#返回请求方式。并且是全大写的字符串形式
-    # print(type(request.method))
-
-    # if request.method == 'GET':
-    #     return render(request, 'login.html')
-    # elif request.method == 'POST':
-    #     return HttpResponse('收到 !!!')
-
-    if request.method == 'POST':
-        return HttpResponse('收到')
-    return render(request, 'login.html')
-```
-
- **在前期使用django提交post请求时，需要去配置文件中注释掉一行代码**
-
-```python
-
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
 ```
 
 
@@ -1712,6 +1656,102 @@ urlpatterns = [
     """
 ```
 
+**在path中使⽤<参数名>表示所传参数，视图函数中的参数名必须和**==**<>中参数名⼀ 致**==，参数可以是以下类型：
+
+```python
+str：如果没有指定参数类型，默认是字符串类型。字符串参数可以匹配除/和
+空字符外的其他字符串
+int：匹配0和正整数，视图函数的参数将得到⼀个整型值
+slug：匹配由数字、字⺟、-和_组成的字符串参数
+path：匹配任何⾮空字符串，包括/。
+```
+
+* **string**
+
+```python
+# 总路由
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    # 路由分发，根路由中包含子路由
+    # blog/ 路由前缀
+    path('blog/', include('App.urls')),
+]
+# 子路由
+    # string
+    path('change/<name>/', views.change, name='change'),
+    # path第三个参数name是路由的名字，与视图函数参数name无关
+
+# views.py
+def change(request, name):
+    return HttpResponse(name)
+```
+
+效果图:
+
+![image-20221105214456492](E:/MarkDown/markdown/imgs/image-20221105214456492.png)
+
+* **int**
+
+```python
+# 子路由
+urlpatterns = [
+    # int
+    path('show/<int:age>/', views.show, name='show')
+
+]
+
+# views.py
+def show(request, age):
+    print(type(age))
+    return HttpResponse(str(age))
+
+```
+
+效果图：
+
+![image-20221105210631000](E:/MarkDown/markdown/imgs/image-20221105210631000.png)
+
+
+
+* **slug**
+
+```python
+# 子路由
+path('list/<slug:name>/', views.list, name='list')
+    
+# views.py
+def list(request,name):
+    print(name,type(name))
+    return HttpResponse(name)
+```
+
+效果如图：
+
+![image-20221105211639543](E:/MarkDown/markdown/imgs/image-20221105211639543.png)
+
+* **path**
+
+```python
+# 子路由
+
+	# path,如果有多个参数，path类型必须在最后一个 
+path('access/<path:path>/',views.access,name='access')
+    
+# views.py
+def access(request, path):
+    # path 可以包含任何字符,包括 /
+    return HttpResponse(path)
+
+```
+
+效果如图:
+
+
+
+![image-20221105212419964](E:/MarkDown/markdown/imgs/image-20221105212419964.png)
+
+---
+
 Django检查url模式之前会移除模式前的`/`，所以url模式前⾯的`/`可以不写，但如果 在地址栏⾥请求的时候不带尾斜杠，则会引起重定向，重定向到带尾斜杠的地址， 所以请求的时候要带尾斜杠。
 
 ![image-20221023134245558](E:\MarkDown\markdown\imgs\image-20221023134245558.png)
@@ -1756,19 +1796,7 @@ urlpatterns = [
 * 模式前⾯不需要加`/ `
 * 如果匹配不上，则会引起异常，Django会调⽤错误处理视图处理（关闭调试模式）
 
-
-
-在path中使⽤<参数名>表示所传参数，视图函数中的参数名必须和<>中参数名⼀ 致。参数可以是以下类型：
-
-```python
-str：如果没有指定参数类型，默认是字符串类型。字符串参数可以匹配除/和
-空字符外的其他字符串
-int：匹配0和正整数，视图函数的参数将得到⼀个整型值
-slug：匹配由数字、字⺟、-和_组成的字符串参数
-path：匹配任何⾮空字符串，包括/。
-```
-
-
+---
 
 
 
@@ -2200,6 +2228,46 @@ def ab_file(request):
 
 ### 4、request对象方法
 
+HttpRequest是从web服务器传递过来的请求对象，经过Django框架封装产⽣的， 封装了原始的Http请求
+
+* 服务器接收到http请求后，django框架会⾃动根据服务器传递的环境变量创建 HttpRequest对象 
+* 视图的第⼀个参数必须是HttpRequest类型的对象 
+* 在django.http模块中定义了HttpRequest对象的API 
+* 使⽤HttpRequest对象的不同属性值，可以获取请求中多种信息
+
+| 属性        | 说明                                                         |
+| ----------- | ------------------------------------------------------------ |
+| contenttype | 请求的mime类型                                               |
+| GET         | ⼀个类似于字典的QueryDict对象，包含get请求⽅式的所有参 数，也就是“?”后⾯的内容 |
+| POST        | ⼀个类似于字典的QueryDict对象，包含post请求⽅式的所有参 数   |
+| COOKIES     | ⼀个标准的Python字典，包含所有的cookie，键和值都为字符串     |
+| SESSION     | ⼀个类似于字典的对象，表示当前的会话，只有当Django启⽤会 话的⽀持时才可⽤ |
+| PATH        | ⼀个字符串，表示请求的⻚⾯的完整路径，不包含域名             |
+| method      | ⼀个字符串，表示请求使⽤的HTTP⽅法，常⽤值包括：GET、 POST， |
+| FILES       | ⼀个类似于字典的QueryDict对象，包含所有的上传⽂件            |
+| META        | 请求的请求头的源信息（请求头中的键值对）                     |
+| encoding    | 字符编码                                                     |
+| scheme      | 协议                                                         |
+
+META中常用的键：
+
+| 键           | 说明       |
+| ------------ | ---------- |
+| HTTP_REFERER | 来源⻚⾯   |
+| REMOTE_ADDR  | 客户端ip   |
+| REMOTE_HOST  | 客户端主机 |
+
+下⾯是常⽤的⽅法:
+
+| 方法名               | 说明                    |
+| -------------------- | ----------------------- |
+| get_host()           | 获取主机名+端⼝         |
+| get_full_path()      | 获取请求路径+查询字符串 |
+| is_ajax()            | 如果是ajax请求返回True  |
+| build_absolute_uri() | 完整的url               |
+
+
+
 ```python
 """
 request.method
@@ -2207,7 +2275,7 @@ request.GET
 request.POST
 request.FILES
 request.is_ajax() 判断当前请求是否是ajax请求，返回布尔值
-	
+
 request.path		#只能获取路由
 request.path_info   #只能获取路由
 request.get_full_path() #能够获取路由以及问号后面的参数
@@ -2217,6 +2285,92 @@ request.body   #原生的浏览器发过来的二进制数据
 print(request.path)#/app01/ab_file/
 print(request.path_info)#/app01/ab_file/
 print(request.get_full_path())#/app01/ab_file/?username=lisi
+```
+```python
+request.method #返回请求方式。并且是全大写的字符串形式
+request.POST #获取用户post请求提交 的普通数据（键值对），不包含文件
+	request.POST.get()  #只获取列表最后一个元素
+    request.POST.getlist() #直接将列表所有元素取出
+    
+request.GET   # 获取url问好后面携带的参数
+	request.GET.get()  #只获取列表最后一个元素
+    request.GET.getlist()  #直接将列表所有元素取出
+    
+"""
+get请求携带的数据是有大小数据的，大概好像只有4k左右
+post请求则没有限制
+""" 
+```
+```python
+# 子路由urls.py
+
+ # path,如果有多个参数，path类型必须在最后一个
+path('access/<path:path>/', views.access, name='access'),
+
+
+
+#views.py
+
+def access(request, path):
+    # path 可以包含任何字符,包括 /
+
+    # 获取请求方法
+    print(request.method)
+    # 获取请求路径
+    print(request.path)
+    # 其他请求属性
+    print(request.META)
+    # 客户端地址
+    print(request.META.get('REMOTE_ADDR'))
+    # 来源页面
+    print(request.META.get('HTTP_REFERER'))
+
+    # 常用方法
+    print(request.get_host())  # 127.0.0.1:8000
+    print(request.get_full_path())
+    print(request.build_absolute_uri())
+
+    # 获取请求参数的字典  QueryDict转成dict
+    print(request.GET.dict())  # {'name': '12'}
+    return HttpResponse(path)
+
+```
+![在这里插入图片描述](E:/MarkDown/markdown/imgs/4a4702a214cd46e3a904897c1fccb1f8.png)
+
+```python
+def login(request):
+    """
+    get请求和post请求应该有不同的处理机制
+    :param request:
+    :return:
+    """
+    # print(request.method)#返回请求方式。并且是全大写的字符串形式
+    # print(type(request.method))
+
+    # if request.method == 'GET':
+    #     return render(request, 'login.html')
+    # elif request.method == 'POST':
+    #     return HttpResponse('收到 !!!')
+
+    if request.method == 'POST':
+        return HttpResponse('收到')
+    return render(request, 'login.html')
+
+
+```
+**在前期使用django提交post请求时，需要去配置文件中注释掉一行代码**
+```python
+
+MIDDLEWARE = [
+   'django.middleware.security.SecurityMiddleware',
+   'django.contrib.sessions.middleware.SessionMiddleware',
+   'django.middleware.common.CommonMiddleware',
+   # 'django.middleware.csrf.CsrfViewMiddleware',
+   'django.contrib.auth.middleware.AuthenticationMiddleware',
+   'django.contrib.messages.middleware.MessageMiddleware',
+   'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
 ```
 
 ### 5、FBV与CBV
