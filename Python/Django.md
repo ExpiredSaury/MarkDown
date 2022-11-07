@@ -2153,6 +2153,8 @@ def inder(request):
 
 ### 2、JsonResponse对象
 
+`JsonResponse` 是`HttpResponse`的⼦类，⽤于向客户端返回`json`数据。⼀般⽤于` ajax`请求。它的`content-type`缺省值为：`application/json `
+
 ```python
 """
 json格式数据有什么用？：
@@ -2226,7 +2228,7 @@ def ab_file(request):
 
 ```
 
-### 4、request对象方法
+### 4、request对象
 
 HttpRequest是从web服务器传递过来的请求对象，经过Django框架封装产⽣的， 封装了原始的Http请求
 
@@ -2373,7 +2375,39 @@ MIDDLEWARE = [
 
 ```
 
-### 5、FBV与CBV
+### 5、响应对象
+
+每⼀个视图函数必须返回⼀个响应对象，HttResponse对象由程序员创建并返回。
+
+| 属性         | 说明               |
+| ------------ | ------------------ |
+| content      | 字节字符串         |
+| charset      | 字符编码           |
+| status_code  | http状态码         |
+| content_type | 指定输出的MIME类型 |
+
+
+
+```python
+# urls.py
+	path('response/', views.handle_response, name='response'),
+    
+    
+ # views.py   
+    def handle_response(request):
+    res = HttpResponse('响应对象')
+    res.content = b'good bye'
+ 	res.charset = "utf-8"
+    res.content_type = 'text/html'
+    res.status_code = 400
+    return None
+```
+
+
+
+![image-20221107224043800](E:/MarkDown/markdown/imgs/image-20221107224043800.png)
+
+### 6、FBV与CBV
 
 ```python
 #视图函数既可以是函数也可以是类
@@ -4899,8 +4933,6 @@ end_page=current_page * per_page_num
 """
 ```
 
-自定义分页器是基于bootstrap样式来的，需要提前导入
-
 ```python
 utils文件夹下mypage.py文件
 
@@ -5017,11 +5049,13 @@ def page(request):
     page_obj = Pagination(current_page=current_page, all_count=all_count)
     # 2. 直接对总数居进行切片操作
     page_queryset = book_queryset[page_obj.start:page_obj.end]
-    # 3. 将page_queryset传递到页面，
+    # 3. 将page_queryset page_obj传递到页面，
     return render(request, 'page.html', locals())
 ```
 
 **前端**
+
+自定义分页器是基于bootstrap样式来的，需要提前导入js、css文件
 
 ```html
 <body>
@@ -5041,4 +5075,792 @@ def page(request):
 
 ![image-20221104223029555](E:/MarkDown/markdown/imgs/image-20221104223029555.png)
 
-## 校验性组件：from组件
+## 校验性组件：froms组件
+
+### 1、前戏
+
+```python
+"""
+写一个注册功能，获取用户名和密码，利用form表单提交数据
+在后端判断用户名和密码是否符合一定条件
+	用户名中不能含有金瓶梅
+	密码不能少于三位
+
+将提示信息展示到前端页面
+"""
+
+# 前端
+<form action="" method="post">
+    <p>username:
+        <input type="text" name="username">
+        <span style="color: red">{{ back_dic.username }}</span>
+    </p>
+
+    <p>password:
+        <input type="password" name="password">
+        <span style="color: red">{{ back_dic.password }}</span>
+    </p>
+    <input type="submit" name="" id="" class="btn btn-info">
+
+</form>
+
+# 后端
+def ab_form(request):
+    back_dic = {'username': '', 'password': ''}
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if '金瓶梅' in username:
+            back_dic['username'] = '用户名不符合社会主义核心价值观'
+        if len(password) <= 3:
+            back_dic['password'] = '密码太短不安全！！'
+            
+    """
+    无论是get请求还是post请求，只不过是get请求的时候，字典值都是空的，而post请求之后，字典有可能有值
+    """
+    
+    return render(request, 'ab_form.html', locals())
+
+
+
+"""
+上述代码的三个环节
+1.手动书写前端获取用户数据的html代码		渲染html代码
+2.后端对用户数据进行校验				   校验数据
+3.不符合要求的数据进行前端提示			 展示提示信息
+
+
+
+forms组件
+	能够完成的事情
+		1.渲染html代码
+		2.校验数据
+		3.展示提示信息
+		
+为什么数据校验非要去后端，不能在前端利用js直接完成呢？
+	数据校验前端可有可无
+	但是后端必须要有！！！
+	
+	因为前端校验若不惊风，可以直接修改或者利用爬虫程序绕过前端页面直接朝后端提交数据
+	
+	
+"""
+```
+
+### 2、基本使用
+
+```python
+# views.py
+
+from django import forms
+
+class MyForm(forms.Form):
+    # username最小3位，最大8位，字符串类型
+    username = forms.CharField(min_length=3, max_length=8)
+    # password最小3位，最大8位，字符串类型
+    password = forms.CharField(min_length=3, max_length=8)
+    # email字段必须符合邮箱格式 xxx@xx.com
+    email = forms.EmailField()
+
+```
+
+### 3、校验数据
+
+> 测试环境的准备除了可以拷贝代码在test.py文件中书写之外，还可以使用pycharm中已经准备好了一个测试环境
+
+```python
+from app01 import views
+# 1. 将带校验的数据组织成字典的形式传入即可
+form_obj=views.MyForm({'username':'zhao','password':'123','email':'123'})
+# 2. 判断数据是否合法， 该方法只有在所有数据都合法的情况下才会返回True
+form_obj.is_valid()
+Out[6]: False
+# 3. 查看所有校验通过的数据（符合校验规则的数据）
+form_obj.cleaned_data
+Out[7]: {'username': 'zhao', 'password': '123'}
+# 4. 查看所有不符合校验规则以及不符合原因
+form_obj.errors
+Out[8]: {'email': ['Enter a valid email address.']}
+```
+
+![image-20221106210111924](E:/MarkDown/markdown/imgs/image-20221106210111924.png)
+
+```python
+# 5. 校验数据只校验类中出现的字段，多传不影响，多传的字段直接忽略
+form_obj=views.MyForm({'username':'zhao','password':'123','email':'123@qq.com','hobby':'JayChou'})
+form_obj.is_valid()
+Out[13]: True
+
+form_obj.cleaned_data
+Out[15]: {'username': 'zhao', 'password': '123', 'email': '123@qq.com'}
+form_obj.errors
+Out[16]: {}
+```
+
+```python
+# . 校验数据 默认情况下，类里的所有字段都必须给值，
+
+form_obj=views.MyForm({'username':'zhao','password':'123'})
+form_obj.is_valid()
+Out[18]: False
+form_obj.cleaned_data
+Out[19]: {'username': 'zhao', 'password': '123'}
+form_obj.errors
+Out[20]: {'email': ['This field is required.']}
+```
+
+**校验数据的时候，==默认情况下==数据可以多传，但是绝不能少传，**
+
+### 4、渲染标签
+
+**froms组件只会自动渲染用户输入的标签(input, select ,radio,checkbox,)，不会渲染提交按钮**
+
+#### 4.1、先在后端生成一个**空对象**
+
+```python
+# views.py
+
+from django import forms
+
+class MyForm(forms.Form):
+    # username最小3位，最大8位，字符串类型
+    username = forms.CharField(min_length=3, max_length=8)
+    # password最小3位，最大8位，字符串类型
+    password = forms.CharField(min_length=3, max_length=8)
+    # email字段必须符合邮箱格式 xxx@xx.com
+    email = forms.EmailField()
+
+
+
+def index(request):
+    # 1.先产生一个空对象
+    form_obj = MyForm()
+    # 2.直接将该空对象传递给html页面
+    return render(request, 'index.html', locals())
+
+
+
+# urls.py
+urlpatterns = [
+    path('index/', views.index, name='index')
+]
+
+#前端利用空对象做操作
+<form action="" method="post">
+    <p>第一种渲染方式:代码书写极少，封装成度太高不便于后续拓展，一般只在本地测试使用</p>
+    {{ form_obj.as_p }}
+    {{ form_obj.as_ul }}
+    {{ form_obj.as_table }}
+
+    <p>第二种渲染方式：可扩展性非常强，但是书写代码太多</p>
+    <p>{{ form_obj.username.label }}:{{ form_obj.username }}</p>
+    <p>{{ form_obj.password.label }}:{{ form_obj.password }}</p>
+    <p>{{ form_obj.email.label }}:{{ form_obj.email }}</p>
+
+    <p>第三种渲染方式：代码精简，扩展性也高</p>
+    {% for form in form_obj %}
+        <p>{{ form.label }}:{{ form }}</p>
+
+    {% endfor %}
+
+</form>
+
+
+# label属性默认展示的是类中定义的字段首字母大写的形式，也可以自己修改，直接给类中字段对象加label属性即可
+```
+
+#### 4.2、第一种渲染方式
+
+```html
+<body>
+<form action="" method="post">
+    <p>第一种渲染方式:代码书写极少，封装成度太高不便于后续拓展，一般只在本地测试使用</p>
+    {{ form_obj.as_p }}
+</form>
+</body>
+```
+
+**自动生成字段名和Input框**
+
+![image-20221106211541541](E:/MarkDown/markdown/imgs/image-20221106211541541.png)
+
+```html
+<form action="" method="post">
+    <p>第一种渲染方式:代码书写极少，封装成度太高不便于后续拓展，一般只在本地测试使用</p>
+    {{ form_obj.as_ul }}
+</form>
+```
+
+![image-20221106212046568](E:/MarkDown/markdown/imgs/image-20221106212046568.png)
+
+```html
+<form action="" method="post">
+    <p>第一种渲染方式:代码书写极少，封装成度太高不便于后续拓展，一般只在本地测试使用</p>
+    {{ form_obj.as_table }}
+</form>
+```
+
+![image-20221106212158865](E:/MarkDown/markdown/imgs/image-20221106212158865.png)
+
+#### 4.3、第二种渲染方式
+
+```python
+<p>{{ form_obj.username }}</p>
+# form_obj是类对象，而username是类里的属性，
+```
+
+![image-20221106213211520](E:/MarkDown/markdown/imgs/image-20221106213211520.png)
+
+```html
+ <p>{{ form_obj.username.label }}{{ form_obj.username }}</p>
+```
+
+![image-20221106212855862](E:/MarkDown/markdown/imgs/image-20221106212855862.png)
+
+```python
+#可以在类里面修改代码，展示input框前面的注释信息，
+username = forms.CharField(min_length=3, max_length=8,label='用户名')
+```
+
+![image-20221106212959362](E:/MarkDown/markdown/imgs/image-20221106212959362.png)
+
+```html
+<form action="" method="post">
+    <p>第二种渲染方式：可扩展性非常强，但是书写代码太多</p>
+    <p>{{ form_obj.username.label }}:{{ form_obj.username }}</p>
+    <p>{{ form_obj.password.label }}:{{ form_obj.password }}</p>
+    <p>{{ form_obj.email.label }}:{{ form_obj.email }}</p>
+</form>
+```
+
+![image-20221106213434732](E:/MarkDown/markdown/imgs/image-20221106213434732.png)
+
+#### 4.4、第三种渲染方式
+
+```html
+<form action="" method="post">
+    <p>第三种渲染方式：</p>
+    {% for form in form_obj %}
+        <p>{{ form }}</p>
+    {% endfor %}
+</form>
+
+
+```
+
+![image-20221106213615001](E:/MarkDown/markdown/imgs/image-20221106213615001.png)
+
+上图所示,`{{form}}`等价于第二种渲染方式的`{{form_obj.username}}`,那么直接`.label`就可以得到`input`框前面的**注释**,
+
+```html
+<form action="" method="post">
+
+    <p>第三种渲染方式：代码精简，扩展性也高</p>
+    {% for form in form_obj %}
+        <p>{{ form.label }}:{{ form }}</p>
+
+    {% endfor %}
+
+</form>
+```
+
+![image-20221106214118737](E:/MarkDown/markdown/imgs/image-20221106214118737.png)
+
+### 5、展示错误信息
+
+前端
+
+```python
+<form action="" method="post">
+    {% for form in form_obj %}
+        <p>{{ form.label }}:{{ form }}
+            <span style="color:red">{{ form.errors }}</span>
+        </p>
+    {% endfor %}
+    <input type="submit" class="btn btn-info">
+</form>
+```
+
+后端
+
+```python
+class MyForm(forms.Form):
+    # username最小3位，最大8位，字符串类型
+    username = forms.CharField(min_length=3, max_length=8, label='用户名')
+    # password最小3位，最大8位，字符串类型
+    password = forms.CharField(min_length=3, max_length=8, label='密码')
+    # email字段必须符合邮箱格式 xxx@xx.com
+    email = forms.EmailField(label='邮箱')
+
+    
+def index(request):
+    # 1.先产生一个空对象
+    form_obj = MyForm()
+    if request.method == 'POST':
+        # 获取用户数据并校验
+        """
+        username=request.POST.get('username')
+        如果数据太多，
+        获取数据太繁琐
+        校验数据需要构造字典的格式传入才行
+        ps:但是request.POST可以看成就是一个字典
+        """
+        # 3校验数据
+        form_obj = MyForm(request.POST)
+        # 4.判断数据是否合法
+        if form_obj.is_valid():
+            # 5如果合法，操作数据库存储数据
+            return HttpResponse('OK')
+        # 6不合法，有错误
+        else:
+            # 将错误信息展示到前端
+            pass
+
+    # 2.直接将该空对象传递给html页面
+    return render(request, 'index.html', locals())
+```
+
+---
+
+* **浏览器会自动检验数据，但是前端检验若不惊风，如下图:**
+
+---
+
+![image-20221107190747441](E:/MarkDown/markdown/imgs/image-20221107190747441.png)
+
+---
+
+![image-20221107191036994](E:/MarkDown/markdown/imgs/image-20221107191036994.png)
+
+---
+
+![image-20221107191023281](E:/MarkDown/markdown/imgs/image-20221107191023281.png)
+
+* **如何让浏览器不自动校验**
+
+```html
+<form action="" method="post" novalidate>
+```
+
+![image-20221107191659967](E:/MarkDown/markdown/imgs/image-20221107191659967.png)
+
+```python
+<form action="" method="post" novalidate>
+    {% for form in form_obj %}
+        <p>{{ form.label }}:{{ form }}
+            <span style="color:red">{{ form.errors.0 }}</span>
+        </p>
+    {% endfor %}
+    <input type="submit" class="btn btn-info">
+
+</form>
+</body>
+```
+
+![image-20221107191923509](E:/MarkDown/markdown/imgs/image-20221107191923509.png)
+
+前端渲染效果展示：就不会再自动生成`ul套li`的格式，而是生成一个`普通文本`
+
+![image-20221107191810415](E:/MarkDown/markdown/imgs/image-20221107191810415.png)
+
+但是又因为再后端做了限制，最大只能8位，所以会出现当输入到8位的时候就出现不能再输入的效果，可以通过打开检查，修改前端代码来达到目的。再次显示出前端校验的若不惊风！！
+
+![image-20221107192646078](E:/MarkDown/markdown/imgs/image-20221107192646078.png)
+
+```python
+"""
+1.必备条件：get请求和post请求传递给html页面对象变量名必须一样
+2.form组件当你的数据不合法的时候，会保存你上次的数据，让你基于之前的结果进行修改，更加人性化
+"""
+```
+
+* **自定义展示信息**
+
+```python
+#针对错误的提示信息可以自己定制
+
+class MyForm(forms.Form):
+    # username最小3位，最大8位，字符串类型
+    username = forms.CharField(min_length=3, max_length=8, label='用户名', error_messages={
+        'min_length': '用户名最少3位',
+        'max_length': '用户名最大8位',
+        'required': '用户名不能位空',
+    })
+    # password最小3位，最大8位，字符串类型
+    password = forms.CharField(min_length=3, max_length=8, label='密码', error_messages={
+        'min_length': '密码最少3位',
+        'max_length': '密码最长8位',
+        'required': '密码不能为空',
+    })
+    # email字段必须符合邮箱格式 xxx@xx.com
+    email = forms.EmailField(label='邮箱', error_messages={
+        'invalid': '邮箱格式不正确',
+        'required': '邮箱不能为空',
+    })
+```
+
+![image-20221107194237578](E:/MarkDown/markdown/imgs/image-20221107194237578.png)
+
+### 6、钩子函数(HOOK)
+
+```python
+"""
+>在特定的节点自动触发，完成相应操作
+
+钩子函数在form组件中就类似于第二道关卡，能够让我们自定义校验规则
+
+form组件中有两类钩子：
+	1. 局部钩子
+		当你需要给单个字段增加校验规则的时候可以使用
+	2. 全局钩子
+		当你需要给多个字段增加校验规则的时候可以使用
+"""
+#实际案例
+
+# 1. 校验用户名中不能有666   只是校验username字段，用局部钩子
+
+# 2. 校验密码和确认密码是否一致  passwrod和confirm两个字段，用全局钩子
+
+```
+
+```python
+from django import forms
+
+
+class MyForm(forms.Form):
+    # username最小3位，最大8位，字符串类型
+    username = forms.CharField(min_length=3, max_length=8, label='用户名', error_messages={
+        'min_length': '用户名最少3位',
+        'max_length': '用户名最大8位',
+        'required': '用户名不能位空',
+    })
+    # password最小3位，最大8位，字符串类型
+    password = forms.CharField(min_length=3, max_length=8, label='密码', error_messages={
+        'min_length': '密码最少3位',
+        'max_length': '密码最长8位',
+        'required': '密码不能为空',
+    })
+    confirm_password = forms.CharField(min_length=3, max_length=8, label='密码确认', error_messages={
+        'min_length': '确认密码最少3位',
+        'max_length': '确认密码最长8位',
+        'required': '确认密码不能为空',
+    })
+    # email字段必须符合邮箱格式 xxx@xx.com
+    email = forms.EmailField(label='邮箱', error_messages={
+        'invalid': '邮箱格式不正确',
+        'required': '邮箱不能为空',
+    })
+
+    # 钩子函数在类里面书写方法即可
+    
+    # 1.局部钩子
+    def clean_username(self):
+        # 获取到用户名
+        username = self.cleaned_data.get('username')
+        if '666' in username:
+            # 提示前端展示错误信息
+            #报错方式一:
+            self.add_error('username', '用户名中不能含有666')
+             # 报错方式二
+            #from django.core.exceptions import NON_FIELD_ERRORS, ValidationError    
+            #raise ValidationError('用户名中不能含有666')
+        # 将钩子函数钩取出来的数据再放回去
+        return username
+
+    # 2.全局钩子
+    def clean(self):
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if not confirm_password == password:
+            self.add_error('confirm_password', '两次密码不一致')
+        # 将钩子函数钩出来的数据全部返回
+        return self.cleaned_data
+
+
+def index(request):
+    # 1.先产生一个空对象
+    form_obj = MyForm()
+    if request.method == 'POST':
+        # 获取用户数据并校验
+        """
+        username=request.POST.get('username')
+        如果数据太多，
+        获取数据太繁琐
+        校验数据需要构造字典的格式传入才行
+        ps:但是request.POST可以看成就是一个字典
+        """
+        # 3校验数据
+        form_obj = MyForm(request.POST)
+        # 4.判断数据是否合法
+        if form_obj.is_valid():
+            # 5如果合法，操作数据库存储数据
+            return HttpResponse('OK')
+        # 6不合法，有错误
+        else:
+            # 将错误信息展示到前端
+            pass
+
+    # 2.直接将该空对象传递给html页面
+    return render(request, 'index.html', locals())
+```
+
+![image-20221107200041886](E:/MarkDown/markdown/imgs/image-20221107200041886.png)
+
+### 7、forms组件其他参数
+
+创建Form类时，主要涉及到 【字段】 和 【插件】，字段用于对用户请求数据的验证，插件用于自动生成HTML;
+
+```python
+label 给字段起名字
+error_messages  自定义报错信息
+initial 默认值
+required=False  控制字段是否必填，默认是True
+
+
+"""
+1.字段没有样式
+2. 针对不同类型的input如何修改
+	text
+	password
+	radio
+	date
+	checkbox
+	...
+"""
+
+widget=forms.widgets.TextInput(attrs={'class': 'form-control c1 c2', 'username': 'zhao'})
+#多个属性，直接空格隔开即可
+
+
+
+```
+
+#### **initial**
+
+初始值，input框里面的初始值。
+
+```python
+class MyForm(forms.Form):
+    # username最小3位，最大8位，字符串类型
+    username = forms.CharField(
+        min_length=3, 
+        max_length=8, 
+        label='用户名', 
+        initial='zhao', #设置默认值
+    )
+    pwd = forms.CharField(min_length=6, label="密码")
+```
+
+#### **error_messages**
+
+重写错误信息。
+
+```python
+class MyForm(forms.Form):
+    # username最小3位，最大8位，字符串类型
+    username = forms.CharField(
+        min_length=3, 
+        max_length=8, 
+        label='用户名', 
+        initial='zhao',
+        error_messages={
+            'min_length': '用户名最少3位',
+            'max_length': '用户名最大8位',
+            'required': '用户名不能位空',
+         }
+      )
+      pwd = forms.CharField(min_length=6, label="密码")
+```
+
+#### widget
+
+PasswordInput    TextInput     EmailInput
+
+```python
+class MyForm(forms.Form):
+    # username最小3位，最大8位，字符串类型
+    username = forms.CharField(
+        min_length=3, 
+        max_length=8, 
+        label='用户名', 
+        initial='zhao',
+        error_messages={
+            'min_length': '用户名最少3位',
+            'max_length': '用户名最大8位',
+            'required': '用户名不能位空',
+        },
+        widget=forms.widgets.TextInput(attrs={'class': 'form-control c1 c2', 'username': 'zhao'})
+                               )
+    
+    # password最小3位，最大8位，字符串类型
+    password = forms.CharField(
+        min_length=3, 
+        max_length=8, 
+        label='密码', 
+        error_messages={
+            'min_length': '密码最少3位',
+            'max_length': '密码最长8位',
+            'required': '密码不能为空',
+    	},
+        widget=forms.widgets.PasswordInput(attrs={'class': 'form-control'})
+                               )
+    
+    email = forms.EmailField(
+        label='邮箱', 
+        error_messages={
+            'invalid': '邮箱格式不正确',
+            'required': '邮箱不能为空',
+        },
+        widget=forms.widgets.EmailInput(attrs={'class': 'form-control'})
+    )
+
+```
+
+#### RegexValidator验证器
+
+```python
+from django.forms import Form
+from django.forms import widgets
+from django.forms import fields
+from django.core.validators import RegexValidator
+ 
+class MyForm(Form):
+    user = fields.CharField(
+        validators=[RegexValidator(r'^[0-9]+$', '请输入数字'), RegexValidator(r'^159[0-9]+$', '数字必须以159开头')],
+    )
+```
+
+#### required
+
+默认是True，必填项
+
+```python
+class MyForm(forms.Form):
+    # username最小3位，最大8位，字符串类型
+    username = forms.CharField(
+        min_length=3, 
+        max_length=8, 
+        label='用户名', 
+        required=False, 
+        initial='zhao',
+                               )
+```
+
+#### radioSelect
+
+单radio值为字符串
+
+```python
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        min_length=8,
+        label="用户名",
+        initial="张三",
+        error_messages={
+            "required": "不能为空",
+            "invalid": "格式错误",
+            "min_length": "用户名最短8位"
+        }
+    )
+    pwd = forms.CharField(min_length=6, label="密码")
+    #选择
+    gender = forms.ChoiceField(
+        choices=((1, "男"), (2, "女"), (3, "保密")),
+        label="性别",
+        initial=3,#默认是保密
+        widget=forms.widgets.RadioSelect()
+    )
+```
+
+#### 单选select
+
+```python
+class LoginForm(forms.Form):
+    ...
+    hobby = forms.ChoiceField(
+        choices=((1, "篮球"), (2, "足球"), (3, "双色球"), ),
+        label="爱好",
+        initial=3,
+        widget=forms.widgets.Select()
+    )
+```
+
+#### 多选select
+
+```python
+class LoginForm(forms.Form):
+    ...
+    hobby = forms.MultipleChoiceField(
+        choices=((1, "篮球"), (2, "足球"), (3, "双色球"), ),
+        label="爱好",
+        initial=[1, 3],
+        widget=forms.widgets.SelectMultiple()
+    )
+```
+
+#### 单选checkbox
+
+```python
+class LoginForm(forms.Form):
+    ...
+    keep = forms.ChoiceField(
+        label="是否记住密码",
+        initial="checked",
+        widget=forms.widgets.CheckboxInput()
+    )
+```
+
+#### 多选checkbox
+
+```python
+class LoginForm(forms.Form):
+    ...
+    hobby = forms.MultipleChoiceField(
+        choices=((1, "篮球"), (2, "足球"), (3, "双色球"),),
+        label="爱好",
+        initial=[1, 3],
+        widget=forms.widgets.CheckboxSelectMultiple()
+    )
+```
+
+### 8、forms组件源码
+
+```python
+"""
+切入点：
+	form_obj.is_valid()
+"""
+
+ def is_valid(self):
+        """Return True if the form has no errors, or False otherwise."""
+        return self.is_bound and not self.errors
+    #如果is_valid()要返回True的话，那么self.is_bound要位True，self.errors要为False
+    
+self.is_bound = data is not None or files is not None #只要传值了，肯定为True
+
+
+@property
+def errors(self):
+    """Return an ErrorDict for the data provided for the form."""
+    if self._errors is None:
+        self.full_clean()
+        return self._errors
+    
+    #forms组件所有的功能基本都出自该方法
+    def full_clean(self):
+        
+        self._clean_fields()  #校验字段+局部钩子
+        self._clean_form()	  #全局钩子
+        self._post_clean()
+```
+
+
+
+## Cookie与Session
+
+## Django中间件
+
+## csrf跨站请求伪造
+
+## 视图函数(CBV)添加装饰器
+
