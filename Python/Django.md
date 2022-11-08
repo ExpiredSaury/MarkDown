@@ -5854,9 +5854,381 @@ def errors(self):
         self._post_clean()
 ```
 
+## ==Cookie与Session==
+
+HTTP被设计为”⽆态”，也就是俗称“脸盲”。 这⼀次请求和下⼀次请求 之间没有任何状态保持，我们⽆法根据请求的任何⽅⾯(IP地址，⽤户代理等)来识别来自同⼀ 个⼈的连续请求。
+
+实现状态保持的⽅式：在客户端或服务器端存储与会话有关的数据 （客户端与服务器端的⼀次通信，就是⼀次会话）
+
+* cookie
+* session
+
+不同的请求者之间不会共享这些数据，cookie和session与请求者⼀⼀对应
+
+```python
+"""
+发展史:
+	1.网站没有保存用户功能的需求，所有用户访问返回的结果都是一样的	eg:新闻，博客，文章
+	
+	2.出现了一些需要保存用户信息的网站
+		eg:淘宝，支付宝，京东.....
+		
+	以登录功能为例子，如果不保存用户登陆状态，也就意味着用户每次访问网站都需要重复的输入用户名和密码（这样的网站你还想用吗？）
+	当用户第一次登录成功之后，将用户的密码返回给用户浏览器，让用户浏览器保存在本地，之后访问网站的时候浏览器会自动将保存在浏览器上的用户名和密码发送给服务端，服务端获取之后，自动校验。
+	早期这种方式具有很大的安全隐患，
+	
+	
+	优化:
+		当用户登录成功之后，服务端产生一个随机字符串（在服务端保存数据,用Kv键值对的形式），交由客户端浏览器保存，
+		
+		随机字符串1:用户1的相关信息
+		随机字符串2:用户2的相关信息
+		随机字符串3:用户3的相关信息
+		
+		之后访问服务端的时候，都带着该随机字符串，服务端去数据库中比对是否有对应的随机字符串，从而获取到对应的用户信息
+		
+但是如果拿到了随机字符串，那么就可以冒充当前用户，其实还存在安全隐患
 
 
-## Cookie与Session
+在web领域，没有绝对的安全，也没有绝对的不安全
+		
+		
+	
+"""
+cookie 	
+	服务端保存在客户端浏览器上的信息都可以称之为cookie
+    它的表现形式一般都是k:v键值对(可以有多个)
+session
+	数据是保存在服务端的，并且它的表现形式一般都是k:v键值对(可以有多个)
+token
+	session虽然数据保存在服务端，但是禁不住数据量大
+    服务端不再保存数据，而是在登录成功之后，将一段信息进行加密处理，(加密算法只有自己知道)，将加密后的结果拼接在信息后面，整体返回给浏览器保存，浏览器下次再访问的时候带着该信息，服务端自动切取前面一段信息，再次使用自己的加密算法跟浏览器尾部的密文进行比对
+
+jwt认证
+	
+ 
+"""总结"""
+	1.cookie是保存在客户端浏览器上的信息
+    2.session就是保存在服务端上的信息
+    3.session是基于cookie工作的（大部分的保存用户状态的操作都需要使用到cookie）
+```
+
+### 1、Cookie
+
+```python
+#虽然cookie是服务端告诉客户端需要保存的内容
+#但是客户端可以选择拒绝保存，禁止了之后只要是需要记录用户状态的网站登录功能都无法使用
+```
+
+![image-20221108194110940](E:/MarkDown/markdown/imgs/image-20221108194110940.png)
+
+```python
+# 视图函数的返回值
+return HttpResponse()
+return render()
+return redirects()
+
+#如果想要操作cookie，就必须利用obj对象，不能再像之前那样写视图函数的返回值了
+obj1=HttsResponse()
+return obj1
+obj2=render()
+return obj2
+obj3=redirect()
+return obj3
+
+
+"""设置cookie"""
+	obj.set_cookie(key,value='')
+"""获取cookie"""
+	request.COOKIES.get(key)
+"""设置超时时间"""
+	在设置cookie的时候，可以添加超时时间
+    obj.set_cookie('username', 'zs666', max_age=5, expires=3)
+    
+    max_age
+    expires
+    	两者都是设置超时时间，都是以秒为单位，
+        需要注意的是针对IE浏览器需要使用expires
+"""删除cookie"""
+obj.delete_cookie('username')
+```
+
+简单cookie使用
+
+```python
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username == 'zhao' and password == '123':
+            # 保存用户登录状态
+            obj = redirect('home')
+            # 让浏览器记录cookie数据
+            obj.set_cookie('username', 'zs666')
+            """
+            浏览器不单单会帮你存，而且每次访问的时候都会带着它
+            """
+            # 跳转到一个需要用户登录才能看到的页面
+            return obj
+    return render(request, 'login.html')
+
+
+def home(request):
+    # 获取cookie信息,进行判断
+    if request.COOKIES.get('username') == 'zs666':
+        return HttpResponse('我是Home页面，只有登录的用户才可进来')
+    # 没有登录应该跳转到登录页面
+    return redirect('login')
+```
+
+加入装饰器
+
+```python
+"""
+用户如果再没有登录的情况下，想访问一个需要登录的页面，那么先跳转到登录页面，
+当用户输入正确的用户名和密码之后，
+应该跳转到用户之前想到访问的页面，而不是直接写死
+"""
+
+
+# 校验用户是否登录的装饰器
+def login_auth(func):
+    def inner(request, *args, **kwargs):
+        target_url = request.get_full_path()
+        if request.COOKIES.get('username'):
+            res = func(request, *args, **kwargs)
+            return res
+        else:
+            return redirect('/login/?next=%s' % target_url)
+
+    return inner
+
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username == 'zhao' and password == '123':
+            # 获取用户上一次想要访问的url
+            target_url = request.GET.get('next')
+            if target_url:
+                obj = redirect(target_url)
+            else:
+                # 保存用户登录状态
+                obj = redirect('home')
+                # 让浏览器记录cookie数据
+            obj.set_cookie('username', 'zs666')
+            """
+            浏览器不单单会帮你存，而且每次访问的时候都会带着它
+            """
+            # 跳转到一个需要用户登录才能看到的页面
+            return obj
+    return render(request, 'login.html')
+
+
+@login_auth
+def home(request):
+    # 获取cookie信息,进行判断
+    # if request.COOKIES.get('username') == 'zs666':
+    #     return HttpResponse('我是Home页面，只有登录的用户才可进来')
+    # 没有登录应该跳转到登录页面
+    # return redirect('login')
+    return HttpResponse('我是Home页面，只有登录的用户才可进来')
+
+
+@login_auth
+def index(request):
+    # return redirect('login')
+    return HttpResponse('我是index页面，只有登录的用户才可进来')
+
+
+@login_auth
+def func(request):
+    return HttpResponse('我是func页面，只有登录的用户才可进来')
+
+
+# 注销，删除cookie
+@login_auth
+def logout(request):
+    obj = redirect('login')
+    obj.delete_cookie('username')
+    return obj
+
+```
+
+### 2、Session
+
+```python
+session数据保存在服务端，给客户端返回的是一个随机字符串
+	sessionid:随机字符串	
+1.默认情况下操作session的时候需要Django默认的一张django_session表
+	数据库迁移命令
+    	django会自动的创建多张表，django_session就是其中的一张
+"""设置session"""
+request.session['key'] = value
+"""获取session"""
+request.session.get('key')
+"""设置过期时间"""
+request.session.set_expiry()
+	括号内可以放四种类型的参数
+    	1.整数   				多少秒
+        2.日期对象   			到指定日期就失效
+        3. 0 				  一旦当前浏览器窗口关闭立刻失效
+        4. 不写				失效时间取决于django内部全局session默认的的失效时间（14天）
+"""清除session"""
+	request.session.delete() #只删服务端的session,客户端的不删
+	request.session.flush() #浏览器和服务端都清空
+ 
+
+
+session是保存在服务端的，但是session的保存位置可以有多种选择
+	1.MySQL
+    2.文件
+    3.redis
+    4.memcache
+    ......
+	
+    
+django_session表中的数据条数，是取决于浏览器的
+	同一个计算机上(IP地址)，同一个浏览器只会同时有一条数据生效
+    （当session过期的时候，可能会出现多条数据对应一个浏览器，但是该现象不会持续很久，内部会自动识别过期的数据清除，也可以手动通过代码清除）
+    主要是为了节省服务端数据库资源
+    
+```
+
+**先执行数据库迁移的两条命令，查看django_session表结构**
+
+![image-20221108205236315](E:/MarkDown/markdown/imgs/image-20221108205236315.png)
+
+#### 设置session
+
+```python
+def set_session(request):
+    # 设置session
+    request.session['hobby'] = 'JayChou'
+    """
+    设置session内部发生了那些事？
+        1.django内部会自动生成一个随机字符串
+        2.django内部自动将随机字符串和后面对应的数据存储到django_session表中（这一步不是直接生效的，）
+            2.1先在内存中产生操作数据的缓存
+            2.2在响应结果django中间件的时候才真正的操作数据
+        3.将产生的随机字符串返回个客户端浏览器保存
+    """
+
+    return HttpResponse('稻香')
+```
+
+然后在浏览器输入路由，回车后，`django_session`表中会自动生成数据,
+
+`expire_data`字段是过期时间
+
+![image-20221108205735075](E:/MarkDown/markdown/imgs/image-20221108205735075.png)
+
+
+
+---
+
+session给客户端返回的是一个随机字符串,**随机字符串**指的就是`django_session表中的session_key`
+
+==django默认的session过期时间是**14**天==，但是也可以认为的修改
+
+![image-20221108211345212](E:/MarkDown/markdown/imgs/image-20221108211345212.png)
+
+#### 获取session
+
+```python
+def get_session(request):
+    # 获取session
+    print(request.session.get('hobby'))
+    """
+    获取session发生了那些事:
+        1.自动从浏览器请求中获取sessionid对应的随机字符串
+        2.拿着该随机字符串去django_session表中查找对应的数据，
+        3.如果比对上了，则将对应的数据取出并以字典的形式封装到request.session中
+            比对不上，则request.session.get()返回None
+    """
+    return HttpResponse('haha')
+```
+
+![image-20221108211941911](E:/MarkDown/markdown/imgs/image-20221108211941911.png)
+
+---
+
+
+
+#### 过期时间
+
+```python
+request.session.set_expiry()
+	括号内可以放四种类型的参数
+    	1.整数   				多少秒
+        2.日期对象   			到指定日期就失效
+        3. 0 				  一旦当前浏览器窗口关闭立刻失效
+        4. 不写				失效时间取决于django内部全局
+```
+
+
+
+```python
+def set_session(request):
+    # 设置session
+    request.session['hobby'] = 'JayChou'
+    # 设置超时时间
+    request.session.set_expiry(0) # 浏览器关闭就失效
+    return HttpResponse('稻香')
+
+def get_session(request):
+    # 获取session
+    # print(request.session.get('hobby'))
+    if request.session.get('hobby'):
+        print(request.session.get('hobby'))
+        return HttpResponse('haha')
+    return HttpResponse('浏览器窗口关闭过了，得不到session数据')
+```
+
+#### 清除session
+
+```python
+def del_session(request):
+    request.session.delete() ##只删服务端的session,客户端的不删
+    return HttpResponse("删除")
+
+
+
+推荐使用request.session.flush() #浏览器和服务端都清空
+```
+
+
+
+![image-20221108220200106](E:/MarkDown/markdown/imgs/image-20221108220200106.png)
+
+
+
+## CBV添加装饰器
+
+```python
+# @method_decorator(login_auth, name='get')  # 方式二，可以添加多个，针对不同的方法加不同的装饰器
+# @method_decorator(login_auth, name='post')
+class MyLogin(View):
+    @method_decorator(login_auth)  # 方式三，会直接作用于当前类里的所有方法
+    def dispatch(self, request, *args, **kwargs):
+        pass
+
+    # @method_decorator(login_auth)#方式一
+    def get(self, requset):
+        return HttpResponse('get')
+
+    def post(self, reqeust):
+        return HttpResponse('post')
+```
+
+
+
+
+
+
+
+
 
 ## Django中间件
 
