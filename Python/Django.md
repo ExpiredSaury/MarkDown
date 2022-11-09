@@ -5562,7 +5562,7 @@ class MyForm(forms.Form):
             #报错方式一:
             self.add_error('username', '用户名中不能含有666')
              # 报错方式二
-            #from django.core.exceptions import NON_FIELD_ERRORS, ValidationError    
+            #from django.core.exceptions import  ValidationError    
             #raise ValidationError('用户名中不能含有666')
         # 将钩子函数钩取出来的数据再放回去
         return username
@@ -5856,7 +5856,7 @@ def errors(self):
 
 ## ==Cookie与Session==
 
-HTTP被设计为”⽆态”，也就是俗称“脸盲”。 这⼀次请求和下⼀次请求 之间没有任何状态保持，我们⽆法根据请求的任何⽅⾯(IP地址，⽤户代理等)来识别来自同⼀ 个⼈的连续请求。
+HTTP被设计为”==⽆态==”，也就是俗称“脸盲”。 这⼀次请求和下⼀次请求 之间没有任何状态保持，我们⽆法根据请求的任何⽅⾯(IP地址，⽤户代理等)来识别来自同⼀ 个⼈的连续请求。
 
 实现状态保持的⽅式：在客户端或服务器端存储与会话有关的数据 （客户端与服务器端的⼀次通信，就是⼀次会话）
 
@@ -5892,8 +5892,7 @@ HTTP被设计为”⽆态”，也就是俗称“脸盲”。 这⼀次请求和
 
 在web领域，没有绝对的安全，也没有绝对的不安全
 		
-		
-	
+			
 """
 cookie 	
 	服务端保存在客户端浏览器上的信息都可以称之为cookie
@@ -5913,7 +5912,7 @@ jwt认证
     3.session是基于cookie工作的（大部分的保存用户状态的操作都需要使用到cookie）
 ```
 
-### 1、Cookie
+### 1、Django操作cookie
 
 ```python
 #虽然cookie是服务端告诉客户端需要保存的内容
@@ -5941,6 +5940,7 @@ return obj3
 	obj.set_cookie(key,value='')
 """获取cookie"""
 	request.COOKIES.get(key)
+    request.get_signed_cookie(key, default=RAISE_ERROR, salt='盐', max_age=None)
 """设置超时时间"""
 	在设置cookie的时候，可以添加超时时间
     obj.set_cookie('username', 'zs666', max_age=5, expires=3)
@@ -5951,9 +5951,12 @@ return obj3
         需要注意的是针对IE浏览器需要使用expires
 """删除cookie"""
 obj.delete_cookie('username')
+
+"""加盐"""
+obj.set_sifned_cookie(key,value,salt='盐')
 ```
 
-简单cookie使用
+#### 简单实现用户登录
 
 ```python
 def login(request):
@@ -5981,7 +5984,7 @@ def home(request):
     return redirect('login')
 ```
 
-加入装饰器
+#### 加入装饰器
 
 ```python
 """
@@ -6056,7 +6059,7 @@ def logout(request):
 
 ```
 
-### 2、Session
+### 2、Django操作session
 
 ```python
 session数据保存在服务端，给客户端返回的是一个随机字符串
@@ -6081,7 +6084,7 @@ request.session.set_expiry()
  
 
 
-session是保存在服务端的，但是session的保存位置可以有多种选择
+2.session是保存在服务端的，但是session的保存位置可以有多种选择
 	1.MySQL
     2.文件
     3.redis
@@ -6097,6 +6100,8 @@ django_session表中的数据条数，是取决于浏览器的
 ```
 
 **先执行数据库迁移的两条命令，查看django_session表结构**
+
+如果没有先执行数据库迁移命令，那么会报(`no such table:django_session`)错误
 
 ![image-20221108205236315](E:/MarkDown/markdown/imgs/image-20221108205236315.png)
 
@@ -6206,33 +6211,437 @@ def del_session(request):
 
 ## CBV添加装饰器
 
-```python
-# @method_decorator(login_auth, name='get')  # 方式二，可以添加多个，针对不同的方法加不同的装饰器
-# @method_decorator(login_auth, name='post')
-class MyLogin(View):
-    @method_decorator(login_auth)  # 方式三，会直接作用于当前类里的所有方法
-    def dispatch(self, request, *args, **kwargs):
-        pass
+* 装饰器
 
-    # @method_decorator(login_auth)#方式一
+```python
+# 校验用户是否登录的装饰器
+def login_auth(func):
+    def inner(request, *args, **kwargs):
+        target_url = request.get_full_path()
+        if request.COOKIES.get('username'):
+            res = func(request, *args, **kwargs)
+            return res
+        else:
+            return redirect('/login/?next=%s' % target_url)
+
+    return inner
+```
+
+* 添加装饰器 方式一
+
+```python
+# views.py
+from django.views import View
+from django.utils.decorators import method_decorator
+
+class MyLogin(View):
+    @method_decorator(login_auth)#方式一
     def get(self, requset):
         return HttpResponse('get')
 
     def post(self, reqeust):
         return HttpResponse('post')
+
+    
+# urls.py
+    path('mylogin/',views.MyLogin.as_view())  
+```
+
+* 添加装饰器 方式二
+
+```python
+# views.py
+from django.views import View
+from django.utils.decorators import method_decorator
+
+@method_decorator(login_auth, name='get')  # 方式二，可以添加多个，针对不同的方法加不同的装饰器
+@method_decorator(login_auth, name='post')
+class MyLogin(View):
+    def get(self, requset):
+        return HttpResponse('get')
+
+    def post(self, reqeust):
+        return HttpResponse('post')
+    
+    
+# urls.py
+    path('mylogin/',views.MyLogin.as_view())
+```
+
+* 添加装饰器 方式三
+
+```python
+# views.py
+from django.views import View
+from django.utils.decorators import method_decorator
+
+
+class MyLogin(View):
+    @method_decorator(login_auth)  # 方式三，会直接作用于当前类里的所有方法
+    def dispatch(self, request, *args, **kwargs): # 
+        pass
+
+    def get(self, requset):
+        return HttpResponse('get')
+
+    def post(self, reqeust):
+        return HttpResponse('post')
+    
+    
+# urls.py
+    path('mylogin/',views.MyLogin.as_view())   
+```
+
+## Django中间件
+
+只要是涉及到全局相关的功能都可以使用中间件方便的完成
+
+* 全局用户身份校验
+* 全局用户权限校验
+* 全局访问频率校验
+
+```python
+"""
+django中间件是django的门户
+	1.请求来的时候需要经过中间件才能达到真正的django后端
+	2.响应走的时候最后也需要经过中间件才能发送出去
+"""
+```
+
+![image-20221109184718273](E:/MarkDown/markdown/imgs/image-20221109184718273.png)
+
+### 默认中间件源码分析
+
+```python
+
+class SecurityMiddleware(MiddlewareMixin):
+        def process_request(self, request):
+            path = request.path.lstrip("/")
+            if (
+                self.redirect
+                and not request.is_secure()
+                and not any(pattern.search(path) for pattern in self.redirect_exempt)
+            ):
+                host = self.redirect_host or request.get_host()
+                return HttpResponsePermanentRedirect(
+                    "https://%s%s" % (host, request.get_full_path())
+                )
+
+    def process_response(self, request, response):
+        return response
+
+
+class AuthenticationMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        request.user = SimpleLazyObject(lambda: get_user(request))
+
+
+class CsrfViewMiddleware(MiddlewareMixin):
+     def process_request(self, request):
+        try:
+            csrf_secret = self._get_secret(request)
+        except InvalidTokenFormat:
+            _add_new_csrf_cookie(request)
+        else:
+            if csrf_secret is not None:
+                request.META["CSRF_COOKIE"] = csrf_secret
+
+    def process_view(self, request, callback, callback_args, callback_kwargs):
+        return self._accept(request)
+   
+    def process_response(self, request, response):
+        return response
+"""
+
+django支持程序员自定义中间件，并且暴露给程序员五个可以自定义的方法
+	1.必须了解
+	process_request
+	
+	process_response
+	2.了解即可
+	process_view
+	
+	process_template_response
+	
+	process_exception
+"""    
+```
+
+### 自定义中间件
+
+```python
+"""
+1.在项目名或者应用下创建一个任意名称的文件夹，
+2.在该文件夹下创建任意任意名字的py文件
+3.在该py文件需要书写类，必须继承MiddlewareMixin
+	然后就可以自定义五个方法
+	(这五个方法用几个写几个，并不需要全都写)
+4.需要将类的路径以字符串的形式注册到配置文件中才能生效
+"""
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  #
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    '自己写的中间件路径',
+    '自己写的中间件路径',
+    '自己写的中间价路径',
+]
+```
+
+#### process_request
+
+![image-20221109191456363](E:/MarkDown/markdown/imgs/image-20221109191456363.png)
+
+**启动项目，查看中间件是否生效**
+
+![image-20221109191548177](E:/MarkDown/markdown/imgs/image-20221109191548177.png)
+
+
+
+---
+
+添加一个路由，写一个视图函数，查看执行顺序
+
+```python
+from django.contrib import admin
+from django.urls import path
+from App import  views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('index/',views.index),
+]
+```
+
+```pytohn
+# Create your views here.
+def index(request):
+    print('我是视图函数index')
+    return HttpResponse('index')
+```
+
+启动项目，浏览器输入路由
+
+![image-20221109192047022](E:/MarkDown/markdown/imgs/image-20221109192047022.png)
+
+
+
+---
+
+再写一个中间件，并颠倒注册顺序
+
+![image-20221109192636506](E:/MarkDown/markdown/imgs/image-20221109192636506.png)
+
+
+
+---
+
+添加返回值
+
+![image-20221109194306420](E:/MarkDown/markdown/imgs/image-20221109194306420.png)
+
+---
+
+**总结:**
+
+1. 请求来的时候是要经过每一个中间件里的process_request方法，结果的顺序按照配置文件中注册的中间件从上往下的顺序依次执行
+
+2. 如果中间件里面没有定义process_request方法，直接跳过，执行下一个
+3. 如果该方法返回了HTTP对象，那么请求将不再继续往后执行，而是直接原路返回（校验失败，不允许访问）
+   1. 所以process_request方法就是用来做全局相关的所有限制功能
+
+#### process_response
+
+```python
+from django.utils.deprecation import MiddlewareMixin
+from django.shortcuts import HttpResponse
+
+
+class MyMiddleWare(MiddlewareMixin):
+    def process_request(self, request):
+        print('我是第一个自定义中间件里面的process_request方法')
+
+    def process_response(self, request, response):
+        print('我是第一个自定义中间件里面的process_response方法')
+
+        """
+
+        :param request:
+        :param response: django后端返回给浏览器的内容
+        :return:
+        """
+        return response
+
+
+class MyMiddleWare2(MiddlewareMixin):
+    def process_request(self, request):
+        print('我是第二个自定义中间件里面的process_request方法')
+
+    def process_response(self, request, response):
+        print('我是第二个自定义中间件里面的process_response方法')
+        return response
+```
+
+浏览器输入路由，回车
+
+![image-20221109195429437](E:/MarkDown/markdown/imgs/image-20221109195429437.png)
+
+返回自己的HttpResponse对象
+
+原本后端是要返回`index`的，走到中间件里面，先经过`MyMiddleWare`，返回`index`,但是经过`MyMiddleWare2`的时候来了一个偷天换日，把原本想要返回的响应换成自己的`hello!`，之后所有的中间件拿到的全是自己写的返回响应的内容
+
+![image-20221109195712980](E:/MarkDown/markdown/imgs/image-20221109195712980.png)
+
+**总结：**
+
+1. 响应走的时候需要经过每一个中间件里的process_response方法,该方法有两个额外的参数(request,response)
+2. 该方法必须返回一个HttpResponse对象
+   1. 默认返回的就是形参response
+   2. 也可以自己返回自己的
+3. 顺序是按照配置文件中注册了的中间件从下往上依次经过，如果没有定义，直接执行上一个
+
+---
+
+如果在先注册了的中间件中的process_request方法就已经返回了HttpResponse对象，那么响应走的时候经过所有的中间件里面的process_response还是有其他情况？
+
+
+
+![image-20221109201241624](E:/MarkDown/markdown/imgs/image-20221109201241624.png)
+
+==观察上图得出以下结论==：
+
+​	首先请求来的时候，会依次经过每一个注册了的中间件里的`process_reques`t方法，一旦`process_request`方法返回了一个`HttpResponse`对象，那么会直接不再往下走，而是直接经过**同级别的`process_response`往外走。**
+
+![image-20221109201546542](E:/MarkDown/markdown/imgs/image-20221109201546542.png)
+
+![image-20221109201702210](E:/MarkDown/markdown/imgs/image-20221109201702210.png)
+
+#### process_view(了解)
+
+```python
+def process_view(self, request, view_name, *args, **kwargs):
+    print(view_name, args, kwargs)
+    print('我是第一个自定义中间件里的process_view')
+```
+
+特点：
+
+路由匹配成功之后，执行视图函数之前，会自动执行中间件里面的process_view方法,顺序按照配置文件中注册的中间件从上往下的顺序依次执行
+
+![image-20221109203106289](E:/MarkDown/markdown/imgs/image-20221109203106289.png)
+
+#### process_template_response(了解)
+
+```python
+def process_response(self, request, response):
+    print('我是第二个自定义中间件里面的process_response方法')
+    return response
+```
+
+```python
+# views.py
+
+def index(request):
+    print('我是视图函数index')
+    obj = HttpResponse('index')
+
+    def render():
+        print('内部的render')
+        return HttpResponse('98K')
+
+    obj.render = render
+    return obj
 ```
 
 
 
+返回的HttpResponse对象有render属性的时候，才会触发，顺序是
+
+按照配置文件中注册的中间件从下往上依次经过
+
+![image-20221109204530848](E:/MarkDown/markdown/imgs/image-20221109204530848.png)
+
+#### process_execption(了解)
+
+```python
+def process_exception(self, request, exception):
+    print(exception)
+    print('我是第二个自定义中间件里的process_exception')
+```
+
+当视图函数中出现异常的情况下，触发，
+
+顺序是按照配置文件中注册的中间件从下往上依次经过
+
+![image-20221109205002531](E:/MarkDown/markdown/imgs/image-20221109205002531.png)
+
+**全部代码:**
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/11/9 19:03
+from django.utils.deprecation import MiddlewareMixin
+from django.shortcuts import HttpResponse
 
 
+class MyMiddleWare(MiddlewareMixin):
+    def process_request(self, request):
+        print('我是第一个自定义中间件里面的process_request方法')
+
+    def process_response(self, request, response):
+        print('我是第一个自定义中间件里面的process_response方法')
+
+        """
+
+        :param request:
+        :param response: django后端返回给浏览器的内容
+        :return:
+        """
+        return response
+
+    def process_view(self, request, view_name, *args, **kwargs):
+        print(view_name, args, kwargs)
+        print('我是第一个自定义中间件里的process_view')
+
+    def process_template_response(self, resquest, response):
+        print('我是第一个自定义中间件里的process_template_response')
+        return response
+
+    def process_exception(self, request, exception):
+        print(exception)
+        print('我是第一个自定义中间件里的process_exception')
 
 
+class MyMiddleWare2(MiddlewareMixin):
+    def process_request(self, request):
+        print('我是第二个自定义中间件里面的process_request方法')
+        # return HttpResponse('JayChou')
 
+    def process_response(self, request, response):
+        print('我是第二个自定义中间件里面的process_response方法')
+        return response
+        # return HttpResponse('hello !')
 
-## Django中间件
+    def process_view(self, request, view_name, *args, **kwargs):
+        print(view_name, args, kwargs)
+        print('我是第二个自定义中间件里的process_view')
+
+    def process_template_response(self, resquest, response):
+        print('我是第二个自定义中间件里的process_template_response')
+        return response
+
+    def process_exception(self, request, exception):
+        print(exception)
+        print('我是第二个自定义中间件里的process_exception')
+```
 
 ## csrf跨站请求伪造
 
-## 视图函数(CBV)添加装饰器
+## auth模块
+
+
 
