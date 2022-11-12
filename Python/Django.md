@@ -6381,7 +6381,7 @@ django支持程序员自定义中间件，并且暴露给程序员五个可以�
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',  #
+    'django.contrib.sessions.middleware.SessionMiddleware',  
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -6393,7 +6393,7 @@ MIDDLEWARE = [
 ]
 ```
 
-#### process_request
+#### process_request（掌握）
 
 ![image-20221109191456363](E:/MarkDown/markdown/imgs/image-20221109191456363.png)
 
@@ -6451,10 +6451,10 @@ def index(request):
 1. 请求来的时候是要经过每一个中间件里的process_request方法，结果的顺序按照配置文件中注册的中间件从上往下的顺序依次执行
 
 2. 如果中间件里面没有定义process_request方法，直接跳过，执行下一个
-3. 如果该方法返回了HTTP对象，那么请求将不再继续往后执行，而是直接原路返回（校验失败，不允许访问）
-   1. 所以process_request方法就是用来做全局相关的所有限制功能
+3. 如果该方法返回了HttpResponse对象，那么请求将不再继续往后执行，而是直接原路返回（校验失败，不允许访问）
+   1. 所以**process_request方法就是用来做全局相关的所有限制功能**
 
-#### process_response
+#### process_response（掌握）
 
 ```python
 from django.utils.deprecation import MiddlewareMixin
@@ -6500,13 +6500,14 @@ class MyMiddleWare2(MiddlewareMixin):
 
 1. 响应走的时候需要经过每一个中间件里的process_response方法,该方法有两个额外的参数(request,response)
 2. 该方法必须返回一个HttpResponse对象
-   1. 默认返回的就是形参response
-   2. 也可以自己返回自己的
-3. 顺序是按照配置文件中注册了的中间件从下往上依次经过，如果没有定义，直接执行上一个
+   1. 默认返回的就是形参response,
+   2. 也可以自己返回自己的HttpResponse对象
+
+3. 顺序是按照配置文件中注册了的中间件**从下往上依次经过，如果没有定义，直接执行上一个**
 
 ---
 
-如果在先注册了的中间件中的process_request方法就已经返回了HttpResponse对象，那么响应走的时候经过所有的中间件里面的process_response还是有其他情况？
+如果在先注册了的中间件中的process_request方法就已经返回了HttpResponse对象，那么响应走的时候经过所有的中间件里面的process_response是否有其他情况？
 
 
 
@@ -6573,7 +6574,7 @@ def process_exception(self, request, exception):
     print('我是第二个自定义中间件里的process_exception')
 ```
 
-当视图函数中出现异常的情况下，触发，
+当视图函数中出现异常的情况下，触发。
 
 顺序是按照配置文件中注册的中间件从下往上依次经过
 
@@ -6641,7 +6642,856 @@ class MyMiddleWare2(MiddlewareMixin):
 
 ## csrf跨站请求伪造
 
-## auth模块
+### 1、前戏
+
+```python
+"""
+钓鱼网站
+	搭建一个跟正规网站一摸一样的界面（中国银行）
+	用户进入到我们的网站，用户给某人打钱，
+	用户打钱操作确确实实是提交给了中国银行的系统，用户的钱也确确实实减少了，但是唯一不同是打钱的账户不是用户想要打的账户，变成了另一个账户
+
+内部本质:
+	在钓鱼网站的页面，针对对方账户，只给用户提供一个没有name属性的input框，然后我们再内部隐藏一个已经写好name和value的input框，
+		
+"""
+```
+
+真正的网站端口:8000
+
+http://127.0.0.1:8000
+
+```python
+# 注释掉csrf
+ 'django.middleware.csrf.CsrfViewMiddleware',
+```
+
+```html
+
+<body>
+<h1>中国银行</h1>
+<form action="" method="post">
+    <p>username:<input type="text" name="username"></p>
+    <p>target_user:<input type="text" name="target_user"></p>
+    <p>money:<input type="text" name="money"></p>
+    <input type="submit">
+</form>
+</body>
+```
+
+```python
+# views.py
+def transfer(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        target_user = request.POST.get('target_user')
+        money = request.POST.get('money')
+        print('%s给%s转了%s元' % (username, target_user, money))
+
+    return render(request, 'transfer.html')
+
+# urls.py
+path('transfer/',views.transfer)
+```
+
+钓鱼网站模拟端口:8001
+
+```python
+#不用注释csfr
+```
+
+```html
+<body>
+<h1>phishing site</h1>
+<form action="http://127.0.0.1:8000/transfer/" method="post">
+    <p>username:<input type="text" name="username"></p>
+    <p>target_user:<input type="text"></p>
+    <input type="text" name="target_user" value="zhao" style="display: none">
+    <p>money:<input type="text" name="money"></p>
+    <input type="submit">
+</form>
+</body>
+```
+
+```python
+#views.py
+def transfer(request):
+    return render(request,'transfer.html')
+
+# urls.py
+path('transfer/',views.transfer)
+```
+
+### 2、csrf校验
+
+如何规避上述问题:
+    csrf跨站请求伪造
+    	网站再给用户返回一个提交数据功能的页面的时候会给这个页面加一个唯一标识
+        当这个页面朝后端发post请求的时候，后端会先校验唯一标识，如果唯一标识不对，直接拒绝（403 forbiden),如果成功则正常执行
+       
+
+#### 2.1、from表单如何符合校验
 
 
 
+```python
+#开启配置文件里的csrf中间件
+```
+
+```html
+<form action="" method="post">
+    {% csrf_token %}
+    <p>username:<input type="text" name="username"></p>
+    <p>target_user:<input type="text" name="target_user"></p>
+    <p>money:<input type="text" name="money"></p>
+    <input type="submit">
+</form>
+```
+
+![image-20221111105106883](E:/MarkDown/markdown/imgs/image-20221111105106883.png)
+
+再次发送请求
+
+![image-20221111105127536](E:/MarkDown/markdown/imgs/image-20221111105127536.png)
+
+钓鱼网站再次发送请求
+
+![image-20221111105520008](E:/MarkDown/markdown/imgs/image-20221111105520008.png)
+
+#### 2.2、ajax如何符合校验
+
+不论是ajax还是谁，只要是向我Django提交post请求的数据，都必须校验csrf_token来防伪跨站请求
+
+* 方式一
+
+通过获取隐藏的input标签中的`csrfmiddlewaretoken`值，放置在data中发送
+
+```html
+</head>
+<body>
+<h1>中国银行</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>username:<input type="text" name="username"></p>
+    <p>target_user:<input type="text" name="target_user"></p>
+    <p>money:<input type="text" name="money"></p>
+    <input type="submit">
+</form>
+<button id="d1">ajax请求</button>
+</body>
+
+
+<script>
+    $('#d1').on('click', function () {
+        $.ajax({
+            url: '',
+            type: 'post',
+            //第一种:利用标签查找获取页面上的随机字符串
+            data: {'username': 'zhao', 'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()},
+            success() {
+
+            }
+
+        })
+
+    })
+</script>
+```
+
+* 方式二
+
+```html
+</head>
+<body>
+<h1>中国银行</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>username:<input type="text" name="username"></p>
+    <p>target_user:<input type="text" name="target_user"></p>
+    <p>money:<input type="text" name="money"></p>
+    <input type="submit">
+</form>
+<button id="d1">ajax请求</button>
+</body>
+
+<script>
+    $('#d1').on('click', function () {
+        $.ajax({
+            url: '',
+            type: 'post',
+            //第二种方式:利用模板语法快捷书写
+            data: {'username': 'zhao', 'csrfmiddlewaretoken': '{{csrf_token}}'},
+            }
+        })
+    })
+</script>
+```
+
+* 方式三
+
+先拷贝js文件:
+
+```js
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+```
+
+将文件配置到静态文件中，在html页面上通过导入该文件即可自动帮我们解决ajax提交post数据时校验csrf_token的问题
+
+![image-20221111112430616](E:/MarkDown/markdown/imgs/image-20221111112430616.png)
+
+```html
+</head>
+<body>
+<h1>中国银行</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>username:<input type="text" name="username"></p>
+    <p>target_user:<input type="text" name="target_user"></p>
+    <p>money:<input type="text" name="money"></p>
+    <input type="submit">
+</form>
+<button id="d1">ajax请求</button>
+</body>
+
+
+{% load static %}
+<script src="{% static  'js/setup.js' %}"></script>
+<script>
+    $('#d1').on('click', function () {
+        $.ajax({
+            url: '',
+            type: 'post',
+            //第三种方式:引入js文件
+            data: {'username': 'zhao'},
+            success() {
+
+            }
+
+        })
+
+    })
+</script>
+```
+
+### 3、csrf相关装饰器
+
+#### FBV
+
+* 网站整体都校验csrf，就单单几个视图函数不校验
+
+```python
+#配置文件中开始csrf中间件，
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
+
+"""
+csrf_protect,需要校验
+csrf_exempt  忽视校验
+"""
+
+@csrf_exempt 
+def transfer(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        target_user = request.POST.get('target_user')
+        money = request.POST.get('money')
+        print('%s给%s转了%s元' % (username, target_user, money))
+
+    return render(request, 'transfer.html')
+```
+
+* 网站整体都不校验csrf，就单单几个视图函数需要校验
+
+```python
+# 注释掉form表单中 {% csrf_token %}#}
+#关闭配置文件中csrf中间件
+
+@csrf_protect
+def transfer(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        target_user = request.POST.get('target_user')
+        money = request.POST.get('money')
+        print('%s给%s转了%s元' % (username, target_user, money))
+
+    return render(request, 'transfer.html')
+```
+
+![image-20221111141146200](E:/MarkDown/markdown/imgs/image-20221111141146200.png)
+
+#### CBV
+
+```pytohn
+csrf_protect,需要校验
+​	针对csrf_protect符合CBV装饰器的三种写法
+
+csrf_exempt  忽视校验
+​	针对csrf_protect只能给dispatch方法加才有效
+```
+
+
+
+* 网站整体都不校验csrf，就单单几个视图函数需要校验
+
+```python
+# views.py
+from django.utils.decorators import method_decorator
+from django.views import View
+
+
+# @method_decorator(csrf_protect,name='post') #第二种
+class MycsrfToken(View):
+    @method_decorator(csrf_protect)
+    def dispatch(self, request, *args, **kwargs):
+        return super(MycsrfToken, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse('get')
+
+    # @method_decorator(csrf_protect) #第一种方式可以
+    def post(self, request):
+        return HttpResponse('post')
+    
+    
+# urls.py
+ path('csrf/', views.MycsrfToken.as_view()),
+```
+
+```python
+# html  from表单向csrf路由提交
+<h1>中国银行</h1>
+<form action="/csrf/" method="post">
+{#    {% csrf_token %}#}
+    <p>username:<input type="text" name="username"></p>
+    <p>target_user:<input type="text" name="target_user"></p>
+    <p>money:<input type="text" name="money"></p>
+    <input type="submit">
+</form>
+
+
+    
+# urls.py
+path('transfer/', views.transfer),
+
+# views.py
+def transfer(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        target_user = request.POST.get('target_user')
+        money = request.POST.get('money')
+        print('%s给%s转了%s元' % (username, target_user, money))
+
+    return render(request, 'transfer.html')
+```
+
+* 网站整体都校验csrf，就单单几个视图函数不校验
+
+```python
+from django.utils.decorators import method_decorator
+from django.views import View
+
+
+
+# @method_decorator(csrf_exempt,name='dispatch') 
+class MycsrfToken(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(MycsrfToken, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse('get')
+
+ 
+    def post(self, request):
+        return HttpResponse('post')
+```
+
+## ==基于Django中间件引发的编程思想（重点）==
+
+#### **importlib模块使用**
+
+能够以字符串的形式导入模块，最小单位只能到模块名
+
+```python
+# 1. 创建一个py文件 aaa.py
+# 2. 创建一个mypach文件夹,里面创建一个bbb.py文件，写上name='zhao'
+
+然后再aaa.py中书写以下代码
+import importlib
+
+res = 'mypack.bbb'  # 最小单位只能到模块的名字，不能点模块里的变量名
+ret = importlib.import_module(res)  # from mypack import bbb
+print(ret)
+
+
+# 结果如下
+<module 'mypack.bbb' from 'E:\\Python\\python\\python进阶\\WEB开发\\day12\\mypack\\bbb.py'>
+```
+
+#### **编程思想**
+
+```python
+1. 先创建一个notify文件夹,里面创建py文件，有几个功能，创建几个py文件
+2. 因为一个文件夹，里面有一个个的py文件，就是一个包，所以要再notify文件夹里创建__init__.py文件
+3. settings #配置文件
+4. start.py #启动文件
+
+```
+
+![image-20221111151627195](E:/MarkDown/markdown/imgs/image-20221111151627195.png)
+
+email.py
+
+```python
+class Email(object):
+    def __init__(self):
+        pass  # 发送邮箱需要做的前期准备工作   接口什么的
+
+    def send(self, content):
+        print('Email通知:%s' % content)
+```
+
+qq.py
+
+```pytohn
+class Qq(object):
+    def __init__(self):
+        pass  # 发送QQ需要做的前期准备工作
+
+    def send(self, content):
+        print('QQ通知:%s' % content)
+```
+
+wechat.py
+
+```python
+class Wechat(object):
+    def __init__(self):
+        pass  # 发送微信需要做的前期准备工作
+
+    def send(self, content):
+        print('微信通知:%s' % content)
+```
+
+**settings.py**
+
+```python
+NOTIFY_LIST = [       
+    'notify.email.Email',
+    'notify.qq.Qq',
+    'notify.wechat.Wechat',
+]
+```
+
+==`__init__.py`== **（编程思想的灵魂）**
+
+```python
+import settings
+import importlib
+
+
+def send_all(content):
+    for path_str in settings.NOTIFY_LIST:  # 'notify.email.Email',
+        module_path, class_name = path_str.rsplit('.', maxsplit=1)
+        # module_path='notify.email'
+        # class_name='Email'
+        # 1. 利用字符串导入模块
+        module = importlib.import_module(module_path)  # from motify import email
+        # 2. 利用反射获取类名
+        cls = getattr(module, class_name)  # Email Qq Wechat
+        # 3. 生成类的对象
+        obj = cls()
+        # 4. 利用鸭子类型直接调用send方法
+        obj.send(content)
+```
+
+start.py
+
+```pytohn
+import notify
+
+notify.send_all('国庆不放假')
+```
+
+## auth模块方法使用
+
+### 1、创建超级用户(管理员)
+
+```python
+"""
+再创建好一个django项目后，直接执行数据库迁移命令后会自动生成很多表，  django_session       auth_user
+
+django在启动之后就可以直接访问admin路由，需要输入用户名和密码，数据参考的就是auth_user表，并且还必须是管理员用户才能进入
+
+"""
+```
+
+先 生成表
+
+![image-20221111182406068](E:/MarkDown/markdown/imgs/image-20221111182406068.png)
+
+
+
+```python
+#创建管理员用户
+python manage.py createsuperuser
+```
+
+![image-20221111182908751](E:/MarkDown/markdown/imgs/image-20221111182908751.png)
+
+超级用户创建好之后，auth_user表中发生变化
+
+![image-20221111183118544](E:/MarkDown/markdown/imgs/image-20221111183118544.png)
+
+路由中输入admin，登录管理员用户
+
+![image-20221112154955296](E:/MarkDown/markdown/imgs/image-20221112154955296.png)
+
+![image-20221112155006201](E:/MarkDown/markdown/imgs/image-20221112155006201.png)
+
+**依赖于auth_user表完成用户以下相关的所有功能：**
+
+### 2、登录功能
+
+获取表，检验密码
+
+```html
+<form action="" method="post">
+    {% csrf_token %}
+    <p>username:<input type="text" name="username"></p>
+    <p>password:<input type="text" name="password"></p>
+    <input type="submit">
+</form>
+```
+
+```python
+# views.py
+
+from django.shortcuts import render, redirect, HttpResponse
+from django.contrib import auth
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        # 去用户表中校验数据
+        # 1.获取表
+        # 2.密码比对
+        user_obj = auth.authenticate(request, username=username, password=password)
+        # print(user_obj)  # 用户对象  数据不符合返回None
+        # print(user_obj.username)  # 用户名
+        # print(user_obj.password)  # ,密码
+        
+        
+        """
+        1.自动查找auth_user表
+        2.自动给密码加密比对
+        该方法的注意事项:
+            括号内必须同时传入用户名和密码
+            不能只传用户名
+        """
+        
+        if user_obj:
+            # 保存用户状态
+            auth.login(request, user=user_obj)  # 类似于request.session[key]=user_obj
+            
+            """
+            只要执行了该方法，就可以在任何地方通过request.user获取到当前登录的用户对象
+            """ 
+             return redirect('/home/')
+      
+
+    return render(request, 'login.html')
+```
+
+
+
+![image-20221112163308754](E:/MarkDown/markdown/imgs/image-20221112163308754.png)
+
+### 3、保存用户状态
+
+```python
+# 保存用户状态
+ auth.login(request, user=user_obj)  # 类似于request.session['key']=user_obj
+    
+ """
+只要执行了该方法，就可以在任何地方通过request.user获取到当前登录的用户对象
+""" 
+```
+
+保存用户状态后，`django_session`表中就多了条数据
+
+![image-20221112205630730](E:/MarkDown/markdown/imgs/image-20221112205630730.png)
+
+![image-20221112205701141](E:/MarkDown/markdown/imgs/image-20221112205701141.png)
+
+### 4、获取用户对象，校验用户是否登录
+
+```python
+def home(request):
+    print(request.user)  # 拿到用户对象
+    """
+    自动去django_session表中查找对应的用户对象给你封装到request.user中
+    """
+    # 判断用户是否登录
+    print(request.user.is_authenticated)
+    return HttpResponse('OK!')
+```
+
+删除`django_session`表中的数据，就表示用户没有登录过，再次查看`request.user`拿到什么数据
+
+![image-20221112210105392](E:/MarkDown/markdown/imgs/image-20221112210105392.png)
+
+登陆成功后，返回当前登录的用户对象，返回True
+
+![image-20221112210247146](E:/MarkDown/markdown/imgs/image-20221112210247146.png)
+
+### 5、验证用户是否登录
+
+用户登录后才能访问(加装饰器)
+
+```python
+"""用户登录之后才能看home"""
+
+#  局部配置:用户没有登录跳转到login_user后面指定的网址
+from django.contrib.auth.decorators import login_required
+@login_required(login_url='/login/')  
+def home(request):
+    print(request.user) 
+    print(request.user.is_authenticated)
+    return HttpResponse('OK!')
+
+
+# 全局配置，没有登录跳转到指定页面
+#配置文件settings.py
+LOGIN_URL = '/login/'
+from django.contrib.auth.decorators import login_required
+@login_required
+def home(request):
+    
+    print(request.user)  
+    print(request.user.is_authenticated)
+    return HttpResponse('OK!')
+
+
+# 如果局部和全局都有会跳转到局部配置，
+# 局部配置的优先级大于全局配置
+# 全局的好处在于无需重复写代码，但是跳转的页面很单一
+# 局部的好处在于不同的视图函数在用户没有登录的情况下可以跳转到不同的页面
+```
+
+### 6、修改密码
+
+```html
+<form action="" method="post">
+    {% csrf_token %}
+    <p>username:<input type="text" name="username" disabled value="{{ request.user.username }}"></p>
+    <p>old_password:<input type="text" name="old_password"></p>
+    <p>new_password:<input type="text" name="new_password"></p>
+    <p>confirm_password:<input type="text" name="confirm_password"></p>
+
+    <input type="submit">
+</form>
+```
+
+```python
+#urls.py
+
+#修改密码
+path('set_password/',views.set_password),
+```
+
+```python
+#views.py
+
+@login_required
+def set_password(request):
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+        # 先校验两次密码是否一致
+        if new_password == confirm_password:
+            # 校验旧密码是否正确
+            is_right = request.user.check_password(old_password)  # 自动加密，比对密码，返回布尔值
+            if is_right:
+                # 修改密码
+                request.user.set_password(new_password)  # 仅仅是修改对象的属性
+                request.user.save()  # 这一步才是真正的操作数据库，
+        return redirect('login')
+    return render(request, 'set_password.html', locals())
+```
+
+![image-20221112213746681](E:/MarkDown/markdown/imgs/image-20221112213746681.png)
+
+### 7、注销
+
+```python
+#注销
+path('login_out/',views.login_out)
+```
+
+```python
+@login_required
+def login_out(request):
+    auth.logout(request)  # 类似于 request.session.flush()
+    return redirect('/login/')
+```
+
+### 8、注册
+
+```html
+<form action="" method="post">
+    {% csrf_token %}
+    <h1>注册</h1>
+    <p>username:<input type="text" name="username"></p>
+    <p>password:<input type="text" name="password"></p>
+    <input type="submit">
+</form>
+```
+
+```python
+# 注册功能
+path('register/',views.register),
+
+#views.py
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        # 操作auth_user表写入数据
+        User.objects.create(username=username, password=password)  # 创建数据，但是用create创建，密码没有加密处理
+
+    return render(request, 'register.html')
+```
+
+![image-20221112220654952](E:/MarkDown/markdown/imgs/image-20221112220654952.png)
+
+```python
+# 创建普通用户
+User.objects.create_user(username=username, password=password)
+```
+
+![image-20221112221049076](E:/MarkDown/markdown/imgs/image-20221112221049076.png)
+
+```python
+ # 创建超级用户（了解）
+        User.objects.create_superuser(username=username,password=password)
+```
+
+![image-20221112221346397](E:/MarkDown/markdown/imgs/image-20221112221346397.png)
+
+### 9、方法总结
+
+```python
+"""1. 比对用户名和密码是否正确"""
+user_obj = auth.authenticate(request, username=username, password=password)
+print(user_obj)  # 用户对象  数据不符合返回None
+print(user_obj.username)  # 用户名
+print(user_obj.password)  # ,密码，密文
+"""2.保存用户状态"""
+# 保存用户状态
+ auth.login(request, user=user_obj)  # 类似于request.session['key']=user_obj
+#只要执行了该方法，就可以在任何地方通过request.user获取到当前登录的用户对象
+"""3. 判断当前用户是否登录"""
+print(request.user.is_authenticated)
+"""4. 获取当前登录用户"""
+request.user
+"""5. 校验用户是否登录（装饰器）"""
+#  局部配置:用户没有登录跳转到login_user后面指定的网址
+from django.contrib.auth.decorators import login_required
+@login_required(login_url='/login/')  
+#全局配置
+#settings.py
+LOGIN_URL='/login/'
+# 如果局部和全局都有,会跳转到局部配置，
+# 局部配置的优先级大于全局配置
+# 全局的好处在于无需重复写代码，但是跳转的页面很单一
+# 局部的好处在于不同的视图函数在用户没有登录的情况下可以跳转到不同的页面
+"""6.比对原密码"""
+request.user.check_password(old_password)  # 自动加密，比对密码，返回布尔值
+"""7. 修改密码"""
+ request.user.set_password(new_password)  # 仅仅是修改对象的属性
+ request.user.save()  # 这一步才是真正的操作数据库，
+"""8. 注销"""
+auth.logout(request)  # 类似于 request.session.flush()
+"""9. 注册"""
+ # 操作auth_user表写入数据
+User.objects.create(username=username, password=password)  # 创建数据，但是用create创建，密码没有加密处理
+# 创建普通用户
+User.objects.create_user(username=username, password=password)
+ # 创建超级用户（了解）
+User.objects.create_superuser(username=username,password=password)
+```
+
+### 10、如何扩展auth_user表
+
+```python
+from django.db import models
+from django.contrib.auth.models import User, AbstractUser
+
+# Create your models here.
+"""扩展表的第一种方式：一对一关系   不推荐使用"""
+#
+# class UserDetail(models.Model):
+#     phone = models.BigIntegerField()
+#     user = models.OneToOneField(to='User', on_delete=models.CASCADE)
+
+"""第二种方式：利用面向对象的继承"""
+
+
+class UserInfo(AbstractUser):
+    phone = models.BigIntegerField()
+    create_time = models.DateTimeField(auto_now_add=True)
+    """
+    如果继承了AbstractUser
+    那么在执行数据库迁移命令的时候auth_user表就不会在创建出来了
+    而UserInfo表中会出现auth_user表中所有的字段，外加自己扩展的字段
+
+    这么做的好处就在于能够直接点击你自己创建的表，更加快速的完成操作及扩展
+
+    前提:
+        1.在继承之前没有执行过数据库迁移命令（auth_user没有被创建）
+            如果auth_user已经被创建，那么就重新换一个库
+        2.继承的类型里面不要覆盖Abstract User里面的字段名
+            表里面的字段都不要动，只扩展额外的字段即可
+        3. 需要在配置文件中告诉django你要用User Info替代auth_user
+            AUTH_USER_MODEL='app01.UserInfo'
+                                '用户名.表名'
+    """
+ 
+```
+
+![image-20221112224513172](E:/MarkDown/markdown/imgs/image-20221112224513172.png)
+
+如果自己写表替代了`auth_user`，那么auth模块还照常使用，参考的表也由原来的`auth_user`变成了现在的`UserInfo`
