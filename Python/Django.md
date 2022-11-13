@@ -5075,7 +5075,7 @@ def page(request):
 
 ![image-20221104223029555](E:/MarkDown/markdown/imgs/image-20221104223029555.png)
 
-## 校验性组件：froms组件
+## ==校验性组件：froms组件==
 
 ### 1、前戏
 
@@ -5201,7 +5201,7 @@ Out[16]: {}
 # . 校验数据 默认情况下，类里的所有字段都必须给值，
 
 form_obj=views.MyForm({'username':'zhao','password':'123'})
-form_obj.is_valid()
+form_obj.is_valid()  #少传了一个字段，返回False
 Out[18]: False
 form_obj.cleaned_data
 Out[19]: {'username': 'zhao', 'password': '123'}
@@ -5732,7 +5732,7 @@ class MyForm(Form):
 
 #### required
 
-默认是True，必填项
+默认是True，必填项，改成False，就可以不填
 
 ```python
 class MyForm(forms.Form):
@@ -6292,7 +6292,7 @@ class MyLogin(View):
     path('mylogin/',views.MyLogin.as_view())   
 ```
 
-## Django中间件
+## ==Django中间件==
 
 只要是涉及到全局相关的功能都可以使用中间件方便的完成
 
@@ -7143,7 +7143,7 @@ import notify
 notify.send_all('国庆不放假')
 ```
 
-## auth模块方法使用
+## ==auth模块方法使用==
 
 ### 1、创建超级用户(管理员)
 
@@ -7156,7 +7156,7 @@ django在启动之后就可以直接访问admin路由，需要输入用户名和
 """
 ```
 
-先 生成表
+先执行数据库迁移命令生成表
 
 ![image-20221111182406068](E:/MarkDown/markdown/imgs/image-20221111182406068.png)
 
@@ -7295,6 +7295,7 @@ def home(request):
 # 全局配置，没有登录跳转到指定页面
 #配置文件settings.py
 LOGIN_URL = '/login/'
+
 from django.contrib.auth.decorators import login_required
 @login_required
 def home(request):
@@ -7312,17 +7313,7 @@ def home(request):
 
 ### 6、修改密码
 
-```html
-<form action="" method="post">
-    {% csrf_token %}
-    <p>username:<input type="text" name="username" disabled value="{{ request.user.username }}"></p>
-    <p>old_password:<input type="text" name="old_password"></p>
-    <p>new_password:<input type="text" name="new_password"></p>
-    <p>confirm_password:<input type="text" name="confirm_password"></p>
 
-    <input type="submit">
-</form>
-```
 
 ```python
 #urls.py
@@ -7351,6 +7342,20 @@ def set_password(request):
         return redirect('login')
     return render(request, 'set_password.html', locals())
 ```
+
+```html
+<form action="" method="post">
+    {% csrf_token %}
+    <p>username:<input type="text" name="username" disabled value="{{ request.user.username }}"></p>
+    <p>old_password:<input type="text" name="old_password"></p>
+    <p>new_password:<input type="text" name="new_password"></p>
+    <p>confirm_password:<input type="text" name="confirm_password"></p>
+
+    <input type="submit">
+</form>
+```
+
+
 
 ![image-20221112213746681](E:/MarkDown/markdown/imgs/image-20221112213746681.png)
 
@@ -7385,6 +7390,7 @@ def login_out(request):
 path('register/',views.register),
 
 #views.py
+from django.contrib.auth.models import User
 def register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -7469,7 +7475,7 @@ from django.contrib.auth.models import User, AbstractUser
 
 """第二种方式：利用面向对象的继承"""
 
-
+#models.py
 class UserInfo(AbstractUser):
     phone = models.BigIntegerField()
     create_time = models.DateTimeField(auto_now_add=True)
@@ -7483,7 +7489,7 @@ class UserInfo(AbstractUser):
     前提:
         1.在继承之前没有执行过数据库迁移命令（auth_user没有被创建）
             如果auth_user已经被创建，那么就重新换一个库
-        2.继承的类型里面不要覆盖Abstract User里面的字段名
+        2.继承的类型里面不要覆盖AbstractUser里面的字段名
             表里面的字段都不要动，只扩展额外的字段即可
         3. 需要在配置文件中告诉django你要用User Info替代auth_user
             AUTH_USER_MODEL='app01.UserInfo'
@@ -7495,3 +7501,702 @@ class UserInfo(AbstractUser):
 ![image-20221112224513172](E:/MarkDown/markdown/imgs/image-20221112224513172.png)
 
 如果自己写表替代了`auth_user`，那么auth模块还照常使用，参考的表也由原来的`auth_user`变成了现在的`UserInfo`
+
+## BBS项目开发
+
+bbs是一个前后端不分离的全栈项目，前后端需要自己一步步完成
+
+### 1、流程
+
+```python
+# 1. 需求分析
+	架构师+产品经理+开发组组长
+    在跟客户谈需求之前，会大致了解客户的需求，然后自己先设计出一套比较好写的方案，在个客户沟通交流中，引导客户往我们想好的方案上靠。
+    形成一个初步方案，
+# 2. 项目设计
+	架构师干的活
+    编程语言的选择
+    框架选择
+    数据库选择  主库:MySQL，缓存数据库:redis,mongondb
+	功能划分
+    	将整个项目划分成几个功能模块
+    找组长开会，
+        	给每个组分发任务
+    项目报价
+    	技术这块需要多少人力，多少天（一个程序员一天按照1500~2000大致）
+        产品经理公司层面：再加点钱，（人力，物力）
+        公司财务
+        公司老板签字确认
+    产品经理去跟客户沟通
+    后续需要加功能，继续加钱
+    
+    
+# 3.分组开发
+	组长找组员开会，安排各自的功能模块，
+    我们其实就是再架构师设计好的框架里填写代码而已(码畜)
+    
+    我们在写代码的时候，写完需要自己先测试是否有bug
+    如果有一个些显而易见的bug，你没有避免而是直接交给测试部门测试出来，那么就可能需要扣绩效了（一定要跟测试搞好关系）
+    薪资组成 15k (合理合规合法的避税)
+    	底薪	10k
+        绩效	3k
+        岗位津贴 1k
+        生活补贴 1k
+# 4. 测试
+	测试部门测试代码
+    压力测试
+    .....
+# 5. 交付上线
+	1.交给对放的运维人员
+    2.直接上线到我们的服务器上，收取维护费
+    3.其他.....
+```
+
+### 2、==表设计==
+
+```python
+"""
+一个项目最终的不是业务逻辑的书写
+而是前期的表设计，只要将表设计好了，后续的功能书写才能一帆风顺
+
+表设计
+	1.用户表
+		继承AbstractUser
+		额外扩展字段
+			phone 电话
+			avatar	用户头像
+			create_time	创建时间
+		外键字段
+		一对一个人站点表 
+        
+        
+	2.个人站点表
+		site_name 个人站点名称
+		site_title  站点标题
+		site_theme  站点样式 css，js
+		
+	3.文章标签表
+		name 标签名
+		
+		外键字段 
+		一对多个人站点表
+		
+	4.文章分类表
+		name 分类名
+		
+		外键字段 
+		一对多个人站点表
+		
+	5.文章表
+		title 文章标题 
+		desc 文章简介
+		content 文章内容
+		create_time 发布时间
+		
+		数据库字段设计优化（虽然下述参数字段，可以通过Orm从其他表计算得出，但是效率太低，）
+		up_num 点赞数
+		down_num 点踩数
+		comment_num 评论数
+		
+		外键字段
+		一对多个人站点
+		多对多文章标签表
+		一对多文章分类
+		
+		
+	6.点赞点踩表
+		用来记录哪个用户给那篇文章点了赞还是点了踩
+		user    ForenginKey(to='User')
+		artice	ForenginKey(to='Article')
+		is_up   BooleanField()
+		
+		1	1	1
+		1	2	1	
+		1	3	0	
+		2	1	1
+		
+		
+		
+	7.文章评论表
+		用来记录哪个用户给那篇文章写了哪些评论内容
+		user 				ForenginKey(to='User')
+		artice				ForenginKey(to='Article')
+		content				CharFeild()
+		comment_time		DateField()	
+		#自关联
+		parent				ForenginKey(to='Comment' null=True)
+		#orm提供的自关联写法
+		parent				ForenginKey(to='self',null=True)
+		
+		
+		id		user_id		article_id		parent_id
+		1			1			1						
+		2			2			1				1
+		
+根评论子评论的概念
+	根评论直接评论当前发布的内容的
+	子评论是评论别人的评论
+	
+	一个根评论可以有多个子评论
+	一个多个子评论只属于一个根评论
+	
+	根评论与子评论是一对多的关系
+	
+"""
+```
+
+
+
+![image-20221113112818038](E:/MarkDown/markdown/imgs/image-20221113112818038.png)
+
+### 3、表创建及同步
+
+```python
+"""数据库选择Mysql，由于django自带的sqllite3对日期不敏感，所以换成Mysql"""
+```
+
+```python
+# models.py
+from django.db import models
+
+# Create your models here.
+from django.contrib.auth.models import AbstractUser
+
+
+class UserInfo(AbstractUser):
+    phone = models.BigIntegerField(null=True, verbose_name='手机号')
+    # 头像
+    avatar = models.FileField(upload_to='avatar/', default='avatar/default.jpg', verbose_name='用户头像')
+    """给avatar字段传文件对象，该文件会自动存储到avatar文件下，然后avatar字段只保存文件路径avatar/default.jpg"""
+    create_time = models.DateField(auto_now_add=True)
+
+    """外键字段"""
+    blog = models.OneToOneField(to='Blog', null=True, on_delete=models.CASCADE)
+
+
+class Blog(models.Model):
+    site_name = models.CharField(max_length=32, verbose_name='站点名称')
+    site_title = models.CharField(max_length=32, verbose_name='站点标题')
+    site_theme = models.CharField(max_length=64, verbose_name='站点样式')  # 存css/js文件路径
+
+
+# 文章分类
+class Category(models.Model):
+    name = models.CharField(max_length=32, verbose_name='文章分类')
+    """外键字段"""
+    blog = models.ForeignKey(to='Blog', null=True, on_delete=models.CASCADE)
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=32, verbose_name='文章标签')
+    """外键字段"""
+    blog = models.ForeignKey(to='Blog', null=True, on_delete=models.CASCADE)
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=64, verbose_name='文章标题')
+    desc = models.CharField(max_length=255, verbose_name='文章简介')
+    # 文章内容很多，一般都使用TextField
+    content = models.TextField(verbose_name='文章内容')
+    create_time = models.DateField(auto_now_add=True)
+    # 数据库字段设计优化
+    up_num = models.BigIntegerField(default=0, verbose_name='文章点赞数')
+    down_num = models.BigIntegerField(default=0, verbose_name='文章点踩数')
+    comment_num = models.BigIntegerField(default=0, verbose_name='文章评论数')
+    """外键字段"""
+    blog = models.ForeignKey(to='Blog', null=True, on_delete=models.CASCADE)
+    category = models.ForeignKey(to='Category', null=True, on_delete=models.CASCADE)
+    tags = models.ManyToManyField(to='Tag',
+                                  through='ArticleToTag',
+                                  through_fields=('article', 'tag'))
+
+
+# 文章表和标签表的第三张关系表
+class ArticleToTag(models.Model):
+    article = models.ForeignKey(to='Article', on_delete=models.CASCADE)
+    tag = models.ForeignKey(to='Tag', on_delete=models.CASCADE)
+
+
+class UpAndDown(models.Model):
+    user = models.ForeignKey(to='UserInfo', on_delete=models.CASCADE)
+    article = models.ForeignKey(to='Article', on_delete=models.CASCADE)
+    is_up = models.BooleanField()  # 布尔值，存0/1
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(to='UserInfo', on_delete=models.CASCADE)
+    article = models.ForeignKey(to='Article', on_delete=models.CASCADE)
+    content = models.CharField(max_length=255, verbose_name='评论内容')
+    comment_time = models.DateTimeField(auto_now_add=True, verbose_name='评论时间')
+    # 自关联
+    parent = models.ForeignKey(to='self', on_delete=models.CASCADE, null=True)  # 有些评论就是根评论
+```
+
+### 4、注册功能
+
+，用户头像前端实时展示
+
+ajax
+
+```python
+"""之前是在views.py中写froms组件代码
+
+为了解耦合，应该将所有forms组件代码单独写一个地方
+
+如果项目至始至终只用到一个forms组件，那么直接建一个py文件即可
+但是如果你的项目需要使用多个forms组件，那么你可以创建一个文件夹，在文件夹内根据forms组件的功能的不同创建多个py文件
+myforms文件夹
+	regform.py
+	loginform.py
+	userform.py
+	orderform.py
+
+"""
+```
+
+**forms组件**
+
+```python
+# 书写针对用户表的forms组件|代码
+from django import forms
+from App import models
+
+
+class MyRegForm(forms.Form):
+    username = forms.CharField(label='用户名',
+                               max_length=8,
+                               min_length=3,
+                               error_messages={
+                                   'min_length': '用户名最小3位',
+                                   'max_length': '用户名最大8位',
+                                   'required': '用户不能为空',
+                               },
+                               widget=forms.widgets.TextInput(attrs={'class': 'form_control'})
+                               )
+    password = forms.CharField(label='密码',
+                               max_length=8,
+                               min_length=3,
+                               error_messages={
+                                   'min_length': '密码最小3位',
+                                   'max_length': '密码最大8位',
+                                   'required': '密码不能为空',
+                               },
+                               widget=forms.widgets.PasswordInput(attrs={'class': 'form_control'})
+                               )
+    confirm_password = forms.CharField(label='确认密码',
+                                       max_length=8,
+                                       min_length=3,
+                                       error_messages={
+                                           'min_length': '确认密码最小3位',
+                                           'max_length': '确认密码最大8位',
+                                           'required': '确认密码不能为空',
+                                       },
+                                       widget=forms.widgets.PasswordInput(attrs={'class': 'form_control'})
+                                       )
+    email = forms.EmailField(label='邮箱',
+                             error_messages={
+                                 'required': '用户不能为空',
+                                 'invalid': '邮箱格式不正确',
+                             },
+                             widget=forms.widgets.EmailInput(attrs={'class': 'from-control'})
+                             )
+
+    # 钩子函数
+    # 局部钩子：校验用户是否已经存在
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        # 去数据库中校验
+        is_exist = models.UserInfo.objects.filter(username=username)
+        if is_exist:
+            # 提示信息:
+            self.add_error('username', '用户名已存在')
+        return username
+
+    # 全局钩子:校验两次密码是否一致
+    def clean(self):
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if not password == confirm_password:
+            self.add_error('confirm_password', '两次密码不一致')
+
+        return self.cleaned_data
+```
+
+**前端**
+
+```html
+<!--register.html---->
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h1 class="text-center">注册</h1>
+            <form id="myform">  <!-----这里不用form表单提交数据，只是单纯的用已给form标签而已--->
+                {% csrf_token %}
+                {% for form in form_obj %}
+                    <dvi class="form-group">
+                        <label for="{{ form.auto_id }}">{{ form.label }}</label>
+                        {{ form }}
+                        <span style="color: red" class="pull-right">{{ form.errors.0 }}</span>
+                    </dvi>
+                {% endfor %}
+
+                <div class="form-group">
+                    <label for="myfile">头像
+                        <img src="{% static 'imgs/default.png' %}" id="myimg" alt="" width='80'
+                             style="margin-top: 20px;margin-left: 10px">
+                    </label>
+                    <input type="file" id="myfile" name="avatar" style="display: none">
+                </div>
+
+                <input type="button" class="btn btn-primary pull-right" value="注册" id="id_commit">
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $('#myfile').change(function () {
+        //文件阅读器对象
+        //1.先生成一个文件对象
+        let myFileReaderObj = new FileReader();
+        //2. 获取用户上传的头像文件
+        let fileObj = $(this)[0].files[0];
+        //3. 将文件对象交给阅读器对象读取
+        myFileReaderObj.readAsDataURL(fileObj)  //异步操作 IO操作
+        //4.利用文件阅读器将文件展示到前端页面  修改src属性
+        //等待文件阅读器加载完毕后再执行
+        myFileReaderObj.onload = function () {
+            $('#myimg').attr('src', myFileReaderObj.result)
+        }
+
+    })
+    $('#id_commit').click(function () {
+        //发送ajax，但是我们发送的数据中，既包含普通的简直，也包含文件
+        let formDataObj = new FormData()
+        //1.添加普通键值对
+        {#console.log($('#myform').serializeArray()) #}
+        $.each($('#myform').serializeArray(), function (index, obj) {
+            formDataObj.append(obj.name, obj.value)
+        })
+        //2.添加文件对象
+        formDataObj.append('avatar', $('#myfile')[0].files[0])
+        //3.发送ajax请求
+        $.ajax({
+            url: '',
+            type: 'post',
+            data: formDataObj,
+            //需要指定两个关键性参数
+            contentType: false,
+            processData: false,
+            success: function (args) {
+                if (args.code == 1000) {
+                    //跳转登录页面
+                    window.location.href = args.url
+                } else {
+                    //将对应的错误提示展示到对应的input框下面
+                    $.each(args.msg, function (index, obj) {
+                        let targetId = '#id_' + index;
+                        $(targetId).next().text(obj[0]).parent().addClass('has-error')
+                    })
+                }
+            }
+
+        })
+    })
+    //给所有的input框绑定获取焦点事件
+    $('input').focus(function (){
+        //将input框下面的span标签和外面的div标签修改内容及属性
+        $(this).next().text('').parent().removeClass('has-error')
+    })
+</script>
+
+</body>
+```
+
+**后端**
+
+```python
+#urls.py
+path('register/', views.register, name='register'),
+
+#views.py
+def register(request):
+    # 生成一个空对象
+    form_obj = MyRegForm()
+    if request.method == 'POST':
+        back_dic = {'code': 1000, 'msg': ''}
+        # 校验数据是否合法
+        form_obj = MyRegForm(request.POST)
+        # 判断数据是否合法
+        if form_obj.is_valid():
+
+            # print(form_obj.cleaned_data) #4个键值，多传的键值不要
+            clean_data = form_obj.cleaned_data  # 将校验通过的数据字典赋值给变量clean_data
+            # 将字典里面的confirm_password键值对删除
+            clean_data.pop('confirm_password')
+            # 用户头像
+            file_obj = request.FILES.get('avatar')
+            """针对用户头像一定要判断是否传值，不能直接添加到字段里去"""
+            if file_obj:
+                clean_data['avatar'] = file_obj
+            # 直接操作数据库保存数据
+            models.UserInfo.objects.create_user(**clean_data)
+            back_dic['url'] = '/login/'
+        else:
+            back_dic['code'] = 2000
+            back_dic['msg'] = form_obj.errors
+        return JsonResponse(back_dic)
+
+    return render(request, 'register.html', locals())
+```
+
+### 5、登录功能
+
+实现图片验证码
+
+ajax
+
+```python
+"""
+img标签的src属性
+	1.图片路径
+	2.url
+	3.图片的二进制数据
+	
+	
+我们的计算机上面之所以能输出各式各样的字体样式，内部其实对应的是一个个.ttf结尾的文件
+"""
+```
+
+**前端**
+
+```html
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!---<script src="../jQuery-3.6.0-min.js"></script>--->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    {#    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.2/css/bootstrap.min.css" rel="stylesheet">#}
+    {#    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.2/js/bootstrap.min.js"></script>#}
+    <link rel="stylesheet" href="{% static 'bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap-3.4.1-dist/js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <h1 class="text-center">登录</h1>
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" name="username" id="username" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" name="password" class="form-control" id="password">
+            </div>
+            <div class="form-group">
+                <label for="">验证码</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" name="code" id="id_code" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <img src="{% url 'code' %}" alt="" width="450" height="35" id="id_img">
+                    </div>
+                </div>
+
+            </div>
+            <input type="button" class="btn btn-success" value="登录" id="id_commit">
+            <span style="color: red" id="error"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#id_img').click(function () {
+        //1.获取标签之前的src
+        let oldVal = $(this).attr('src');
+        $(this).attr('src', oldVal += '?')
+    })
+    //点击按钮，发送ajax请求
+    $('#id_commit').on('click', function () {
+        $.ajax({
+            url: '',
+            type: 'post',
+            data: {
+                'username': $('#username').val(),
+                'password': $('#password').val(),
+                'code': $('#id_code').val(),
+                'csrfmiddlewaretoken':'{{ csrf_token }}',
+            },
+            success: function (args) {
+                if (args.code == 1000) {
+                    //跳转到首页
+                    window.location.href = args.url
+                } else {
+                    //渲染错误信息
+                    $('#error').text(args.msg)
+
+                }
+            }
+
+        })
+    })
+</script>
+</body>
+</html>
+```
+
+**后端**
+
+```python
+#urls.py
+path('login/', views.login, name='login'),
+# 图片验证码相关
+path('get_code/', views.get_code, name='code'),
+
+#views.py
+def login(request):
+    if request.method == 'POST':
+        back_dic = {'code': 1000, 'msg': ''}
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        code = request.POST.get('code')
+        # 1. 验证验证码是否正确   忽略大小写(通过转成大写或者小写进行比较)
+        if request.session.get('code').upper() == code.upper():
+            # 2. 校验用户名和密码是否正确
+            user_obj = auth.authenticate(request, username=username, password=password)
+            if user_obj:
+                # 保存用户状态
+                auth.login(request, user_obj)
+                back_dic['url'] = '/home/'
+            else:
+                back_dic['code'] = 2000
+                back_dic['msg'] = '用户名或者密码错误'
+        else:
+            back_dic['code'] = 3000
+            back_dic['msg'] = '验证码错误'
+        return JsonResponse(back_dic)
+    return render(request, 'login.html')
+
+
+"""
+图片相关模块
+pip install pillow
+"""
+from PIL import Image, ImageDraw, ImageFont
+
+"""
+ Image：生成图片
+ ImageDraw：能够在图片上乱涂乱画
+ ImageFont：控制字体样式
+"""
+import random
+from io import BytesIO, StringIO
+
+"""
+内存管理模块
+BytesIO,:临时帮你存储数据，返回的时候数据是二进制格式
+StringIO：临时帮你存储数据，返回的时候数据是字符串格式
+"""
+
+
+def get_random():
+    return random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
+
+
+def get_code(request):
+    """推导数据一：直接获取后端现成的图片二进制数据发送给前端"""
+
+    # with open(r'static/imgs/title.png', 'rb') as f:
+    #     data = f.read()
+    # return HttpResponse(data)
+
+    """推导步骤2：利用pillow模块，动态产生图片"""
+    # # img_obj = Image.new(mode='RGB', size=(430, 35), color='green')
+    # # img_obj = Image.new(mode='RGB', size=(430, 35), color=(123, 23, 12))
+    # img_obj = Image.new(mode='RGB', size=(430, 35), color=get_random())
+    # # 先将图片对象保存起来
+    # with open('xxx.png', 'wb') as f:
+    #     img_obj.save(f, 'png')
+    # # 再将图片对象读取出来
+    # with open('xxx.png', 'rb') as f:
+    #     data = f.read()
+    # return HttpResponse(data)
+    """推导步骤3:步骤2文件存储繁琐，IO效率低，借助于内存管理器模块"""
+    # img_obj = Image.new(mode='RGB', size=(430, 35), color=get_random())
+    # io_obj = BytesIO()  # 生成一个内存管理器对象，可以看成是一个文件句柄
+    # img_obj.save(io_obj, 'png')
+    # return HttpResponse(io_obj.getvalue())  # 从内存管理器中读取二进制数据返回给前端
+
+    """最终步骤4：写图片验证码"""
+    img_obj = Image.new(mode='RGB', size=(430, 35), color=get_random())
+    img_draw = ImageDraw.Draw(img_obj)  # 产生一个画笔对象
+    img_font = ImageFont.truetype('static/font/22.ttf', 30)  # 字体样式和大小
+
+    # 随机验证码 五位数的随机验证码（数字，小写字母，大写字母）
+    code = ''
+    for i in range(5):
+        random_upper = chr(random.randint(65, 90))  # chr 把数字转成对应的ascii对应的字符
+        random_lower = chr(random.randint(97, 120))
+        random_int = str(random.randint(0, 9))
+        # 从上面三个里随机选一个
+        tmp = random.choice([random_lower, random_int, random_upper])
+        # 将产生的随机字符串写入到图片上
+        """为什么一个个写而不是生成好了之后再写
+        因为一个个写能控制每个字体之间的间隙，而生成好的没法控制间隙
+        """
+        img_draw.text((i * 50 + 90, -1), tmp, get_random(), img_font)
+        # 拼接随机i字符串
+        code += tmp
+    print(code)
+    # 随机验证码在登录的视图函数里要用到，要比对，所以要存起来，其他视图函数也能拿到
+    request.session['code'] = code
+    io_obj = BytesIO()
+    img_obj.save(io_obj, 'png')
+    return HttpResponse(io_obj.getvalue())
+```
+
+### 6、搭建BBS首页
+
+导航条根据用户是否登录展示不同的内容
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
