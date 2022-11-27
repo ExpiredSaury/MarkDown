@@ -1,3 +1,9 @@
+
+
+
+
+
+
 # day01
 
 [Mysql 选择5.6.48版本](https://downloads.mysql.com/archives/community/)

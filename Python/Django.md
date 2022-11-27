@@ -700,6 +700,7 @@ DATABASES = {
 # 国际化
 LANGUAGE_CODE = 'zh-hans' #语⾔编码
 TIME_ZONE = 'Asia/Shanghai' #时区
+USE_TZ=False # 可以保证数据库时间和现实shi'jian同步，否则相差8个小时
 ```
 
 
@@ -1029,7 +1030,7 @@ DATABASES = {
 
 ![image-20221022105927612](E:\MarkDown\markdown\imgs\image-20221022105927612.png)
 
-## Django ORM
+## ==Django ORM==
 
 ==orm不会创建库，只能创建到表的层面。需要自己手动敲命令创建库==
 
@@ -1202,7 +1203,7 @@ def userlist(request):
 
     # 方式二：
     user_queryset = models.User.objects.all()
-    # print(data)
+    
     return render(request, 'userlist.html', locals())
 ```
 
@@ -2277,7 +2278,7 @@ request.GET
 request.POST
 request.FILES
 request.is_ajax() 判断当前请求是否是ajax请求，返回布尔值
-
+r
 request.path		#只能获取路由
 request.path_info   #只能获取路由
 request.get_full_path() #能够获取路由以及问号后面的参数
@@ -2718,28 +2719,32 @@ def index(request):
  
     """
     三步走：
-    	1. 必须要在应用下创建一个名字必须叫templatetags文件夹
-    	2.在该文件夹内创建任意名称的py文件
-    	3.在该py文件内必须先书写两句话
+    	1. 必须要在应用下创建一个名字"必须"叫templatetags文件夹
+    	2.在该文件夹内创建"任意"名称的py文件
+    	3.在该py文件内"必须"先书写两句话
             from django import template
 
             register = template.Library()
     """
 
     
-{% load tag %}
-<p>{{ n|tag:666 }}</p>
 
 
+#自定义过滤器(参数最多两个)
 @register.filter(name='tag')
 def my_sum(v1, v2):
     return v1 + v2
+
+#页面使用
+{% load mytag %}   #先加载自定义的py文件
+<p>{{ n|tag:666 }}</p>
 ```
 
 * 自定义标签
 
 ```python
 标签多个参数彼此之间空格隔开
+{% load mytag %}
 <p>{% plus 'zhao' 123 456 789 %}</p>
 
 
@@ -2770,6 +2775,7 @@ def left(n):
 
 
 #left_menu.html
+
 <ul>
     {% for datum in data %}
         <li>{{ datum }}</li>
@@ -2779,6 +2785,7 @@ def left(n):
 </ul>
 
 #index.html
+{% load mytag %}
 {% left 10 %}
 
 
@@ -2908,7 +2915,7 @@ Django自带的sqlite3对日期格式不是很敏感，处理的时候容易出�
 class User(models.Model):
     name = models.CharField(max_length=32, verbose_name='姓名')
     age = models.IntegerField()
-    register_time = models.DateField()  # 年月日
+    register_time = models.DateField(auto_now_add=True)  # 年月日
     """
     DateTime     
     DateTimeField
@@ -3174,7 +3181,7 @@ from django.db import models
 class Book(models.Model):
     title = models.CharField(max_length=32)
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    publish_data = models.DateField(auto_now_add=True)
+    publish_date = models.DateField(auto_now_add=True)
     # 一对多
     publish = models.ForeignKey(to='Publish', on_delete=models.CASCADE)
 
@@ -3252,7 +3259,7 @@ clear 清空对应的关系数据 括号内不加任何参数
     # 如何给数据添加作者
     # book_obj = models.Book.objects.filter(pk=2).first()
     # print(book_obj.author) #就类似于你已经找到了第三张关系表了
-    # book_obj.author.add(1)  # 书籍id为1的书籍绑定一个主键为1的作者
+    # book_obj.author.add(1)  # 书籍id为2的书籍绑定一个主键为1的作者
     # book_obj.author.add(2,3)
 
     # author_obj = models.Author.objects.filter(pk=1).first()
@@ -3409,7 +3416,7 @@ pupblish >>>外键字段在书那（反向）>>>book
     # res = models.Book.objects.filter(pk=1).values('author__author_detail__phone')
     # print(res)  
     """反向"""
-    # res1=models.Author.objects.filter(book__id=1).values('author_detail__phone')
+   #res1=models.Author.objects.filter(book__id=1).values('author_detail__phone')
     # print(res1)
 ```
 
@@ -3493,6 +3500,7 @@ author_number是自己定义的字段，用来存储统计出来的每本书对�
     from django.db.models import F
     res = models.Book.objects.filter(maichu__gt=F('kucun'))
     print(res)
+    
 
     # 2将所有书籍的价格提升50块
     res = models.Book.objects.update(price=F('price') + 50)
@@ -3676,7 +3684,7 @@ res=models.Book.objects.defer('title')
     for i in res:
         print(i.price)
         """defer与only刚好相反
-                defer括号内放到字段不在查询出来的对象里面，查询该字段需要重新走数据
+                defer括号内放的字段不在查询出来的对象里面，查询该字段需要重新走数据
                 而如果查询的是非括号内的字段，则不需要走数据库
             """
 ```
@@ -3753,7 +3761,7 @@ class User(models.Model):
     )
     gender = models.IntegerField(choices=gender_choices)
     """
-    该gender字段存的还是数字，但是如果存的数字再上面元组列举的范围之内，
+    该gender字段存的还是数字，但是如果存的数字在上面元组列举的范围之内，
     那么就可以获取到数字对应的真正内容
     
     1 gender如果字段存的数字不在上述元组列举的范围内容
@@ -3856,8 +3864,8 @@ class Author(models.Model):
     name=models.CharField(max_length=32)
     
 class BookToAuthor(models.Model):
-    book_id=models.ForeignKey(to='Book',on_delete=models.CASCADE)
-    author_id=models.ForeignKey(to='Author',on_delete=models.CASCADE)
+    book=models.ForeignKey(to='Book',on_delete=models.CASCADE)
+    author=models.ForeignKey(to='Author',on_delete=models.CASCADE)
     
     """
     优点:第三张关系表完全取决于自己进行额外的拓展
@@ -3905,7 +3913,7 @@ class BookToAuthor(models.Model):
     只需要掌握全自动和半自动，半自动扩展性高，一般都采用半自动，
 ```
 
-## ==Ajax（重点）==
+## ==基于jQuery的Ajax实现（重点）==
 
 * **异步提交**
 * **局部刷新**
@@ -3979,10 +3987,10 @@ Ajax只学习jQuery封装好之后的版本，所以在前端页面使用ajax的
             //3 数据
             data: {'d1': $('#d1').val(), 'd2': $('#d2').val()},
             //4 回调函数:当后端给你返回结果的时候会自动触发 args接收后端的返回结果
-            datatyp: true, //会自动反序列化
+            datatyp: 'JSON', //会自动反序列化
             success: function (args) {
                 $('#d3').val(args)//通过DOM操作，动态渲染到第三个Input框
-                console.log(typeof (args))
+                #console.log(typeof (args))
                 
             }
         })
@@ -4099,7 +4107,6 @@ get请求数据就是直接放在url后面的
 # views.py
 
 from django.shortcuts import render
-
 # Create your views here.
 def index(request):
     if request.method =='POST':
@@ -4213,7 +4220,7 @@ django后端针对符合urlencoded编码格式的数据会自动的帮你解析�
 """
 前后端传输数据的时候一定要确保编码格式跟数据真正的格式是一致的
 
-{"username":"zhao","age":19} 在request.POST里肯定找不到
+
 """
 
 request对象补充
@@ -4554,10 +4561,10 @@ def delete_user(request):
 
 ## Django自带的序列化组件(为drf做铺垫)
 
-(drf：django restframework)
+(drf：django rest framework)
 
 ```python
-#在前端获取到、后端用户表里所有的数据，并且是列表套字典的格式
+#在前端获取到,后端用户表里所有的数据，并且是列表套字典的格式
 ```
 
 ```python
@@ -4579,14 +4586,7 @@ def ab_ser(request):
     return JsonResponse(user_list, safe=False)
 ```
 
-```html
-<body>
-{% for user_obj in user_queryset %}
-    <p>{{ user_obj }}</p>
-{% endfor %}
 
-</body>
-```
 
 **前端显示结果：**
 
@@ -5143,7 +5143,6 @@ forms组件
 	
 	因为前端校验若不惊风，可以直接修改或者利用爬虫程序绕过前端页面直接朝后端提交数据
 	
-	
 """
 ```
 
@@ -5674,6 +5673,8 @@ class MyForm(forms.Form):
 
 #### widget
 
+Widget负责渲染网页上HTML表单的输入元素和提取提交的原始数据。widget是字段的一个内在属性，用于定义字段在浏览器的页面里以何种HTML元素展现。
+
 PasswordInput    TextInput     EmailInput
 
 ```python
@@ -6117,7 +6118,7 @@ def set_session(request):
         2.django内部自动将随机字符串和后面对应的数据存储到django_session表中（这一步不是直接生效的，）
             2.1先在内存中产生操作数据的缓存
             2.2在响应结果django中间件的时候才真正的操作数据
-        3.将产生的随机字符串返回个客户端浏览器保存
+        3.将产生的随机字符串返回给客户端浏览器保存
     """
 
     return HttpResponse('稻香')
@@ -6135,7 +6136,7 @@ def set_session(request):
 
 session给客户端返回的是一个随机字符串,**随机字符串**指的就是`django_session表中的session_key`
 
-==django默认的session过期时间是**14**天==，但是也可以认为的修改
+==django默认的session过期时间是**14**天==，但是也可以修改
 
 ![image-20221108211345212](E:/MarkDown/markdown/imgs/image-20221108211345212.png)
 
@@ -6209,7 +6210,7 @@ def del_session(request):
 
 
 
-## CBV添加装饰器
+## ==CBV添加装饰器==
 
 * 装饰器
 
@@ -6395,11 +6396,11 @@ MIDDLEWARE = [
 
 #### process_request（掌握）
 
-![image-20221109191456363](E:/MarkDown/markdown/imgs/image-20221109191456363.png)
+<img src="E:/MarkDown/markdown/imgs/image-20221109191456363.png" alt="image-20221109191456363" style="zoom: 80%;" />
 
 **启动项目，查看中间件是否生效**
 
-![image-20221109191548177](E:/MarkDown/markdown/imgs/image-20221109191548177.png)
+<img src="E:/MarkDown/markdown/imgs/image-20221109191548177.png" alt="image-20221109191548177" style="zoom:80%;" />
 
 
 
@@ -6417,7 +6418,7 @@ urlpatterns = [
 ]
 ```
 
-```pytohn
+```python
 # Create your views here.
 def index(request):
     print('我是视图函数index')
@@ -6426,7 +6427,7 @@ def index(request):
 
 启动项目，浏览器输入路由
 
-![image-20221109192047022](E:/MarkDown/markdown/imgs/image-20221109192047022.png)
+<img src="E:/MarkDown/markdown/imgs/image-20221109192047022.png" alt="image-20221109192047022" style="zoom:80%;" />
 
 
 
@@ -6434,7 +6435,7 @@ def index(request):
 
 再写一个中间件，并颠倒注册顺序
 
-![image-20221109192636506](E:/MarkDown/markdown/imgs/image-20221109192636506.png)
+<img src="E:/MarkDown/markdown/imgs/image-20221109192636506.png" alt="image-20221109192636506" style="zoom:80%;" />
 
 
 
@@ -6442,17 +6443,17 @@ def index(request):
 
 添加返回值
 
-![image-20221109194306420](E:/MarkDown/markdown/imgs/image-20221109194306420.png)
+<img src="E:/MarkDown/markdown/imgs/image-20221109194306420.png" alt="image-20221109194306420" style="zoom:80%;" />
 
 ---
 
-**总结:**
+#### ==总结==:
 
-1. 请求来的时候是要经过每一个中间件里的process_request方法，结果的顺序按照配置文件中注册的中间件从上往下的顺序依次执行
+1. **请求来的时候是要经过每一个中间件里的`process_request`方法，结果的顺序按照配置文件中注册的中间件从上往下的顺序依次执行**
 
-2. 如果中间件里面没有定义process_request方法，直接跳过，执行下一个
-3. 如果该方法返回了HttpResponse对象，那么请求将不再继续往后执行，而是直接原路返回（校验失败，不允许访问）
-   1. 所以**process_request方法就是用来做全局相关的所有限制功能**
+2. **如果中间件里面没有定义`process_request`方法，直接跳过，执行下一个**
+3. **如果该方法返回了`HttpResponse`对象，那么请求将不再继续往后执行，而是直接原路返回（校验失败，不允许访问）**
+   1. **所以process_request方法就是用来做全局相关的所有限制功能**
 
 #### process_response（掌握）
 
@@ -6496,14 +6497,14 @@ class MyMiddleWare2(MiddlewareMixin):
 
 ![image-20221109195712980](E:/MarkDown/markdown/imgs/image-20221109195712980.png)
 
-**总结：**
+#### 总结：
 
-1. 响应走的时候需要经过每一个中间件里的process_response方法,该方法有两个额外的参数(request,response)
-2. 该方法必须返回一个HttpResponse对象
-   1. 默认返回的就是形参response,
-   2. 也可以自己返回自己的HttpResponse对象
+1. **响应走的时候需要经过每一个中间件里的process_response方法,该方法有两个额外的参数(request,response)**
+2. **该方法必须返回一个HttpResponse对象**
+   1. **默认返回的就是形参response,**
+   2. **也可以自己返回自己的HttpResponse对象**
 
-3. 顺序是按照配置文件中注册了的中间件**从下往上依次经过，如果没有定义，直接执行上一个**
+3. **顺序是按照配置文件中注册了的中间件从下往上依次经过，如果没有定义，直接执行上一个**
 
 ---
 
@@ -6518,6 +6519,8 @@ class MyMiddleWare2(MiddlewareMixin):
 ​	首先请求来的时候，会依次经过每一个注册了的中间件里的`process_reques`t方法，一旦`process_request`方法返回了一个`HttpResponse`对象，那么会直接不再往下走，而是直接经过**同级别的`process_response`往外走。**
 
 ![image-20221109201546542](E:/MarkDown/markdown/imgs/image-20221109201546542.png)
+
+---
 
 ![image-20221109201702210](E:/MarkDown/markdown/imgs/image-20221109201702210.png)
 
@@ -6640,7 +6643,7 @@ class MyMiddleWare2(MiddlewareMixin):
         print('我是第二个自定义中间件里的process_exception')
 ```
 
-## csrf跨站请求伪造
+## ==csrf跨站请求伪造==
 
 ### 1、前戏
 
@@ -6657,9 +6660,9 @@ class MyMiddleWare2(MiddlewareMixin):
 """
 ```
 
-真正的网站端口:8000
+* 真正的网站端口:8000
 
-http://127.0.0.1:8000
+`http://127.0.0.1:8000`
 
 ```python
 # 注释掉csrf
@@ -6694,7 +6697,7 @@ def transfer(request):
 path('transfer/',views.transfer)
 ```
 
-钓鱼网站模拟端口:8001
+* 钓鱼网站模拟端口:8001
 
 ```python
 #不用注释csfr
@@ -7149,7 +7152,8 @@ notify.send_all('国庆不放假')
 
 ```python
 """
-再创建好一个django项目后，直接执行数据库迁移命令后会自动生成很多表，  django_session       auth_user
+在创建好一个django项目后，直接执行数据库迁移命令后会自动生成很多表，  django_session  .............     
+其中就包括 auth_user表
 
 django在启动之后就可以直接访问admin路由，需要输入用户名和密码，数据参考的就是auth_user表，并且还必须是管理员用户才能进入
 
@@ -7177,13 +7181,15 @@ python manage.py createsuperuser
 
 ![image-20221112154955296](E:/MarkDown/markdown/imgs/image-20221112154955296.png)
 
+登录进入后的界面：
+
 ![image-20221112155006201](E:/MarkDown/markdown/imgs/image-20221112155006201.png)
 
 **依赖于auth_user表完成用户以下相关的所有功能：**
 
-### 2、登录功能
+### 2、获取表，检验密码
 
-获取表，检验密码
+登录功能
 
 ```html
 <form action="" method="post">
@@ -7268,7 +7274,7 @@ def home(request):
     return HttpResponse('OK!')
 ```
 
-删除`django_session`表中的数据，就表示用户没有登录过，再次查看`request.user`拿到什么数据
+当删除`django_session`表中的数据，就表示用户没有登录过，再次查看`request.user`拿到什么数据
 
 ![image-20221112210105392](E:/MarkDown/markdown/imgs/image-20221112210105392.png)
 
@@ -7296,16 +7302,16 @@ def home(request):
 #配置文件settings.py
 LOGIN_URL = '/login/'
 
+
 from django.contrib.auth.decorators import login_required
 @login_required
 def home(request):
-    
     print(request.user)  
     print(request.user.is_authenticated)
     return HttpResponse('OK!')
 
 
-# 如果局部和全局都有会跳转到局部配置，
+# 如果局部和全局都有，会跳转到局部配置，
 # 局部配置的优先级大于全局配置
 # 全局的好处在于无需重复写代码，但是跳转的页面很单一
 # 局部的好处在于不同的视图函数在用户没有登录的情况下可以跳转到不同的页面
@@ -7452,6 +7458,7 @@ request.user.check_password(old_password)  # 自动加密，比对密码，返�
 """8. 注销"""
 auth.logout(request)  # 类似于 request.session.flush()
 """9. 注册"""
+from django.contrib.auth.models import User
  # 操作auth_user表写入数据
 User.objects.create(username=username, password=password)  # 创建数据，但是用create创建，密码没有加密处理
 # 创建普通用户
@@ -7493,706 +7500,14 @@ class UserInfo(AbstractUser):
             表里面的字段都不要动，只扩展额外的字段即可
         3. 需要在配置文件中告诉django你要用User Info替代auth_user
             AUTH_USER_MODEL='app01.UserInfo'
-                                '用户名.表名'
+                                '应用名.表名'
     """
  
 ```
 
 ![image-20221112224513172](E:/MarkDown/markdown/imgs/image-20221112224513172.png)
 
-如果自己写表替代了`auth_user`，那么auth模块还照常使用，参考的表也由原来的`auth_user`变成了现在的`UserInfo`
-
-## BBS项目开发
-
-bbs是一个前后端不分离的全栈项目，前后端需要自己一步步完成
-
-### 1、流程
-
-```python
-# 1. 需求分析
-	架构师+产品经理+开发组组长
-    在跟客户谈需求之前，会大致了解客户的需求，然后自己先设计出一套比较好写的方案，在个客户沟通交流中，引导客户往我们想好的方案上靠。
-    形成一个初步方案，
-# 2. 项目设计
-	架构师干的活
-    编程语言的选择
-    框架选择
-    数据库选择  主库:MySQL，缓存数据库:redis,mongondb
-	功能划分
-    	将整个项目划分成几个功能模块
-    找组长开会，
-        	给每个组分发任务
-    项目报价
-    	技术这块需要多少人力，多少天（一个程序员一天按照1500~2000大致）
-        产品经理公司层面：再加点钱，（人力，物力）
-        公司财务
-        公司老板签字确认
-    产品经理去跟客户沟通
-    后续需要加功能，继续加钱
-    
-    
-# 3.分组开发
-	组长找组员开会，安排各自的功能模块，
-    我们其实就是再架构师设计好的框架里填写代码而已(码畜)
-    
-    我们在写代码的时候，写完需要自己先测试是否有bug
-    如果有一个些显而易见的bug，你没有避免而是直接交给测试部门测试出来，那么就可能需要扣绩效了（一定要跟测试搞好关系）
-    薪资组成 15k (合理合规合法的避税)
-    	底薪	10k
-        绩效	3k
-        岗位津贴 1k
-        生活补贴 1k
-# 4. 测试
-	测试部门测试代码
-    压力测试
-    .....
-# 5. 交付上线
-	1.交给对放的运维人员
-    2.直接上线到我们的服务器上，收取维护费
-    3.其他.....
-```
-
-### 2、==表设计==
-
-```python
-"""
-一个项目最终的不是业务逻辑的书写
-而是前期的表设计，只要将表设计好了，后续的功能书写才能一帆风顺
-
-表设计
-	1.用户表
-		继承AbstractUser
-		额外扩展字段
-			phone 电话
-			avatar	用户头像
-			create_time	创建时间
-		外键字段
-		一对一个人站点表 
-        
-        
-	2.个人站点表
-		site_name 个人站点名称
-		site_title  站点标题
-		site_theme  站点样式 css，js
-		
-	3.文章标签表
-		name 标签名
-		
-		外键字段 
-		一对多个人站点表
-		
-	4.文章分类表
-		name 分类名
-		
-		外键字段 
-		一对多个人站点表
-		
-	5.文章表
-		title 文章标题 
-		desc 文章简介
-		content 文章内容
-		create_time 发布时间
-		
-		数据库字段设计优化（虽然下述参数字段，可以通过Orm从其他表计算得出，但是效率太低，）
-		up_num 点赞数
-		down_num 点踩数
-		comment_num 评论数
-		
-		外键字段
-		一对多个人站点
-		多对多文章标签表
-		一对多文章分类
-		
-		
-	6.点赞点踩表
-		用来记录哪个用户给那篇文章点了赞还是点了踩
-		user    ForenginKey(to='User')
-		artice	ForenginKey(to='Article')
-		is_up   BooleanField()
-		
-		1	1	1
-		1	2	1	
-		1	3	0	
-		2	1	1
-		
-		
-		
-	7.文章评论表
-		用来记录哪个用户给那篇文章写了哪些评论内容
-		user 				ForenginKey(to='User')
-		artice				ForenginKey(to='Article')
-		content				CharFeild()
-		comment_time		DateField()	
-		#自关联
-		parent				ForenginKey(to='Comment' null=True)
-		#orm提供的自关联写法
-		parent				ForenginKey(to='self',null=True)
-		
-		
-		id		user_id		article_id		parent_id
-		1			1			1						
-		2			2			1				1
-		
-根评论子评论的概念
-	根评论直接评论当前发布的内容的
-	子评论是评论别人的评论
-	
-	一个根评论可以有多个子评论
-	一个多个子评论只属于一个根评论
-	
-	根评论与子评论是一对多的关系
-	
-"""
-```
-
-
-
-![image-20221113112818038](E:/MarkDown/markdown/imgs/image-20221113112818038.png)
-
-### 3、表创建及同步
-
-```python
-"""数据库选择Mysql，由于django自带的sqllite3对日期不敏感，所以换成Mysql"""
-```
-
-```python
-# models.py
-from django.db import models
-
-# Create your models here.
-from django.contrib.auth.models import AbstractUser
-
-
-class UserInfo(AbstractUser):
-    phone = models.BigIntegerField(null=True, verbose_name='手机号')
-    # 头像
-    avatar = models.FileField(upload_to='avatar/', default='avatar/default.jpg', verbose_name='用户头像')
-    """给avatar字段传文件对象，该文件会自动存储到avatar文件下，然后avatar字段只保存文件路径avatar/default.jpg"""
-    create_time = models.DateField(auto_now_add=True)
-
-    """外键字段"""
-    blog = models.OneToOneField(to='Blog', null=True, on_delete=models.CASCADE)
-
-
-class Blog(models.Model):
-    site_name = models.CharField(max_length=32, verbose_name='站点名称')
-    site_title = models.CharField(max_length=32, verbose_name='站点标题')
-    site_theme = models.CharField(max_length=64, verbose_name='站点样式')  # 存css/js文件路径
-
-
-# 文章分类
-class Category(models.Model):
-    name = models.CharField(max_length=32, verbose_name='文章分类')
-    """外键字段"""
-    blog = models.ForeignKey(to='Blog', null=True, on_delete=models.CASCADE)
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=32, verbose_name='文章标签')
-    """外键字段"""
-    blog = models.ForeignKey(to='Blog', null=True, on_delete=models.CASCADE)
-
-
-class Article(models.Model):
-    title = models.CharField(max_length=64, verbose_name='文章标题')
-    desc = models.CharField(max_length=255, verbose_name='文章简介')
-    # 文章内容很多，一般都使用TextField
-    content = models.TextField(verbose_name='文章内容')
-    create_time = models.DateField(auto_now_add=True)
-    # 数据库字段设计优化
-    up_num = models.BigIntegerField(default=0, verbose_name='文章点赞数')
-    down_num = models.BigIntegerField(default=0, verbose_name='文章点踩数')
-    comment_num = models.BigIntegerField(default=0, verbose_name='文章评论数')
-    """外键字段"""
-    blog = models.ForeignKey(to='Blog', null=True, on_delete=models.CASCADE)
-    category = models.ForeignKey(to='Category', null=True, on_delete=models.CASCADE)
-    tags = models.ManyToManyField(to='Tag',
-                                  through='ArticleToTag',
-                                  through_fields=('article', 'tag'))
-
-
-# 文章表和标签表的第三张关系表
-class ArticleToTag(models.Model):
-    article = models.ForeignKey(to='Article', on_delete=models.CASCADE)
-    tag = models.ForeignKey(to='Tag', on_delete=models.CASCADE)
-
-
-class UpAndDown(models.Model):
-    user = models.ForeignKey(to='UserInfo', on_delete=models.CASCADE)
-    article = models.ForeignKey(to='Article', on_delete=models.CASCADE)
-    is_up = models.BooleanField()  # 布尔值，存0/1
-
-
-class Comment(models.Model):
-    user = models.ForeignKey(to='UserInfo', on_delete=models.CASCADE)
-    article = models.ForeignKey(to='Article', on_delete=models.CASCADE)
-    content = models.CharField(max_length=255, verbose_name='评论内容')
-    comment_time = models.DateTimeField(auto_now_add=True, verbose_name='评论时间')
-    # 自关联
-    parent = models.ForeignKey(to='self', on_delete=models.CASCADE, null=True)  # 有些评论就是根评论
-```
-
-### 4、注册功能
-
-，用户头像前端实时展示
-
-ajax
-
-```python
-"""之前是在views.py中写froms组件代码
-
-为了解耦合，应该将所有forms组件代码单独写一个地方
-
-如果项目至始至终只用到一个forms组件，那么直接建一个py文件即可
-但是如果你的项目需要使用多个forms组件，那么你可以创建一个文件夹，在文件夹内根据forms组件的功能的不同创建多个py文件
-myforms文件夹
-	regform.py
-	loginform.py
-	userform.py
-	orderform.py
-
-"""
-```
-
-**forms组件**
-
-```python
-# 书写针对用户表的forms组件|代码
-from django import forms
-from App import models
-
-
-class MyRegForm(forms.Form):
-    username = forms.CharField(label='用户名',
-                               max_length=8,
-                               min_length=3,
-                               error_messages={
-                                   'min_length': '用户名最小3位',
-                                   'max_length': '用户名最大8位',
-                                   'required': '用户不能为空',
-                               },
-                               widget=forms.widgets.TextInput(attrs={'class': 'form_control'})
-                               )
-    password = forms.CharField(label='密码',
-                               max_length=8,
-                               min_length=3,
-                               error_messages={
-                                   'min_length': '密码最小3位',
-                                   'max_length': '密码最大8位',
-                                   'required': '密码不能为空',
-                               },
-                               widget=forms.widgets.PasswordInput(attrs={'class': 'form_control'})
-                               )
-    confirm_password = forms.CharField(label='确认密码',
-                                       max_length=8,
-                                       min_length=3,
-                                       error_messages={
-                                           'min_length': '确认密码最小3位',
-                                           'max_length': '确认密码最大8位',
-                                           'required': '确认密码不能为空',
-                                       },
-                                       widget=forms.widgets.PasswordInput(attrs={'class': 'form_control'})
-                                       )
-    email = forms.EmailField(label='邮箱',
-                             error_messages={
-                                 'required': '用户不能为空',
-                                 'invalid': '邮箱格式不正确',
-                             },
-                             widget=forms.widgets.EmailInput(attrs={'class': 'from-control'})
-                             )
-
-    # 钩子函数
-    # 局部钩子：校验用户是否已经存在
-    def clean_username(self):
-        username = self.cleaned_data.get('username')
-        # 去数据库中校验
-        is_exist = models.UserInfo.objects.filter(username=username)
-        if is_exist:
-            # 提示信息:
-            self.add_error('username', '用户名已存在')
-        return username
-
-    # 全局钩子:校验两次密码是否一致
-    def clean(self):
-        password = self.cleaned_data.get('password')
-        confirm_password = self.cleaned_data.get('confirm_password')
-        if not password == confirm_password:
-            self.add_error('confirm_password', '两次密码不一致')
-
-        return self.cleaned_data
-```
-
-**前端**
-
-```html
-<!--register.html---->
-
-<body>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <h1 class="text-center">注册</h1>
-            <form id="myform">  <!-----这里不用form表单提交数据，只是单纯的用已给form标签而已--->
-                {% csrf_token %}
-                {% for form in form_obj %}
-                    <dvi class="form-group">
-                        <label for="{{ form.auto_id }}">{{ form.label }}</label>
-                        {{ form }}
-                        <span style="color: red" class="pull-right">{{ form.errors.0 }}</span>
-                    </dvi>
-                {% endfor %}
-
-                <div class="form-group">
-                    <label for="myfile">头像
-                        <img src="{% static 'imgs/default.png' %}" id="myimg" alt="" width='80'
-                             style="margin-top: 20px;margin-left: 10px">
-                    </label>
-                    <input type="file" id="myfile" name="avatar" style="display: none">
-                </div>
-
-                <input type="button" class="btn btn-primary pull-right" value="注册" id="id_commit">
-
-            </form>
-
-        </div>
-
-    </div>
-</div>
-
-<script>
-    $('#myfile').change(function () {
-        //文件阅读器对象
-        //1.先生成一个文件对象
-        let myFileReaderObj = new FileReader();
-        //2. 获取用户上传的头像文件
-        let fileObj = $(this)[0].files[0];
-        //3. 将文件对象交给阅读器对象读取
-        myFileReaderObj.readAsDataURL(fileObj)  //异步操作 IO操作
-        //4.利用文件阅读器将文件展示到前端页面  修改src属性
-        //等待文件阅读器加载完毕后再执行
-        myFileReaderObj.onload = function () {
-            $('#myimg').attr('src', myFileReaderObj.result)
-        }
-
-    })
-    $('#id_commit').click(function () {
-        //发送ajax，但是我们发送的数据中，既包含普通的简直，也包含文件
-        let formDataObj = new FormData()
-        //1.添加普通键值对
-        {#console.log($('#myform').serializeArray()) #}
-        $.each($('#myform').serializeArray(), function (index, obj) {
-            formDataObj.append(obj.name, obj.value)
-        })
-        //2.添加文件对象
-        formDataObj.append('avatar', $('#myfile')[0].files[0])
-        //3.发送ajax请求
-        $.ajax({
-            url: '',
-            type: 'post',
-            data: formDataObj,
-            //需要指定两个关键性参数
-            contentType: false,
-            processData: false,
-            success: function (args) {
-                if (args.code == 1000) {
-                    //跳转登录页面
-                    window.location.href = args.url
-                } else {
-                    //将对应的错误提示展示到对应的input框下面
-                    $.each(args.msg, function (index, obj) {
-                        let targetId = '#id_' + index;
-                        $(targetId).next().text(obj[0]).parent().addClass('has-error')
-                    })
-                }
-            }
-
-        })
-    })
-    //给所有的input框绑定获取焦点事件
-    $('input').focus(function (){
-        //将input框下面的span标签和外面的div标签修改内容及属性
-        $(this).next().text('').parent().removeClass('has-error')
-    })
-</script>
-
-</body>
-```
-
-**后端**
-
-```python
-#urls.py
-path('register/', views.register, name='register'),
-
-#views.py
-def register(request):
-    # 生成一个空对象
-    form_obj = MyRegForm()
-    if request.method == 'POST':
-        back_dic = {'code': 1000, 'msg': ''}
-        # 校验数据是否合法
-        form_obj = MyRegForm(request.POST)
-        # 判断数据是否合法
-        if form_obj.is_valid():
-
-            # print(form_obj.cleaned_data) #4个键值，多传的键值不要
-            clean_data = form_obj.cleaned_data  # 将校验通过的数据字典赋值给变量clean_data
-            # 将字典里面的confirm_password键值对删除
-            clean_data.pop('confirm_password')
-            # 用户头像
-            file_obj = request.FILES.get('avatar')
-            """针对用户头像一定要判断是否传值，不能直接添加到字段里去"""
-            if file_obj:
-                clean_data['avatar'] = file_obj
-            # 直接操作数据库保存数据
-            models.UserInfo.objects.create_user(**clean_data)
-            back_dic['url'] = '/login/'
-        else:
-            back_dic['code'] = 2000
-            back_dic['msg'] = form_obj.errors
-        return JsonResponse(back_dic)
-
-    return render(request, 'register.html', locals())
-```
-
-### 5、登录功能
-
-实现图片验证码
-
-ajax
-
-```python
-"""
-img标签的src属性
-	1.图片路径
-	2.url
-	3.图片的二进制数据
-	
-	
-我们的计算机上面之所以能输出各式各样的字体样式，内部其实对应的是一个个.ttf结尾的文件
-"""
-```
-
-**前端**
-
-```html
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <!---<script src="../jQuery-3.6.0-min.js"></script>--->
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    {#    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.2/css/bootstrap.min.css" rel="stylesheet">#}
-    {#    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.2/js/bootstrap.min.js"></script>#}
-    <link rel="stylesheet" href="{% static 'bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
-    <script src="{% static 'bootstrap-3.4.1-dist/js/bootstrap.min.js' %}"></script>
-</head>
-<body>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-offset-2 col-md-8">
-            <h1 class="text-center">登录</h1>
-            <div class="form-group">
-                <label for="username">用户名</label>
-                <input type="text" name="username" id="username" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="password">密码</label>
-                <input type="password" name="password" class="form-control" id="password">
-            </div>
-            <div class="form-group">
-                <label for="">验证码</label>
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="text" name="code" id="id_code" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                        <img src="{% url 'code' %}" alt="" width="450" height="35" id="id_img">
-                    </div>
-                </div>
-
-            </div>
-            <input type="button" class="btn btn-success" value="登录" id="id_commit">
-            <span style="color: red" id="error"></span>
-        </div>
-    </div>
-</div>
-
-<script>
-    $('#id_img').click(function () {
-        //1.获取标签之前的src
-        let oldVal = $(this).attr('src');
-        $(this).attr('src', oldVal += '?')
-    })
-    //点击按钮，发送ajax请求
-    $('#id_commit').on('click', function () {
-        $.ajax({
-            url: '',
-            type: 'post',
-            data: {
-                'username': $('#username').val(),
-                'password': $('#password').val(),
-                'code': $('#id_code').val(),
-                'csrfmiddlewaretoken':'{{ csrf_token }}',
-            },
-            success: function (args) {
-                if (args.code == 1000) {
-                    //跳转到首页
-                    window.location.href = args.url
-                } else {
-                    //渲染错误信息
-                    $('#error').text(args.msg)
-
-                }
-            }
-
-        })
-    })
-</script>
-</body>
-</html>
-```
-
-**后端**
-
-```python
-#urls.py
-path('login/', views.login, name='login'),
-# 图片验证码相关
-path('get_code/', views.get_code, name='code'),
-
-#views.py
-def login(request):
-    if request.method == 'POST':
-        back_dic = {'code': 1000, 'msg': ''}
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        code = request.POST.get('code')
-        # 1. 验证验证码是否正确   忽略大小写(通过转成大写或者小写进行比较)
-        if request.session.get('code').upper() == code.upper():
-            # 2. 校验用户名和密码是否正确
-            user_obj = auth.authenticate(request, username=username, password=password)
-            if user_obj:
-                # 保存用户状态
-                auth.login(request, user_obj)
-                back_dic['url'] = '/home/'
-            else:
-                back_dic['code'] = 2000
-                back_dic['msg'] = '用户名或者密码错误'
-        else:
-            back_dic['code'] = 3000
-            back_dic['msg'] = '验证码错误'
-        return JsonResponse(back_dic)
-    return render(request, 'login.html')
-
-
-"""
-图片相关模块
-pip install pillow
-"""
-from PIL import Image, ImageDraw, ImageFont
-
-"""
- Image：生成图片
- ImageDraw：能够在图片上乱涂乱画
- ImageFont：控制字体样式
-"""
-import random
-from io import BytesIO, StringIO
-
-"""
-内存管理模块
-BytesIO,:临时帮你存储数据，返回的时候数据是二进制格式
-StringIO：临时帮你存储数据，返回的时候数据是字符串格式
-"""
-
-
-def get_random():
-    return random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
-
-
-def get_code(request):
-    """推导数据一：直接获取后端现成的图片二进制数据发送给前端"""
-
-    # with open(r'static/imgs/title.png', 'rb') as f:
-    #     data = f.read()
-    # return HttpResponse(data)
-
-    """推导步骤2：利用pillow模块，动态产生图片"""
-    # # img_obj = Image.new(mode='RGB', size=(430, 35), color='green')
-    # # img_obj = Image.new(mode='RGB', size=(430, 35), color=(123, 23, 12))
-    # img_obj = Image.new(mode='RGB', size=(430, 35), color=get_random())
-    # # 先将图片对象保存起来
-    # with open('xxx.png', 'wb') as f:
-    #     img_obj.save(f, 'png')
-    # # 再将图片对象读取出来
-    # with open('xxx.png', 'rb') as f:
-    #     data = f.read()
-    # return HttpResponse(data)
-    """推导步骤3:步骤2文件存储繁琐，IO效率低，借助于内存管理器模块"""
-    # img_obj = Image.new(mode='RGB', size=(430, 35), color=get_random())
-    # io_obj = BytesIO()  # 生成一个内存管理器对象，可以看成是一个文件句柄
-    # img_obj.save(io_obj, 'png')
-    # return HttpResponse(io_obj.getvalue())  # 从内存管理器中读取二进制数据返回给前端
-
-    """最终步骤4：写图片验证码"""
-    img_obj = Image.new(mode='RGB', size=(430, 35), color=get_random())
-    img_draw = ImageDraw.Draw(img_obj)  # 产生一个画笔对象
-    img_font = ImageFont.truetype('static/font/22.ttf', 30)  # 字体样式和大小
-
-    # 随机验证码 五位数的随机验证码（数字，小写字母，大写字母）
-    code = ''
-    for i in range(5):
-        random_upper = chr(random.randint(65, 90))  # chr 把数字转成对应的ascii对应的字符
-        random_lower = chr(random.randint(97, 120))
-        random_int = str(random.randint(0, 9))
-        # 从上面三个里随机选一个
-        tmp = random.choice([random_lower, random_int, random_upper])
-        # 将产生的随机字符串写入到图片上
-        """为什么一个个写而不是生成好了之后再写
-        因为一个个写能控制每个字体之间的间隙，而生成好的没法控制间隙
-        """
-        img_draw.text((i * 50 + 90, -1), tmp, get_random(), img_font)
-        # 拼接随机i字符串
-        code += tmp
-    print(code)
-    # 随机验证码在登录的视图函数里要用到，要比对，所以要存起来，其他视图函数也能拿到
-    request.session['code'] = code
-    io_obj = BytesIO()
-    img_obj.save(io_obj, 'png')
-    return HttpResponse(io_obj.getvalue())
-```
-
-### 6、搭建BBS首页
-
-导航条根据用户是否登录展示不同的内容
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+**如果自己写表替代了`auth_user`，那么auth模块还照常使用，参考的表也由原来的`auth_user`变成了现在的`UserInfo`**
 
 
 
