@@ -2,7 +2,7 @@
 
 
 
-## 纯手撸web框架
+## （一）纯手撸web框架
 
 ```python
 # HTTP协议
@@ -73,7 +73,7 @@ while True:
     3.并发问题
 ```
 
-## 基于wsgiref模块（web服务网关接口）
+## （二）基于wsgiref模块（web服务网关接口）
 
 ```python
 # -*- coding: UTF-8 -*- 
@@ -185,13 +185,13 @@ templates文件夹 专门用来存储html文件
 #按照功能的不同，只需要在urls.py中书写对应关系，然后去views.py中书写业务逻辑
 ```
 
-![image-20221020093951059](E:\MarkDown\markdown\imgs\image-20221020093951059.png)
+![image-20221020093951059](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130121815.png)
 
-![image-20221020094002008](E:\MarkDown\markdown\imgs\image-20221020094002008.png)
+![image-20221020094002008](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130122009.png)
 
-![image-20221020094021483](E:\MarkDown\markdown\imgs\image-20221020094021483.png)
+![image-20221020094021483](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130121944.png)
 
-## 动静态网页
+## （三）动静态网页
 
 ```python
 """
@@ -246,7 +246,7 @@ def get_dict(env):
 
 **前端获取后端结果**
 
-![image-20221028155919554](E:\MarkDown\markdown\imgs\image-20221028155919554.png)
+![image-20221028155919554](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130122312.png)
 
 * **后端获取数据库中数据展示到前端页面**
 
@@ -310,7 +310,7 @@ def get_user(env):
 </div>
 ```
 
-## 模板语法之jinja2模块
+## （四）模板语法之jinja2模块
 
 ```python
 """模板语法在后端起作用"""
@@ -332,13 +332,13 @@ def get_user(env):
 {% endfor %}
 ```
 
-![image-20221020101009731](E:\MarkDown\markdown\imgs\image-20221020101009731.png)
+![image-20221020101009731](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130122329.png)
 
-![image-20221020104139128](E:\MarkDown\markdown\imgs\image-20221020104139128.png)
+![image-20221020104139128](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213439.png)
 
-## 自定义简易版本web框架请求流程图
+## （五）自定义简易版本web框架请求流程图
 
-![image-20221020104944880](E:\MarkDown\markdown\imgs\image-20221020104944880.png)
+![image-20221020104944880](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213443.png)
 
 ```python
 """
@@ -348,7 +348,7 @@ wsgiref模块
 """
 ```
 
-## Python三大主流web框架
+## （六）Python三大主流web框架
 
 ```python
 """
@@ -384,7 +384,7 @@ C:模板语法
     ABC都是自己写的
 ```
 
-## 注意事项
+## （七）注意事项
 
 ```python
 # 让计算机能够正常启动django项目
@@ -405,7 +405,7 @@ pip install django==4.0
 	终端中输入django-admin看看有没有反应
 ```
 
-## django基本操作
+## （八）django基本操作
 
 ### 1、**命令行操作**
 
@@ -431,7 +431,7 @@ django-admin startproject 项目名
 manage.py:是Django⽤于管理本项⽬的命令⾏⼯具，之后进⾏站点运⾏，数据库⾃动⽣成等都是通过本⽂件完成。
 ```
 
-![image-20221105205022192](E:/MarkDown/markdown/imgs/image-20221105205022192.png)
+![image-20221105205022192](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213453.png)
 
 ---
 
@@ -469,9 +469,9 @@ ALLOWED_HOSTS = ['*']
 
 可以看到自己的网站,就表示运行启动成功！
 
-![image-20221021095003878](E:\MarkDown\markdown\imgs\image-20221021095003878.png)
+![image-20221021095003878](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213457.png)
 
-![image-20221021094805831](E:\MarkDown\markdown\imgs\image-20221021094805831.png)
+![image-20221021094805831](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213500.png)
 
 ---
 
@@ -483,7 +483,7 @@ ALLOWED_HOSTS = ['*']
 python manage.py startapp app01
 ```
 
-![image-20221021095924761](E:\MarkDown\markdown\imgs\image-20221021095924761.png)
+![image-20221021095924761](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213503.png)
 
 修改项⽬的配置⽂件setting.py
 
@@ -515,9 +515,9 @@ INSTALLED_APPS = [
 file---new project  ,选择左侧第二个Django即可
 ```
 
-![image-20221021101334625](E:\MarkDown\markdown\imgs\image-20221021101334625.png)
+![image-20221021101334625](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213506.png)
 
-![image-20221021101652876](E:\MarkDown\markdown\imgs\image-20221021101652876.png)
+![image-20221021101652876](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213509.png)
 
 ##### 2. 2.==启动django项目==
 
@@ -531,11 +531,11 @@ file---new project  ,选择左侧第二个Django即可
 
 
 
-![image-20221021102142570](E:\MarkDown\markdown\imgs\image-20221021102142570.png)
+![image-20221021102142570](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213513.png)
 
 **如下图所示**：**启动成功**
 
-![image-20221021102225879](E:\MarkDown\markdown\imgs\image-20221021102225879.png)
+![image-20221021102225879](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213516.png)
 
 ---
 
@@ -551,15 +551,15 @@ file---new project  ,选择左侧第二个Django即可
 
 ---
 
-![image-20221021102406290](E:\MarkDown\markdown\imgs\image-20221021102406290.png)
+![image-20221021102406290](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213518.png)
 
 - 有自动提示功能
 
-![image-20221021102504743](E:\MarkDown\markdown\imgs\image-20221021102504743.png)
+![image-20221021102504743](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213521.png)
 
 **如下图所示：应用创建成功**
 
-![image-20221021102553348](E:\MarkDown\markdown\imgs\image-20221021102553348.png)
+![image-20221021102553348](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213524.png)
 
 ---
 
@@ -567,13 +567,13 @@ file---new project  ,选择左侧第二个Django即可
 
 
 
-![image-20221021102801948](E:\MarkDown\markdown\imgs\image-20221021102801948.png)
+![image-20221021102801948](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213526.png)
 
-![image-20221021102835863](E:\MarkDown\markdown\imgs\image-20221021102835863.png)
+![image-20221021102835863](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213528.png)
 
 **如下图所示：端口修改成功！**
 
-![image-20221021102901754](E:\MarkDown\markdown\imgs\image-20221021102901754.png)
+![image-20221021102901754](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213531.png)
 
 ### 3、应用
 
@@ -610,9 +610,9 @@ ps:在用pycharm创建项目的时候，pycharm可以帮你创建一个app并自
 
 ```
 
-![image-20221028172420141](E:\MarkDown\markdown\imgs\image-20221028172420141.png)
+![image-20221028172420141](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213534.png)
 
-![image-20221021104644697](E:\MarkDown\markdown\imgs\image-20221021104644697.png)
+![image-20221021104644697](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213536.png)
 
 ### 4、主要文件介绍
 
@@ -760,7 +760,7 @@ TEMPLATES = [
 
 
 
-## django小白必会三板斧
+## （九）django小白必会三板斧
 
 ```python
 """
@@ -807,7 +807,7 @@ def ab_render(request):
     return render(request,'ab_render.html',locals())
 ```
 
-##   静态文件配置
+##   （十）静态文件配置
 
 ### **引入**
 
@@ -844,13 +844,13 @@ def ab_render(request):
 """   
 ```
 
-![image-20221021173936220](E:\MarkDown\markdown\imgs\image-20221021173936220.png)
+![image-20221021173936220](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213546.png)
 
-![image-20221021174520951](E:\MarkDown\markdown\imgs\image-20221021174520951.png)
+![image-20221021174520951](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213548.png)
 
 * 引入了bootstrap的js文件和css文件，但是浏览器访问的时候并没有显示该有的样式，需**要开设该资源的接口**
 
-![image-20221021174448402](E:\MarkDown\markdown\imgs\image-20221021174448402.png)
+![image-20221021174448402](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213557.png)
 
 ```python
 **************************************************************************************
@@ -863,9 +863,9 @@ def ab_render(request):
 **************************************************************************************
 ```
 
-![image-20221021181046077](E:\MarkDown\markdown\imgs\image-20221021181046077.png)
+![image-20221021181046077](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213600.png)
 
-![](E:\MarkDown\markdown\imgs\image-20221021181009410.png)
+![](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213603.png)
 
 ### ==**静态文件配置**==
 
@@ -939,11 +939,11 @@ MIDDLEWARE = [
 
 
 
-## pycharm链接数据库（MySQL）
+## （十一）pycharm链接数据库（MySQL）
 
 pycharm可以充当很多数据库的客户端
 
-![image-20221022100125505](E:\MarkDown\markdown\imgs\image-20221022100125505.png)
+![image-20221022100125505](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213606.png)
 
 
 
@@ -951,7 +951,7 @@ pycharm可以充当很多数据库的客户端
 
 
 
-![image-20221022100404882](E:\MarkDown\markdown\imgs\image-20221022100404882.png)
+![image-20221022100404882](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213613.png)
 
 
 
@@ -959,9 +959,9 @@ pycharm可以充当很多数据库的客户端
 
 
 
-![image-20221022102748371](E:\MarkDown\markdown\imgs\image-20221022102748371.png)
+![image-20221022102748371](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213616.png)
 
-![image-20221022103600831](E:\MarkDown\markdown\imgs\image-20221022103600831.png)
+![image-20221022103600831](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213619.png)
 
 ​      
 
@@ -969,7 +969,7 @@ pycharm可以充当很多数据库的客户端
 
 
 
-![image-20221022103653311](E:\MarkDown\markdown\imgs\image-20221022103653311.png)
+![image-20221022103653311](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213621.png)
 
 
 
@@ -977,19 +977,19 @@ pycharm可以充当很多数据库的客户端
 
 
 
-![image-20221022103754208](E:\MarkDown\markdown\imgs\image-20221022103754208.png)
+![image-20221022103754208](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213624.png)
 
-![image-20221022103805763](E:\MarkDown\markdown\imgs\image-20221022103805763.png)
+![image-20221022103805763](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213627.png)
 
 **通过pycharm修改数据，然后submit提交同步到数据库**
 
-![image-20221022104045078](E:\MarkDown\markdown\imgs\image-20221022104045078.png)
+![image-20221022104045078](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213630.png)
 
 **回到Navicat，刷新一下，数据就有了**
 
-![image-20221022104129877](E:\MarkDown\markdown\imgs\image-20221022104129877.png)
+![image-20221022104129877](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213633.png)
 
-## Django链接MySQL
+## （十二）Django链接MySQL
 
 django不能创建库，需要自己手动创建，并指定
 
@@ -1028,9 +1028,9 @@ DATABASES = {
 	pymysql.install_as_MySQLdb()
 ```
 
-![image-20221022105927612](E:\MarkDown\markdown\imgs\image-20221022105927612.png)
+![image-20221022105927612](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213637.png)
 
-## ==Django ORM==
+## ==（十三）Django ORM==
 
 ==orm不会创建库，只能创建到表的层面。需要自己手动敲命令创建库==
 
@@ -1110,28 +1110,28 @@ class Author(models.Model):
 
 
 
-![image-20221022111412105](E:\MarkDown\markdown\imgs\image-20221022111412105.png)
+![image-20221022111412105](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213640.png)
 
 应用文件夹下的==migrations文件夹==下多了一个==0001._initial.py==日志文件
 
-![image-20221022111604561](E:\MarkDown\markdown\imgs\image-20221022111604561.png)
+![image-20221022111604561](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213643.png)
 
 ```python
  python manage.py migrate  #⽣成数据库表 
 #将操作真正同步到数据库中
 ```
 
-![image-20221022112226431](E:\MarkDown\markdown\imgs\image-20221022112226431.png)
+![image-20221022112226431](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213649.png)
 
 **数据库迁移的两条命令输入完成后，此时数据库中会出现很多张表**
 
 
 
-![image-20221022115814598](E:\MarkDown\markdown\imgs\image-20221022115814598.png)
+![image-20221022115814598](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213653.png)
 
 **一个Djanog项目可以有多个应用，那么多个应用之间可能会出现表名冲突的情况，那么加上前缀就可以完全避免冲突**    
 
-![image-20221022120128278](E:\MarkDown\markdown\imgs\image-20221022120128278.png)
+![image-20221022120128278](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213656.png)
 
 ```python
 """
@@ -1156,7 +1156,7 @@ class Author(models.Model):
 
 **终端内直接给默认值操作如下图**
 
-![image-20221022124444920](E:\MarkDown\markdown\imgs\image-20221022124444920.png)
+![image-20221022124444920](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213659.png)
 
 ==切记==，**只要动了数据库相关的代码就必须执行数据库迁移的两条命令**
 
@@ -1173,7 +1173,7 @@ python manage.py migrate
 """直接修改代码然后执行数据库迁移的两条命令即可"""
 ```
 
-![image-20221022125639587](E:\MarkDown\markdown\imgs\image-20221022125639587.png)
+![image-20221022125639587](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213703.png)
 
 ##### 2. 3、字段的删除
 
@@ -1599,9 +1599,9 @@ ForeignKey与OneToOneField会自动在字段后面加_id后缀
 
 
 
-## Django请求周期流程图（重要）
+## （十四）Django请求周期流程图（重要）
 
-![image-20221023130145467](E:\MarkDown\markdown\imgs\image-20221023130145467.png)
+![image-20221023130145467](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213717.png)
 
 
 
@@ -1614,7 +1614,7 @@ ForeignKey与OneToOneField会自动在字段后面加_id后缀
 """
 ```
 
-## ==路由层==
+## ==（十五）路由层==
 
 当⽤户在您的Web应⽤程序上发出⻚⾯请求时，Django会获取url中请求路径（端 ⼝之后的部分），然后通过urls.py⽂件查找与路径相匹配的视图，然后返回HTML 响应或404未找到的错误（如果未找到）。在urls.py中，最重要的是 **`urlpatterns` 列表。这是您定义URL和视图之间映射的地⽅。映射是URL模式中的path对象**
 
@@ -1689,7 +1689,7 @@ def change(request, name):
 
 效果图:
 
-![image-20221105214456492](E:/MarkDown/markdown/imgs/image-20221105214456492.png)
+![image-20221105214456492](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213721.png)
 
 * **int**
 
@@ -1710,7 +1710,7 @@ def show(request, age):
 
 效果图：
 
-![image-20221105210631000](E:/MarkDown/markdown/imgs/image-20221105210631000.png)
+![image-20221105210631000](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213724.png)
 
 
 
@@ -1728,7 +1728,7 @@ def list(request,name):
 
 效果如图：
 
-![image-20221105211639543](E:/MarkDown/markdown/imgs/image-20221105211639543.png)
+![image-20221105211639543](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213727.png)
 
 * **path**
 
@@ -1749,13 +1749,13 @@ def access(request, path):
 
 
 
-![image-20221105212419964](E:/MarkDown/markdown/imgs/image-20221105212419964.png)
+![image-20221105212419964](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213734.png)
 
 ---
 
 Django检查url模式之前会移除模式前的`/`，所以url模式前⾯的`/`可以不写，但如果 在地址栏⾥请求的时候不带尾斜杠，则会引起重定向，重定向到带尾斜杠的地址， 所以请求的时候要带尾斜杠。
 
-![image-20221023134245558](E:\MarkDown\markdown\imgs\image-20221023134245558.png)
+![image-20221023134245558](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213737.png)
 
 **django路由匹配 的时候其实可以匹配两次，第一次如果url后面没有加斜杠，django会让浏览器加斜杠在发送一次请求**
 
@@ -1766,7 +1766,7 @@ APPEND_SLASH = False# 取消自动加斜杠，默认是True
 """取消了自动加斜杠后，再次访问浏览器就会报错"""
 ```
 
-![image-20221023134109323](E:\MarkDown\markdown\imgs\image-20221023134109323.png)
+![image-20221023134109323](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213743.png)
 
 ---
 
@@ -2052,7 +2052,7 @@ urlpatterns = [
 """
 ```
 
-## 虚拟环境
+## （十六）虚拟环境
 
 ```python
 """
@@ -2082,7 +2082,7 @@ urlpatterns = [
 . /: 在哪个文件生成requirements.txt 文件
 ```
 
-## Django版本区别
+## （十七）Django版本区别
 
 ```python
 """
@@ -2119,7 +2119,7 @@ models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)
 """
 ```
 
-## ==视图层==
+## ==（十八）视图层==
 
 视图响应的过程：
 
@@ -2338,7 +2338,7 @@ def access(request, path):
     return HttpResponse(path)
 
 ```
-![在这里插入图片描述](E:/MarkDown/markdown/imgs/4a4702a214cd46e3a904897c1fccb1f8.png)
+![在这里插入图片描述](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213803.png)
 
 ```python
 def login(request):
@@ -2406,7 +2406,7 @@ MIDDLEWARE = [
 
 
 
-![image-20221107224043800](E:/MarkDown/markdown/imgs/image-20221107224043800.png)
+![image-20221107224043800](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213809.png)
 
 ### 6、FBV与CBV
 
@@ -2440,7 +2440,7 @@ MIDDLEWARE = [
 
 ### 6、CBV源码剖析
 
-## ==模版层==
+## ==（十九）模版层==
 
 ### 1、模板语法传值
 
@@ -2793,11 +2793,11 @@ def left(n):
 (bbs中会使用到)
 ```
 
-![image-20221024224003718](E:\MarkDown\markdown\imgs\image-20221024224003718.png)
+![image-20221024224003718](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213828.png)
 
-![image-20221024224030160](E:\MarkDown\markdown\imgs\image-20221024224030160.png)
+![image-20221024224030160](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213831.png)
 
-![image-20221024224053678](E:\MarkDown\markdown\imgs\image-20221024224053678.png)
+![image-20221024224053678](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213835.png)
 
 ### 5、模板的继承
 
@@ -2818,7 +2818,7 @@ def left(n):
 
 ```
 
-![image-20221025153951035](E:\MarkDown\markdown\imgs\image-20221025153951035.png)
+![image-20221025153951035](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213838.png)
 
 ```python
 #然后子页面可以声明想要修改哪块划定了的区域
@@ -2832,7 +2832,7 @@ def left(n):
 
 
 
-![image-20221025152808944](E:\MarkDown\markdown\imgs\image-20221025152808944.png)
+![image-20221025152808944](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213841.png)
 
 ```python
         
@@ -2845,9 +2845,9 @@ def left(n):
 每一个子页面都可以有自己独有的html代码，css代码，js代码
 ```
 
-![image-20221025153413108](E:\MarkDown\markdown\imgs\image-20221025153413108.png)
+![image-20221025153413108](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213843.png)
 
-![image-20221025153715030](E:\MarkDown\markdown\imgs\image-20221025153715030.png)
+![image-20221025153715030](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213846.png)
 
 * **一般情况下，模板页面上划定的区域越多，那么该模板的扩展性就越高，但是如果太多，就还不如自己写**
 
@@ -2864,11 +2864,11 @@ def left(n):
 {% include 'demo.html' %}"
 ```
 
-![image-20221025155047637](E:\MarkDown\markdown\imgs\image-20221025155047637.png)
+![image-20221025155047637](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213851.png)
 
-![image-20221025155207250](E:\MarkDown\markdown\imgs\image-20221025155207250.png)
+![image-20221025155207250](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213859.png)
 
-## ==模型层==
+## ==（二十）模型层==
 
 
 
@@ -3124,7 +3124,7 @@ exclude
 
 
 
-![image-20221026180126520](E:\MarkDown\markdown\imgs\image-20221026180126520.png)
+![image-20221026180126520](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213918.png)
 
 ### 4、==神奇的双下划线==
 
@@ -3667,13 +3667,13 @@ orm语句的特点：惰性查询，如果仅仅只是书写了orm语句，在�
         print(i.price) #点击only括号外的字段，会重新走数据库查询而all不需要
 ```
 
-![image-20221029164727597](E:\MarkDown\markdown\imgs\image-20221029164727597.png)
+![image-20221029164727597](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213935.png)
 
 
 
 ---
 
-![image-20221029164841977](E:\MarkDown\markdown\imgs\image-20221029164841977.png)
+![image-20221029164841977](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213939.png)
 
 #### **defer**
 
@@ -3691,11 +3691,11 @@ res=models.Book.objects.defer('title')
 
 
 
-![image-20221029164310790](E:\MarkDown\markdown\imgs\image-20221029164310790.png)
+![image-20221029164310790](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213950.png)
 
 ---
 
-![image-20221029164520153](E:\MarkDown\markdown\imgs\image-20221029164520153.png)
+![image-20221029164520153](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130213954.png)
 
 ---
 
@@ -3736,9 +3736,9 @@ res=models.Book.objects.defer('title')
 
 ```
 
-## 图书管理系统搭建
+## （二十一）图书管理系统搭建
 
-## choices参数（数据库字段设计常见）
+## （二十二）choices参数（数据库字段设计常见）
 
 当数据可以被列举完，能够供用户选择的时候，能够考虑用choices参数，好比性别，成绩，学历，婚否等等
 
@@ -3818,7 +3818,7 @@ if __name__ == '__main__':
     main()
 ```
 
-## MTV与MVC模型
+## （二十三）MTV与MVC模型
 
 ```python
 # MTV:django是MTV模型
@@ -3833,7 +3833,7 @@ C:    controler(urls.py)
 
 
 
-## 多对多关系的三种创建方式
+## （二十四）多对多关系的三种创建方式
 
 * ==全自动==
 
@@ -3913,7 +3913,7 @@ class BookToAuthor(models.Model):
     只需要掌握全自动和半自动，半自动扩展性高，一般都采用半自动，
 ```
 
-## ==基于jQuery的Ajax实现（重点）==
+## ==（二十五）基于jQuery的Ajax实现（重点）==
 
 * **异步提交**
 * **局部刷新**
@@ -4147,13 +4147,13 @@ form表单没有办法发送json格式
 
 * **默认的编码格式**
 
-![image-20221102200546457](E:/MarkDown/markdown/imgs/image-20221102200546457.png)
+![image-20221102200546457](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214008.png)
 
 * **数据格式**
 
-![image-20221102201124294](E:/MarkDown/markdown/imgs/image-20221102201124294.png)
+![image-20221102201124294](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214011.png)
 
-![image-20221102201322322](E:/MarkDown/markdown/imgs/image-20221102201322322.png)
+![image-20221102201322322](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214014.png)
 
 
 
@@ -4161,9 +4161,9 @@ form表单没有办法发送json格式
 
 
 
-![image-20221102202334553](E:/MarkDown/markdown/imgs/image-20221102202334553.png)
+![image-20221102202334553](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214017.png)
 
-![image-20221102203015897](E:/MarkDown/markdown/imgs/image-20221102203015897.png)
+![image-20221102203015897](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214020.png)
 
 
 
@@ -4171,11 +4171,11 @@ form表单没有办法发送json格式
 
 
 
-![image-20221102202407309](E:/MarkDown/markdown/imgs/image-20221102202407309.png)
+![image-20221102202407309](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214022.png)
 
-![image-20221102202618109](E:/MarkDown/markdown/imgs/image-20221102202618109.png)
+![image-20221102202618109](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214028.png)
 
-![image-20221102202655337](E:/MarkDown/markdown/imgs/image-20221102202655337.png)
+![image-20221102202655337](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214025.png)
 
 #### 3.2、ajax
 
@@ -4186,7 +4186,7 @@ django后端针对符合urlencoded编码格式的数据会自动的帮你解析�
 	username=zhao&password=123  >>> request.POST
 ```
 
-![image-20221102204855809](E:/MarkDown/markdown/imgs/image-20221102204855809.png)
+![image-20221102204855809](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214043.png)
 
 
 
@@ -4194,7 +4194,7 @@ django后端针对符合urlencoded编码格式的数据会自动的帮你解析�
 
   
 
-![image-20221102203718139](E:/MarkDown/markdown/imgs/image-20221102203718139.png)
+![image-20221102203718139](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214047.png)
 
 
 
@@ -4202,7 +4202,7 @@ django后端针对符合urlencoded编码格式的数据会自动的帮你解析�
 
 
 
-![image-20221102203825877](E:/MarkDown/markdown/imgs/image-20221102203825877.png)
+![image-20221102203825877](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214050.png)
 
 
 
@@ -4210,7 +4210,7 @@ django后端针对符合urlencoded编码格式的数据会自动的帮你解析�
 
 
 
-![image-20221102204038587](E:/MarkDown/markdown/imgs/image-20221102204038587.png)
+![image-20221102204038587](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214052.png)
 
 ### 4、ajax发送json格式数据
 
@@ -4301,9 +4301,9 @@ urlpatterns = [
 
 * **指定编码格式**
 
-![image-20221102205741523](E:/MarkDown/markdown/imgs/image-20221102205741523.png)
+![image-20221102205741523](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214109.png)
 
-![image-20221102205908090](E:/MarkDown/markdown/imgs/image-20221102205908090.png)
+![image-20221102205908090](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214125.png)
 
 * 但是此时要发送的数据并不是json格式,**需要转成json格式**
 * 前端使用`JSON.stringify()`将想要发送的数据转成json格式的数据
@@ -4314,7 +4314,7 @@ data: JSON.stringify({'username': 'zhao', 'age': 19}),
 
 
 
-![image-20221102210141395](E:/MarkDown/markdown/imgs/image-20221102210141395.png)
+![image-20221102210141395](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214120.png)
 
 * 查看json格式数据
 
@@ -4322,21 +4322,21 @@ data: JSON.stringify({'username': 'zhao', 'age': 19}),
 {"username":"zhao","age":19}
 ```
 
-![image-20221102210354092](E:/MarkDown/markdown/imgs/image-20221102210354092.png)
+![image-20221102210354092](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214116.png)
 
 * 在`request.POST`中找不到数据
 
-![image-20221102210714716](E:/MarkDown/markdown/imgs/image-20221102210714716.png)
+![image-20221102210714716](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214141.png)
 
 * 去`request.body`中获取数据，转成`json`格式
 
-![image-20221103171457707](E:/MarkDown/markdown/imgs/image-20221103171457707.png)
+![image-20221103171457707](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214145.png)
 
 ```python
 json.loads() 括号内如果传入了一个二进制数据，那么内部可以 自动解码再反序列化
 ```
 
-![image-20221102213336984](E:/MarkDown/markdown/imgs/image-20221102213336984.png)
+![image-20221102213336984](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214149.png)
 
 ### 5、ajax发送文件数据
 
@@ -4407,7 +4407,7 @@ urlpatterns = [
 ]
 ```
 
-![image-20221102221448232](E:/MarkDown/markdown/imgs/image-20221102221448232.png)
+![image-20221102221448232](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214154.png)
 
 #### **总结：**
 
@@ -4557,9 +4557,9 @@ def delete_user(request):
 
 效果图：
 
-![image-20221104224139637](E:/MarkDown/markdown/imgs/image-20221104224139637.png)
+![image-20221104224139637](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214201.png)
 
-## Django自带的序列化组件(为drf做铺垫)
+## （二十六）Django自带的序列化组件(为drf做铺垫)
 
 (drf：django rest framework)
 
@@ -4590,7 +4590,7 @@ def ab_ser(request):
 
 **前端显示结果：**
 
-![image-20221103175900052](E:/MarkDown/markdown/imgs/image-20221103175900052.png)
+![image-20221103175900052](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214206.png)
 
 ```python
 """
@@ -4662,9 +4662,9 @@ def ab_ser(request):
 #后端开发写接口就是利用序列化组件渲染数据，然后写一个接口文档，
 ```
 
-![image-20221104205336198](E:/MarkDown/markdown/imgs/image-20221104205336198.png)
+![image-20221104205336198](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214210.png)
 
-## 批量插入    bulk_create()
+## （二十七）批量插入    bulk_create()
 
 ```python
 # urls.py
@@ -4732,7 +4732,7 @@ def ab_pl(request):
 """
 ```
 
-## 自定义分页器
+## （二十八）自定义分页器
 
 ### 1、分页推导
 
@@ -4920,7 +4920,7 @@ end_page=current_page * per_page_num
 
 
 
-![image-20221104223106449](E:/MarkDown/markdown/imgs/image-20221104223106449.png)
+![image-20221104223106449](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214222.png)
 
 ### 2、分页器代码封装
 
@@ -5073,9 +5073,9 @@ def page(request):
 
 
 
-![image-20221104223029555](E:/MarkDown/markdown/imgs/image-20221104223029555.png)
+![image-20221104223029555](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214236.png)
 
-## ==校验性组件：froms组件==
+## ==（二十九）校验性组件：froms组件==
 
 ### 1、前戏
 
@@ -5182,7 +5182,7 @@ form_obj.errors
 Out[8]: {'email': ['Enter a valid email address.']}
 ```
 
-![image-20221106210111924](E:/MarkDown/markdown/imgs/image-20221106210111924.png)
+![image-20221106210111924](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214242.png)
 
 ```python
 # 5. 校验数据只校验类中出现的字段，多传不影响，多传的字段直接忽略
@@ -5281,7 +5281,7 @@ urlpatterns = [
 
 **自动生成字段名和Input框**
 
-![image-20221106211541541](E:/MarkDown/markdown/imgs/image-20221106211541541.png)
+![image-20221106211541541](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214249.png)
 
 ```html
 <form action="" method="post">
@@ -5290,7 +5290,7 @@ urlpatterns = [
 </form>
 ```
 
-![image-20221106212046568](E:/MarkDown/markdown/imgs/image-20221106212046568.png)
+![image-20221106212046568](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433.png)
 
 ```html
 <form action="" method="post">
@@ -5299,7 +5299,7 @@ urlpatterns = [
 </form>
 ```
 
-![image-20221106212158865](E:/MarkDown/markdown/imgs/image-20221106212158865.png)
+![image-20221106212158865](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214253.png)
 
 #### 4.3、第二种渲染方式
 
@@ -5308,20 +5308,20 @@ urlpatterns = [
 # form_obj是类对象，而username是类里的属性，
 ```
 
-![image-20221106213211520](E:/MarkDown/markdown/imgs/image-20221106213211520.png)
+![image-20221106213211520](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214256.png)
 
 ```html
  <p>{{ form_obj.username.label }}{{ form_obj.username }}</p>
 ```
 
-![image-20221106212855862](E:/MarkDown/markdown/imgs/image-20221106212855862.png)
+![image-20221106212855862](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214311.png)
 
 ```python
 #可以在类里面修改代码，展示input框前面的注释信息，
 username = forms.CharField(min_length=3, max_length=8,label='用户名')
 ```
 
-![image-20221106212959362](E:/MarkDown/markdown/imgs/image-20221106212959362.png)
+![image-20221106212959362](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214314.png)
 
 ```html
 <form action="" method="post">
@@ -5332,7 +5332,7 @@ username = forms.CharField(min_length=3, max_length=8,label='用户名')
 </form>
 ```
 
-![image-20221106213434732](E:/MarkDown/markdown/imgs/image-20221106213434732.png)
+![image-20221106213434732](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214318.png)
 
 #### 4.4、第三种渲染方式
 
@@ -5347,7 +5347,7 @@ username = forms.CharField(min_length=3, max_length=8,label='用户名')
 
 ```
 
-![image-20221106213615001](E:/MarkDown/markdown/imgs/image-20221106213615001.png)
+![image-20221106213615001](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214322.png)
 
 上图所示,`{{form}}`等价于第二种渲染方式的`{{form_obj.username}}`,那么直接`.label`就可以得到`input`框前面的**注释**,
 
@@ -5363,7 +5363,7 @@ username = forms.CharField(min_length=3, max_length=8,label='用户名')
 </form>
 ```
 
-![image-20221106214118737](E:/MarkDown/markdown/imgs/image-20221106214118737.png)
+![image-20221106214118737](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214325.png)
 
 ### 5、展示错误信息
 
@@ -5425,15 +5425,15 @@ def index(request):
 
 ---
 
-![image-20221107190747441](E:/MarkDown/markdown/imgs/image-20221107190747441.png)
+![image-20221107190747441](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214329.png)
 
 ---
 
-![image-20221107191036994](E:/MarkDown/markdown/imgs/image-20221107191036994.png)
+![image-20221107191036994](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214331.png)
 
 ---
 
-![image-20221107191023281](E:/MarkDown/markdown/imgs/image-20221107191023281.png)
+![image-20221107191023281](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214335.png)
 
 * **如何让浏览器不自动校验**
 
@@ -5441,7 +5441,7 @@ def index(request):
 <form action="" method="post" novalidate>
 ```
 
-![image-20221107191659967](E:/MarkDown/markdown/imgs/image-20221107191659967.png)
+![image-20221107191659967](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214338.png)
 
 ```python
 <form action="" method="post" novalidate>
@@ -5456,15 +5456,15 @@ def index(request):
 </body>
 ```
 
-![image-20221107191923509](E:/MarkDown/markdown/imgs/image-20221107191923509.png)
+![image-20221107191923509](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214341.png)
 
 前端渲染效果展示：就不会再自动生成`ul套li`的格式，而是生成一个`普通文本`
 
-![image-20221107191810415](E:/MarkDown/markdown/imgs/image-20221107191810415.png)
+![image-20221107191810415](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214343.png)
 
 但是又因为再后端做了限制，最大只能8位，所以会出现当输入到8位的时候就出现不能再输入的效果，可以通过打开检查，修改前端代码来达到目的。再次显示出前端校验的若不惊风！！
 
-![image-20221107192646078](E:/MarkDown/markdown/imgs/image-20221107192646078.png)
+![image-20221107192646078](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214346.png)
 
 ```python
 """
@@ -5498,7 +5498,7 @@ class MyForm(forms.Form):
     })
 ```
 
-![image-20221107194237578](E:/MarkDown/markdown/imgs/image-20221107194237578.png)
+![image-20221107194237578](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214353.png)
 
 ### 6、钩子函数(HOOK)
 
@@ -5603,7 +5603,7 @@ def index(request):
     return render(request, 'index.html', locals())
 ```
 
-![image-20221107200041886](E:/MarkDown/markdown/imgs/image-20221107200041886.png)
+![image-20221107200041886](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214403.png)
 
 ### 7、forms组件其他参数
 
@@ -5855,7 +5855,7 @@ def errors(self):
         self._post_clean()
 ```
 
-## ==Cookie与Session==
+## ==（三十）Cookie与Session==
 
 HTTP被设计为”==⽆态==”，也就是俗称“脸盲”。 这⼀次请求和下⼀次请求 之间没有任何状态保持，我们⽆法根据请求的任何⽅⾯(IP地址，⽤户代理等)来识别来自同⼀ 个⼈的连续请求。
 
@@ -5920,7 +5920,7 @@ jwt认证
 #但是客户端可以选择拒绝保存，禁止了之后只要是需要记录用户状态的网站登录功能都无法使用
 ```
 
-![image-20221108194110940](E:/MarkDown/markdown/imgs/image-20221108194110940.png)
+![image-20221108194110940](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214414.png)
 
 ```python
 # 视图函数的返回值
@@ -6104,7 +6104,7 @@ django_session表中的数据条数，是取决于浏览器的
 
 如果没有先执行数据库迁移命令，那么会报(`no such table:django_session`)错误
 
-![image-20221108205236315](E:/MarkDown/markdown/imgs/image-20221108205236315.png)
+![image-20221108205236315](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214427.png)
 
 #### 设置session
 
@@ -6128,7 +6128,7 @@ def set_session(request):
 
 `expire_data`字段是过期时间
 
-![image-20221108205735075](E:/MarkDown/markdown/imgs/image-20221108205735075.png)
+![image-20221108205735075](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-1.png)
 
 
 
@@ -6138,7 +6138,7 @@ session给客户端返回的是一个随机字符串,**随机字符串**指的�
 
 ==django默认的session过期时间是**14**天==，但是也可以修改
 
-![image-20221108211345212](E:/MarkDown/markdown/imgs/image-20221108211345212.png)
+![image-20221108211345212](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-2.png)
 
 #### 获取session
 
@@ -6156,7 +6156,7 @@ def get_session(request):
     return HttpResponse('haha')
 ```
 
-![image-20221108211941911](E:/MarkDown/markdown/imgs/image-20221108211941911.png)
+![image-20221108211941911](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-3.png)
 
 ---
 
@@ -6206,11 +6206,11 @@ def del_session(request):
 
 
 
-![image-20221108220200106](E:/MarkDown/markdown/imgs/image-20221108220200106.png)
+![image-20221108220200106](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-4.png)
 
 
 
-## ==CBV添加装饰器==
+## ==（三十一）CBV添加装饰器==
 
 * 装饰器
 
@@ -6293,7 +6293,7 @@ class MyLogin(View):
     path('mylogin/',views.MyLogin.as_view())   
 ```
 
-## ==Django中间件==
+## ==（三十二）Django中间件==
 
 只要是涉及到全局相关的功能都可以使用中间件方便的完成
 
@@ -6309,9 +6309,9 @@ django中间件是django的门户
 """
 ```
 
-![image-20221109184718273](E:/MarkDown/markdown/imgs/image-20221109184718273.png)
+![image-20221109184718273](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-5.png)
 
-### 默认中间件源码分析
+### 1、默认中间件源码分析
 
 ```python
 
@@ -6368,7 +6368,7 @@ django支持程序员自定义中间件，并且暴露给程序员五个可以�
 """    
 ```
 
-### 自定义中间件
+### 2、自定义中间件
 
 ```python
 """
@@ -6396,11 +6396,11 @@ MIDDLEWARE = [
 
 #### process_request（掌握）
 
-<img src="E:/MarkDown/markdown/imgs/image-20221109191456363.png" alt="image-20221109191456363" style="zoom: 80%;" />
+<img src="https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-6.png" alt="image-20221109191456363" style="zoom: 80%;" />
 
 **启动项目，查看中间件是否生效**
 
-<img src="E:/MarkDown/markdown/imgs/image-20221109191548177.png" alt="image-20221109191548177" style="zoom:80%;" />
+<img src="https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-7.png" alt="image-20221109191548177" style="zoom:80%;" />
 
 
 
@@ -6427,7 +6427,7 @@ def index(request):
 
 启动项目，浏览器输入路由
 
-<img src="E:/MarkDown/markdown/imgs/image-20221109192047022.png" alt="image-20221109192047022" style="zoom:80%;" />
+<img src="https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-8.png" alt="image-20221109192047022" style="zoom:80%;" />
 
 
 
@@ -6435,7 +6435,7 @@ def index(request):
 
 再写一个中间件，并颠倒注册顺序
 
-<img src="E:/MarkDown/markdown/imgs/image-20221109192636506.png" alt="image-20221109192636506" style="zoom:80%;" />
+<img src="https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-9.png" alt="image-20221109192636506" style="zoom:80%;" />
 
 
 
@@ -6443,7 +6443,7 @@ def index(request):
 
 添加返回值
 
-<img src="E:/MarkDown/markdown/imgs/image-20221109194306420.png" alt="image-20221109194306420" style="zoom:80%;" />
+<img src="https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-10.png" alt="image-20221109194306420" style="zoom:80%;" />
 
 ---
 
@@ -6489,13 +6489,13 @@ class MyMiddleWare2(MiddlewareMixin):
 
 浏览器输入路由，回车
 
-![image-20221109195429437](E:/MarkDown/markdown/imgs/image-20221109195429437.png)
+![image-20221109195429437](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-11.png)
 
 返回自己的HttpResponse对象
 
 原本后端是要返回`index`的，走到中间件里面，先经过`MyMiddleWare`，返回`index`,但是经过`MyMiddleWare2`的时候来了一个偷天换日，把原本想要返回的响应换成自己的`hello!`，之后所有的中间件拿到的全是自己写的返回响应的内容
 
-![image-20221109195712980](E:/MarkDown/markdown/imgs/image-20221109195712980.png)
+![image-20221109195712980](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-12.png)
 
 #### 总结：
 
@@ -6512,17 +6512,17 @@ class MyMiddleWare2(MiddlewareMixin):
 
 
 
-![image-20221109201241624](E:/MarkDown/markdown/imgs/image-20221109201241624.png)
+![image-20221109201241624](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-13.png)
 
 ==观察上图得出以下结论==：
 
 ​	首先请求来的时候，会依次经过每一个注册了的中间件里的`process_reques`t方法，一旦`process_request`方法返回了一个`HttpResponse`对象，那么会直接不再往下走，而是直接经过**同级别的`process_response`往外走。**
 
-![image-20221109201546542](E:/MarkDown/markdown/imgs/image-20221109201546542.png)
+![image-20221109201546542](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-14.png)
 
 ---
 
-![image-20221109201702210](E:/MarkDown/markdown/imgs/image-20221109201702210.png)
+![image-20221109201702210](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-15.png)
 
 #### process_view(了解)
 
@@ -6536,7 +6536,7 @@ def process_view(self, request, view_name, *args, **kwargs):
 
 路由匹配成功之后，执行视图函数之前，会自动执行中间件里面的process_view方法,顺序按照配置文件中注册的中间件从上往下的顺序依次执行
 
-![image-20221109203106289](E:/MarkDown/markdown/imgs/image-20221109203106289.png)
+![image-20221109203106289](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-16.png)
 
 #### process_template_response(了解)
 
@@ -6567,7 +6567,7 @@ def index(request):
 
 按照配置文件中注册的中间件从下往上依次经过
 
-![image-20221109204530848](E:/MarkDown/markdown/imgs/image-20221109204530848.png)
+![image-20221109204530848](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-17.png)
 
 #### process_execption(了解)
 
@@ -6581,7 +6581,7 @@ def process_exception(self, request, exception):
 
 顺序是按照配置文件中注册的中间件从下往上依次经过
 
-![image-20221109205002531](E:/MarkDown/markdown/imgs/image-20221109205002531.png)
+![image-20221109205002531](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-18.png)
 
 **全部代码:**
 
@@ -6643,7 +6643,7 @@ class MyMiddleWare2(MiddlewareMixin):
         print('我是第二个自定义中间件里的process_exception')
 ```
 
-## ==csrf跨站请求伪造==
+## ==（三十三）csrf跨站请求伪造==
 
 ### 1、前戏
 
@@ -6751,15 +6751,15 @@ path('transfer/',views.transfer)
 </form>
 ```
 
-![image-20221111105106883](E:/MarkDown/markdown/imgs/image-20221111105106883.png)
+![image-20221111105106883](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-19.png)
 
 再次发送请求
 
-![image-20221111105127536](E:/MarkDown/markdown/imgs/image-20221111105127536.png)
+![image-20221111105127536](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-20.png)
 
 钓鱼网站再次发送请求
 
-![image-20221111105520008](E:/MarkDown/markdown/imgs/image-20221111105520008.png)
+![image-20221111105520008](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-21.png)
 
 #### 2.2、ajax如何符合校验
 
@@ -6870,7 +6870,7 @@ $.ajaxSetup({
 
 将文件配置到静态文件中，在html页面上通过导入该文件即可自动帮我们解决ajax提交post数据时校验csrf_token的问题
 
-![image-20221111112430616](E:/MarkDown/markdown/imgs/image-20221111112430616.png)
+![image-20221111112430616](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-22.png)
 
 ```html
 </head>
@@ -6908,7 +6908,7 @@ $.ajaxSetup({
 
 ### 3、csrf相关装饰器
 
-#### FBV
+#### 3.1、FBV
 
 * 网站整体都校验csrf，就单单几个视图函数不校验
 
@@ -6949,9 +6949,9 @@ def transfer(request):
     return render(request, 'transfer.html')
 ```
 
-![image-20221111141146200](E:/MarkDown/markdown/imgs/image-20221111141146200.png)
+![image-20221111141146200](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-23.png)
 
-#### CBV
+#### 3.2、CBV
 
 ```pytohn
 csrf_protect,需要校验
@@ -7039,7 +7039,7 @@ class MycsrfToken(View):
         return HttpResponse('post')
 ```
 
-## ==基于Django中间件引发的编程思想（重点）==
+## ==（三十四）基于Django中间件引发的编程思想（重点）==
 
 #### **importlib模块使用**
 
@@ -7071,7 +7071,7 @@ print(ret)
 
 ```
 
-![image-20221111151627195](E:/MarkDown/markdown/imgs/image-20221111151627195.png)
+![image-20221111151627195](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-24.png)
 
 email.py
 
@@ -7146,7 +7146,7 @@ import notify
 notify.send_all('国庆不放假')
 ```
 
-## ==auth模块方法使用==
+## ==（三十五）auth模块方法使用==
 
 ### 1、创建超级用户(管理员)
 
@@ -7162,7 +7162,7 @@ django在启动之后就可以直接访问admin路由，需要输入用户名和
 
 先执行数据库迁移命令生成表
 
-![image-20221111182406068](E:/MarkDown/markdown/imgs/image-20221111182406068.png)
+![image-20221111182406068](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-25.png)
 
 
 
@@ -7171,19 +7171,19 @@ django在启动之后就可以直接访问admin路由，需要输入用户名和
 python manage.py createsuperuser
 ```
 
-![image-20221111182908751](E:/MarkDown/markdown/imgs/image-20221111182908751.png)
+![image-20221111182908751](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-26.png)
 
 超级用户创建好之后，auth_user表中发生变化
 
-![image-20221111183118544](E:/MarkDown/markdown/imgs/image-20221111183118544.png)
+![image-20221111183118544](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-27.png)
 
 路由中输入admin，登录管理员用户
 
-![image-20221112154955296](E:/MarkDown/markdown/imgs/image-20221112154955296.png)
+![image-20221112154955296](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-28.png)
 
 登录进入后的界面：
 
-![image-20221112155006201](E:/MarkDown/markdown/imgs/image-20221112155006201.png)
+![image-20221112155006201](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-29.png)
 
 **依赖于auth_user表完成用户以下相关的所有功能：**
 
@@ -7242,7 +7242,7 @@ def login(request):
 
 
 
-![image-20221112163308754](E:/MarkDown/markdown/imgs/image-20221112163308754.png)
+![image-20221112163308754](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-30.png)
 
 ### 3、保存用户状态
 
@@ -7257,9 +7257,9 @@ def login(request):
 
 保存用户状态后，`django_session`表中就多了条数据
 
-![image-20221112205630730](E:/MarkDown/markdown/imgs/image-20221112205630730.png)
+![image-20221112205630730](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-31.png)
 
-![image-20221112205701141](E:/MarkDown/markdown/imgs/image-20221112205701141.png)
+![image-20221112205701141](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-32.png)
 
 ### 4、获取用户对象，校验用户是否登录
 
@@ -7276,11 +7276,11 @@ def home(request):
 
 当删除`django_session`表中的数据，就表示用户没有登录过，再次查看`request.user`拿到什么数据
 
-![image-20221112210105392](E:/MarkDown/markdown/imgs/image-20221112210105392.png)
+![image-20221112210105392](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-33.png)
 
 登陆成功后，返回当前登录的用户对象，返回True
 
-![image-20221112210247146](E:/MarkDown/markdown/imgs/image-20221112210247146.png)
+![image-20221112210247146](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-34.png)
 
 ### 5、验证用户是否登录
 
@@ -7363,7 +7363,7 @@ def set_password(request):
 
 
 
-![image-20221112213746681](E:/MarkDown/markdown/imgs/image-20221112213746681.png)
+![image-20221112213746681](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-35.png)
 
 ### 7、注销
 
@@ -7407,21 +7407,21 @@ def register(request):
     return render(request, 'register.html')
 ```
 
-![image-20221112220654952](E:/MarkDown/markdown/imgs/image-20221112220654952.png)
+![image-20221112220654952](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-36.png)
 
 ```python
 # 创建普通用户
 User.objects.create_user(username=username, password=password)
 ```
 
-![image-20221112221049076](E:/MarkDown/markdown/imgs/image-20221112221049076.png)
+![image-20221112221049076](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-37.png)
 
 ```python
  # 创建超级用户（了解）
         User.objects.create_superuser(username=username,password=password)
 ```
 
-![image-20221112221346397](E:/MarkDown/markdown/imgs/image-20221112221346397.png)
+![image-20221112221346397](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-38.png)
 
 ### 9、方法总结
 
@@ -7505,13 +7505,1261 @@ class UserInfo(AbstractUser):
  
 ```
 
-![image-20221112224513172](E:/MarkDown/markdown/imgs/image-20221112224513172.png)
+![image-20221112224513172](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130214433-39.png)
 
 **如果自己写表替代了`auth_user`，那么auth模块还照常使用，参考的表也由原来的`auth_user`变成了现在的`UserInfo`**
 
 
 
+## （三十六）Web应用模式
+
+**在Web开发中，有两种模式:**
+
+1. **前后端分离**
+
+---
+
+
+
+![5a9c76bb3b243ebb771fe3e606ebc9f7](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130185928.jpg)
+
+```python
+#前后端分离:  只专注于后端，返回json格式数据
+```
+
+
+
+2. **前后端不分离**
+
+---
+
+![b2ab8ef6477b920668424a8071a5b51e](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130185934.jpg)
+
+```python
+# 前后端混合开发(前后端不分离)  返回的是HTML的内容,需要写模板
+
+# 动态页面(查数据库)，静态页面（一个静止的html）
+
+# 页面静态化
+```
+
+## （三十七）API接口
+
+通过网络，规定了前后端信息交互的url连接，也就是前后端信息交互的媒介
+
+## （三十八）Restful规范
+
+```python
+REST全称是Representational State Transfer,中文意思是表述（编者注：通常译为表征性状态转移）。它首次出现在2000年Roy Fielding的博士论文中
+
+RESTFUL是一种定义Web API接口的设计风格，尤其适合前后端分离的应用模式中。
+
+这种风格的理念认为后端开发任务就是提供数据的，对外提供的是数据资源访问的接口，所以在定义接口时，客户端访问的URL路径就表示这种需要操作的数据资源
+
+事实上，我们可以使用任何一种框架都可以实现符合RESTFUL规范的API接口
+```
+
+1.  数据的安全保障 
+
+```python
+url链接一般都采用https协议进行传输，注：采用Https协议，可以提高数据		交互过程中的安全性
+```
+
+2. 接口的特征表现
+
+```python
+     -用api关键字标识接口url:
+            -[https://api.baidu.com](https://api.baidu.com/)
+            -https://www.baidu.com/api
+        注：看到api字段，就代表该请求url链接是完成前后端数据交互的
+```
+
+3. 多版本共存
+
+```python
+-在url链接中标识数据版本
+-https://api.baidu.com/v1
+-https://api.baidu.com/v2
+注:url链接中的v1，v2,就是不同数据版本的提现，(只有在一种数据资源有多版本情况下)
+```
+
+4. ==**数据即资源**==
+
+```python
+接口作为前后端交互的媒介其交互的数据又被叫做资源，推荐使用名词或者名词的复数形式，对于某些特殊接口，我们可以使用动词（api/books api/login）
+    	- 接口一般都是前后端数据的交互，交互的数据称之为资源
+        	- https://api.baidu.com/users
+            - https://api.baidu.com/books
+```
+
+5. ==**资源操作由请求方式决定 **==     (method)
+
+```python
+资源的操作我们直接通过提交的请求方式来决定(get、post、put/patch、delete)
+ - 操作资源一般都涉及到增删改查，以下请求方式来标识增删改查动作
+        https://api.baidu.com/books     -get请求：获取所有书
+        https://api.baidu.com/books/1   -get请求：获取主键为1 的书
+        https://api.baidu.com/books     -post请求: 新增一本书
+        https://api.baidu.com/books/1   -put请求:整体修改主键为1的书
+        https://api.baidu.com/books/1   -patch请求：局部修改主键为1 的书
+        https://api.baidu.com/books/1   -delete请求:删除主键为1 的书
+```
+
+6. 过滤
+
+```python
+我们可以再url上传参的形式传递搜索条件
+    https://api.example.com/v1/people?limit=10  :指定返回记录的数量
+    https://api.example.com/v1/people?offset=10 :指定返回记录的开始位置
+    https://api.example.com/v1/people?page=2&per_page=100 :指定第几页，以及每页的记录数
+    https://api.example.com/v1/people?sortby=name&order=asc:指定返回结果按照哪个属性排序，以及排序顺序
+    https://api.example.com/v1/people?animal_type_id=1 :指定筛选条件
+```
+
+7. 响应状态码
+
+```python
+# 正常响应
+    200(正常请求)、
+    201(创建成功)、
+# 重定向响应
+    301(永久重定向)、
+    302(临时重定向)、
+# 客户端异常
+    403(请求无权限)、
+    404(请求路径不存在)、
+    405(请求方法不存在)、
+# 服务端异常
+	500(服务器异常)、
+
+```
+
+8. 错误处理
+
+```python
+应当返回错误信息   error当作key
+
+{
+    error:'无权限操作'
+}
+```
+
+9. 返回结果
+
+```python
+根据不同的请求以及请求得到的数据， 服务端返回不同的结果
+	GET /collection:返回资源对象的列表（数组）
+    GET /collection/resource:返回单个资源对象
+    POST /collection:返回新生成的资源对象
+    PUT /collection/resource:返回完整的资源对象
+    PATCH /collection/resource:返回完成的资源对象
+    DELETE /collection/resource:返回一个空文档
+    
+```
+
+10. 需要url请求的资源需要访问资源的请求链接
+
+```python
+# Hypermedia API ,RESTFUL API最好做到Hypermedia，即返回结果中提供链接，连向其他API方法，使得用户不查文档，也知道下一步应该做什么
+    {
+        "status":0,
+        "msg":"OK",
+        "results":[
+            {
+                "name":"肯德基",
+                "img":"https://image.baidu.com/ftc/001.png"
+            }
+            ........
+        ]  
+    }  
+```
+
+## （三十九）drf安装和简单使用
+
+### 1、安装
+
+```python 
+#安装
+pip install djangorestframework   
+```
+
+### 2、使用
+
+```python
+1. settings.py中
+    INSTALLED_APPS = [
+        'rest_framework'
+    ]
+2. 在models.py中写表模型
+    class Book(models.Model):
+        nid = models.AutoField(primary_key=True)
+        name = models.CharField(max_length=32)
+        price = models.DecimalField(max_digits=8, decimal_places=2)
+        author = models.CharField(max_length=32)
+        
+3. 新建一个序列化类 (新建一个py文件名字随意)
+	from rest_framework.serializers import ModelSerializer
+    from App.models import Book
+
+
+    class BookModelSerializer(ModelSerializer):
+        class Meta:
+            model = Book
+            fields = '__all__'
+
+4. 视图中写视图类（CBV）
+	from rest_framework.viewsets import ModelViewSet
+    from .models import Book
+    from .ser import BookModelSerializer     #ser指的是第三步中创建的py文件
+
+    class BooksViewSet(ModelViewSet):
+        queryset = Book.objects.all()
+        serializer_class = BookModelSerializer
+
+5. 写路由关系
+    from django.contrib import admin
+    from django.urls import path
+    from rest_framework.routers import DefaultRouter
+    from App import views
+
+    router = DefaultRouter()  # 可以处理视图的路由器
+    router.register('book', views.BooksViewSet)  # 向路由中注册视图集
+
+    # 将路由器中的所有路由信息追溯到django的路由列表中
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+    ]
+    # 两个列表相加
+    urlpatterns += router.urls  # router.urls是一个列表
+
+6. 数据迁移
+	python manage.py makemigrations
+    python manage.py migrate
+7. 启动项目，测试
+```
+
+**启动项目程序**
+
+![image-20221130190040523](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130190042.png)
+
+![image-20221130190128209](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130190129.png)
+
+
+
+![image-20221130190231361](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130190233.png)
+
+
+
+![image-20221130190310415](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130190312.png)
+
+### 3、postman测试
+
+在`postman`中测试，`postman`中最后要加`/`，浏览器会自动重定向，但`postman`不会，所以在`postman`中最后要加`/`
+
+* 查数据
+
+![image-20221130190547021](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130190548.png)
+
+![image-20221130190741110](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130190742.png)
+
+* 删数据
+
+![image-20221130190817949](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130190819.png)
+
+将`2`删除后，就找不到数据
+
+![image-20221130190905553](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130190906.png)
+
+删除`2`数据后，再查看所有数据
+
+![image-20221130190931665](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130190933.png)
+
+* 修改数据
+
+![image-20221130191046558](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130192131.png)
+
+修改完后，再次查询所有
+
+![image-20221130191105815](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130191107.png)
+
+* 增加数据
+
+![image-20221130191218113](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130192133.png)
+
+增加后再次查看所有数据
+
+![image-20221130191237150](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130191238.png)
+
+## （四十）源码分析
+
+### cbv
+
+```python
+ModelViewSet继承与View (djanog原生View)
+```
+
+![image-20221130191945881](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130192132.png)
+
+```python
+path('books/',views.Books.as_view())#在这个地方应该写函数内存地址，views.Books.as_view()执行完，是个函数内存地址,as_view是一个类方法，类直接来调用，会把类自动传入
+放入了一个view的内存地址，（View--》as_view--》内层函数）
+
+class Books(View):
+    # 只能接收get请求
+    http_method_names = ['get']
+    def get(self, request):
+        print(self.request)
+        return HttpResponse('ok')
+    def post(self,request):
+        print(request.POST)
+- 视图类里边必须继承View，，
+- 在类里写get方法，post方法，只要get请求来了，就走get方法， 跟之前fbv写法完全一样。
+- 路由:views.Books.as_view()-------->放入了一个view的内存地址，
+- 请求一旦来了，路由匹配上----》view(request)---》self.dispatch(request,*args, **kwargs)
+-dispatch---》把请求方法转成小写，----》通过反射，去对象中找，没有get方法，有就加括号执行，并且把request传进去
+
+
+"""源码分析"""
+
+#请求来了，如果路径匹配，会执行，函数内存地址（request)
+def view(request, *args, **kwargs):
+    #request是当次请求的request
+    self = cls(**initkwargs)
+    self.setup(request, *args, **kwargs)
+    if not hasattr(self, 'request'): #实例化得到一个对象 Book对象
+        raise AttributeError(
+            "%s instance has no 'request' attribute. Did you override "
+            "setup() and forget to call super()?" % cls.__name__
+        )
+        return self.dispatch(request, *args, **kwargs)
+    
+    
+    
+    
+def dispatch(self, request, *args, **kwargs):
+    #request就是当次请求的request  selef是Book对象
+    if request.method.lower() in self.http_method_names:
+        #handle是自己写的Book类的get方法的内存地址
+        handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+    else:
+        handler = self.http_method_not_allowed
+        return handler(request, *args, **kwargs) #执行get(request)   
+```
+
+
+
+### APIView源码分析(drf提供，扩展了View功能)
+
+```python
+- 视图类里边必须继承APIView，，
+- 在类里写get方法，post方法，只要get请求来了，就走get方法， 跟之前fbv写法完全一样。
+- 路由:views.Books.as_view()-------->放入了一个view的内存地址，处理了csrf，所有请求都没有csrf校验了
+- 请求一旦来了，路由匹配上----》view(request)---》self.dispatch(request,*args, **kwargs)，现在这个dispatch不是View中的dispatch,而是APIView中的dispatch
+-dispatch---》把请求方法转成小写，----》通过反射，去对象中找，没有get方法，有就加括号执行，并且把request传进去
 
 
 
 
+
+
+#urls.py
+path('booksapiview/', views.BooksAPIView.as_view()),在这个地方应该写函数内存地址
+
+#views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.request import Request
+
+class BooksAPIView(APIView):
+    def get(self, request):
+        #request已经不是原生的django的request了，是drf自己定义的request对象
+        print(self.request)
+        return HttpResponse('ok')
+    
+"""源码分析"""
+
+#APIView的as_view方法（类的绑定方法）
+@classmethod
+def as_view(cls, **initkwargs):
+    view = super().as_view(**initkwargs)#调用父类（View）的as_view方法，
+    view.cls = cls
+    view.initkwargs = initkwargs
+    #以后所有的请求都没有csrf认证了，只要继承了APIV i额外，就没有csrf认证了
+    return csrf_exempt(view)
+
+#请求来了，路由匹配上，会执行view(request),调用了self.dispatch(),会执行apiview的self.dispatch()
+
+#APIView的dispatch方法
+ def dispatch(self, request, *args, **kwargs):
+
+        self.args = args
+        self.kwargs = kwargs
+        #请求模块（解析模块）
+        # self.initialize_request(request, *args, **kwargs)   这里的request是当次请求的request
+        #request= self.initialize_request  这里的request是一个新的request对象
+        #重新包装成一个request对象，以后再用的request对象，就是新的request对象
+        request = self.initialize_request(request, *args, **kwargs)
+        self.request = request
+        self.headers = self.default_response_headers  # deprecate?
+
+        try:
+            #三大认证模块
+            self.initial(request, *args, **kwargs)
+
+            # Get the appropriate handler method
+            if request.method.lower() in self.http_method_names:
+                handler = getattr(self, request.method.lower(),
+                                  self.http_method_not_allowed)
+            else:
+                handler = self.http_method_not_allowed
+			#响应模块
+            response = handler(request, *args, **kwargs)
+
+        except Exception as exc:
+            #异常模块
+            response = self.handle_exception(exc)
+		#渲染模块
+        self.response = self.finalize_response(request, response, *args, **kwargs)
+        return self.response
+
+    
+#APIView的initial方法源码分析
+    def initial(self, request, *args, **kwargs):
+       	#认证组件:校验用户，游客，合法用户，非法用户
+        #游客:代表校验通过，直接进入下一步校验（权限校验）
+        #合法用户:代表校验通过，将用户存储在request.user中，再进入下一步校验（权限校验）
+        #非法用户:代表校验失败，抛出异常，返回403权限异常结果
+        self.perform_authentication(request)
+        #权限组件:校验用户权限-必须登录，所有用户、登录读写游客只读，自定义用户角色
+        #认证通过:可以进入下一步校验(频率认证)
+        #认证失败:抛出异常，返回403权限异常结果
+        self.check_permissions(request)
+        #频率权限:限制视图接口被访问的频率次数-限制的条件(IP,id,唯一键)、频率周期时间(s、m、h)、频率次数(3/s)
+        #没有达到限次:正常访问接口
+        #达到限次:限制时间内不能访问，限制时间达到后，可以重新访问
+        self.check_throttles(request)
+```
+
+### 补充：
+
+**一切皆对象**
+
+```python
+def foo(a, b):
+    return a + b
+
+foo.name = 'zhao'
+
+print(foo(1, 3))
+print(foo.name)
+```
+
+局部禁用csrf
+
+```python 
+#视图函数中加装饰器@csrf_exempt
+
+#csrf_exempt(view)和在视图函数上加装饰器是一摸一样的
+```
+
+```python
+from django.views.decorators.csrf import csrf_exempt
+
+urlpatterns = [
+    path('test/',csrf_exempt(views.test))#也是禁用csrf认证
+]
+```
+
+### drf的Request类
+
+```python
+from rest_framework.request import Request
+#只要继承了APIView,视图中的request对象，都是新的，也就是上面这个request的对象，
+
+#老的request在新的request._request里
+
+#以后使用request对象，就像使用之前的request是一摸一样的（因为重写了__getattr__方法）
+
+ def __getattr__(self, attr):
+        try:
+            return getattr(self._request, attr) #通过反射，取原生的request对象，取出属性和方法
+        except AttributeError:
+            return self.__getattribute__(attr)
+        
+        
+#request.data 感觉是数据属性，其实是个方法，@property修饰了
+它是一个字段，post请求不管使用社么编码，传过来的数据，都在request.data中
+
+
+
+#get请求传过来的数据，从哪取?
+	request.GET
+ 
+
+"""源码分析"""
+******************************************
+    @property
+    def query_params(self):
+        """
+        More semantically correct name for request.GET.
+        """
+        return self._request.GET
+******************************************    
+	
+    #views.py
+    class BooksAPIView(APIView):
+    def get(self, request):
+        print(self.request)
+        print(request.query_params)#get请求,地址中的参数
+		#原来获取get请求，用的是request.GET
+        print(request.GET)
+
+        return HttpResponse('ok')
+
+#文件 FILES
+"""源码分析"""
+****************************************** 
+    @property
+    def FILES(self):
+        # Leave this one alone for backwards compat with Django's request.FILES
+        # Different from the other two cases, which are not valid property
+        # names on the WSGIRequest class.
+        if not _hasattr(self, '_files'):
+            self._load_data_and_files()
+        return self._files
+****************************************** 
+```
+
+## （四十一）序列化器-Serializer
+
+**作用**:
+
+1. 序列化，序列化器会把模型对象转换成字典，经过response以后变成json字符串
+2. 反序列化，把客户端发送过来的数据，经过request以后变成字典，序列化器可以把字典转成模型
+3. 反序列化，完成数据校验功能
+
+```python
+#先在models.py中写创建表
+from django.db import models
+
+class Book(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=32)
+    price = models.DecimalField(max_digits=8, decimal_places=3)
+    author = models.CharField(max_length=32)
+    publish = models.CharField(max_length=32)
+```
+
+### 1、序列化器使用
+
+```python
+写一个序列化类，继承Serializer
+在类中写要序列化的字段，想要序列化哪个字段，就在类中写哪个字段
+在视图类中使用，导入自己写的序列化类（ser.py）---》实例化得到序列化类的对象，把要序列化的对象传入
+序列化类的对象.data  是一个字典
+把字典返回，如果不使用rest_framework提供的Resposne，就得使用JsonResponse
+```
+
+
+
+```python
+# 自己创建的ser.py文件中写序列化类
+
+from rest_framework import serializers
+
+# 需要继承Serializer
+class BookSeralizer(serializers.Serializer):
+    #想要序列化哪个字段，就在类中写哪个字段
+    id = serializers.CharField()
+    name = serializers.CharField()
+    price = serializers.CharField()
+    author = serializers.CharField()
+    publish = serializers.CharField()
+```
+
+```python
+#urls.py
+
+re_path('books/(?P<pk>\d+)', views.BookView.as_view())
+```
+
+
+
+```python
+#views.py
+from rest_framework.views import APIView
+from App.models import Book
+from App.ser import BookSeralizer
+from rest_framework.response import Response  # drf提供的响应对象
+
+class BookView(APIView):
+    def get(self, request, pk):
+        book_obj = Book.objects.filter(pk=pk).first()
+        # 序列化谁，就把谁传过来
+        book_ser = BookSeralizer(book_obj)  # 调用类的__init__方法
+        # 序列化对象.data就是序列化后的字典
+        return Response(book_ser.data)
+```
+
+![image-20221202161136295](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202161137.png)
+
+![image-20221202161300266](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202161313.png)
+
+如果使用`JsonResponse`返回数据，效果如下:
+
+**如果使用`JsonResponse`返回数据，就不需要在`settings.py`中注册`rest_framework`了**
+
+![image-20221202161048599](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202161050.png)
+
+
+
+**注意**：
+
+如果碰到下面的报错，需要把`rest_framework`在settings.py中的app中注册
+
+![image-20221202155024033](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202155026.png)
+
+![image-20221202155145795](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202155147.png)
+
+### 2、序列化类的字段类型
+
+```python
+有很多，
+只需记住 CharField IntegerField，DateField......
+```
+
+**字段类型**:
+
+![20210405180619734](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202162323.png)
+
+![20210405180655435](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202162305.png)
+
+**选项参数:**
+
+![20210405180757635](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202162432.png)
+
+**通用参数**:
+
+![20210405180910624](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202162502.png)
+
+### 3、序列化组件修改数据
+
+```python
+1.写一个序列化类，继承Serializer
+2.在类中写要反序列化的字段，想要反序列化哪个字段，就在类中写哪个字段,字段的属性(max_length.....)
+3.在视图类中使用，导入---》实例化得到序列化类的对象，把要修改的数据传入         
+		book_ser = BookSeralizer(book_obj, request.data)
+    	book_ser = BookSeralizer(instance=book_obj, data=request.data)
+```
+
+
+
+```python
+#自己创建的ser.py文件
+
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
+
+# 需要继承Serializer
+class BookSeralizer(serializers.Serializer):
+    name = serializers.CharField(max_length=16, min_length=4)
+    price = serializers.CharField()
+    author = serializers.CharField()
+    publish = serializers.CharField()
+
+    def update(self, instance, validated_data):
+        # instance是Book这个对象
+        # validated_data是校验后的数据
+        instance.name = validated_data.get('name')
+        instance.price = validated_data.get('price')
+        instance.author = validated_data.get("author")
+        instance.publish = validated_data.get('publish')
+        instance.save()  # book.save() 是django 的orm提供的
+        return instance
+```
+
+
+
+```python
+#urls.py
+re_path('books/(?P<pk>\d+)', views.BookView.as_view())
+
+
+#views.py
+from rest_framework.views import APIView
+from App.models import Book
+from App.ser import BookSeralizer
+from rest_framework.response import Response  # drf提供的响应对象
+
+class BookView(APIView):
+    def put(self, request, pk):
+        response_msg = {'code': 100, 'msg': ''}
+        # 找到要改的对象
+        book_obj = Book.objects.filter(pk=pk).first()
+        # 得到序列化类的对象
+        # book_ser = BookSeralizer(book_obj, request.data)
+        book_ser = BookSeralizer(instance=book_obj, data=request.data)
+        # 要验证（和forms组件校验一样）
+        if book_ser.is_valid():  # 表示验证通过
+            book_ser.save()
+            response_msg['msg'] = '数据校验成功'
+            response_msg['data'] = book_ser.data
+
+        else:
+            response_msg['code'] = 101
+            response_msg['msg'] = '数据校验失败'
+            response_msg['data'] = book_ser.errors
+        return Response(response_msg)
+```
+
+
+
+### 4、序列化组件校验数据
+
+```python
+1.写一个序列化类，继承Serializer
+2.在类中写要反序列化的字段，想要反序列化哪个字段，就在类中写哪个字段,字段的属性(max_length.....)
+3.在视图类中使用，导入---》实例化得到序列化类的对象，把要修改的数据传入         
+		book_ser = BookSeralizer(book_obj, request.data)
+    	book_ser = BookSeralizer(instance=book_obj, data=request.data)
+
+4.数据校验 if book_ser.is_valid()
+5.如果校验通过就保存，book_ser.save() 序列化对象.save()
+6.如果不通过，逻辑自己写
+7.如果字段的校验规则不够，可以写钩子函数（局部和全局）
+	# 局部钩子
+	def validate_price(self, data):  # validate_字段名，接受一个参数
+        # print(type(data))
+        # print(data)
+        if float(data) < 10:
+            # 校验失败，抛异常
+            raise ValidationError('价格太低')
+        return data
+    #全局钩子
+    
+8. 可以使用字段的validators来校验
+		author = serializers.CharField(validators=[check_author])， 来校验
+        -写一个函数
+        def check_author(data):
+            if data.startswith('sb'):
+                raise ValidationError('作者名不能以sb开头')
+        -配置:author =validators=[check_author]
+
+```
+
+```python
+re_path('books/(?P<pk>\d+)', views.BookView.as_view())
+```
+
+**第一种局部（全局）钩子校验:**
+
+```python
+#自己创建的ser.py文件
+
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
+
+# 需要继承Serializer
+class BookSeralizer(serializers.Serializer):
+    name = serializers.CharField(max_length=16, min_length=4)
+    price = serializers.CharField()
+    author = serializers.CharField()
+    publish = serializers.CharField()
+
+    # 局部钩子
+    def validate_price(self, data):  # validate_字段名，接受一个参数
+        # print(type(data))
+        # print(data)
+         # 如果价格小于10，校验不通过
+        if float(data) < 10:
+            # 校验失败，抛异常
+            raise ValidationError('价格太低')
+        return data
+    
+	 # 全局钩子
+    def validate(self, validated_data): 
+        author = validated_data.get("author")
+        publish = validated_data.get("publish")
+        if author == publish:
+            raise ValidationError("作者跟出版社一样")
+            return validated_data
+
+
+    def update(self, instance, validated_data):
+        # instance是Book这个对象
+        # validated_data是校验后的数据
+        instance.name = validated_data.get('name')
+        instance.price = validated_data.get('price')
+        instance.author = validated_data.get("author")
+        instance.publish = validated_data.get('publish')
+        instance.save()  # book.save() 是django 的orm提供的
+        return instance
+```
+
+**第二种 自己逻辑上的校验:**
+
+```python
+#views.py
+
+from rest_framework.views import APIView
+from App.models import Book
+from App.ser import BookSeralizer
+from rest_framework.response import Response  # drf提供的响应对象
+
+class BookView(APIView):
+    def put(self, request, pk):
+        response_msg = {'code': 100, 'msg': ''}
+        # 找到要改的对象
+        book_obj = Book.objects.filter(pk=pk).first()
+        # 得到序列化类的对象
+        # book_ser = BookSeralizer(book_obj, request.data)
+        book_ser = BookSeralizer(instance=book_obj, data=request.data)
+        # 要验证（和forms组件校验一样）
+        if book_ser.is_valid():  # 表示验证通过
+            book_ser.save()
+            response_msg['msg'] = '数据校验成功'
+            response_msg['data'] = book_ser.data
+
+        else:
+            response_msg['code'] = 101
+            response_msg['msg'] = '数据校验失败'
+            response_msg['data'] = book_ser.errors
+        return Response(response_msg)
+```
+
+![image-20221202172556039](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202172557.png)
+
+**第三种校验方法：**
+
+```python
+def check_author(data):
+    if data.startswith('sb'):
+        raise ValidationError('作者名不能以sb开头')
+
+
+# 需要继承Serializer
+class BookSeralizer(serializers.Serializer):
+    name = serializers.CharField(max_length=16, min_length=4)
+    price = serializers.CharField()
+    author = serializers.CharField(validators=[check_author])  # validators=[]，列表中写函数内存地址
+    publish = serializers.CharField()
+```
+
+![image-20221202182256623](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202182258.png)
+
+**全部代码：**
+
+* 1 表模型类
+
+```python
+#models.py
+
+from django.db import models
+
+class Book(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=32)
+    price = models.DecimalField(max_digits=8, decimal_places=3)
+    author = models.CharField(max_length=32)
+    publish = models.CharField(max_length=32)
+```
+
+* 2  序列化类
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/2 15:29
+
+#ser.py
+
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
+
+def check_author(data):
+    if data.startswith('sb'):
+        raise ValidationError('作者名不能以sb开头')
+
+
+# 需要继承Serializer
+class BookSeralizer(serializers.Serializer):
+    name = serializers.CharField(max_length=16, min_length=4)
+    price = serializers.CharField()
+    author = serializers.CharField(validators=[check_author])  # validators=[]，列表中写函数内存地址
+    publish = serializers.CharField()
+
+    # 局部钩子
+    def validate_price(self, data):  # validate_字段名，接受一个参数
+        # print(type(data))
+        # print(data)
+
+        # 如果价格小于10，校验不通过
+        if float(data) < 10:
+            # 校验失败，抛异常
+            raise ValidationError('价格太低')
+        return data
+
+    def validate(self, validated_data):  # 全局钩子
+        author = validated_data.get("author")
+        publish = validated_data.get("publish")
+        if author == publish:
+            raise ValidationError("作者跟出版社一样")
+        return validated_data
+
+    def update(self, instance, validated_data):
+        # instance是Book这个对象
+        # validated_data是校验后的数据
+        instance.name = validated_data.get('name')
+        instance.price = validated_data.get('price')
+        instance.author = validated_data.get("author")
+        instance.publish = validated_data.get('publish')
+        instance.save()  # book.save() 是django 的orm提供的
+        return instance
+```
+
+* 3 路由配置
+
+```python
+#urls.py
+
+from django.contrib import admin
+from django.urls import path, re_path
+from App import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    re_path('books/(?P<pk>\d+)', views.BookView.as_view())
+]
+```
+
+* 4 书写视图类
+
+```python
+#views.py
+
+from django.shortcuts import render
+from rest_framework.views import APIView
+from App.models import Book
+from App.ser import BookSeralizer
+from rest_framework.response import Response  # drf提供的响应对象
+from django.http import JsonResponse
+
+
+class BookView(APIView):
+    def get(self, request, pk):
+        book_obj = Book.objects.filter(pk=pk).first()
+        # 序列化谁，就把谁传过来
+        book_ser = BookSeralizer(book_obj)  # 调用类的__init__方法
+        # 序列化对象.data就是序列化后的字典
+        return Response(book_ser.data)
+        # return JsonResponse(book_ser.data)
+
+    def put(self, request, pk):
+        response_msg = {'code': 100, 'msg': ''}
+        # 找到要改的对象
+        book_obj = Book.objects.filter(pk=pk).first()
+        # 得到序列化类的对象
+        # book_ser = BookSeralizer(book_obj, request.data)
+        book_ser = BookSeralizer(instance=book_obj, data=request.data)
+        # 要验证（和forms组件校验一样）
+        if book_ser.is_valid():  # 表示验证通过
+            book_ser.save()
+            response_msg['msg'] = '数据校验成功'
+            response_msg['data'] = book_ser.data
+
+        else:
+            response_msg['code'] = 101
+            response_msg['msg'] = '数据校验失败'
+            response_msg['data'] = book_ser.errors
+        return Response(response_msg)
+```
+
+### 4、reand_only和write_only
+
+* read_only
+
+```python
+表明该字段仅仅用于序列化输出，默认False，
+如果设置成True,postman中可以看到该字段，修改时不需要传该字段
+```
+
+* write_only
+
+```python
+表明该字段仅仅用户反序列化输入，默认False，
+如果设置成了True，postman看不到该字段，但修改时，该字段必须传
+```
+
+![image-20221202194101218](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202194102.png)
+
+### 5、查看所有，删除，新增，自定义
+
+1. 查询所有数据
+
+```python
+
+path('books/', views.BooksView.as_view())
+
+#views.py
+重新写一个视图类
+class BooksView(APIView):
+    def get(self, request):
+        response_msg = {'code': 100, 'msg': ''}
+        books_obj = Book.objects.all()
+        book_ser = BookSeralizer(books_obj, many=True)  # 序列化多条,如果序列化一条，不需要写
+        response_msg['data'] = book_ser.data
+        response_msg['msg'] = '校验成功'
+        return Response(response_msg)
+
+```
+
+2. 新增数据
+
+```python
+# urls.py
+
+path('books/', views.BooksView.as_view())
+
+
+#views.py
+class BooksView(APIView):
+    # 新增数据
+    def post(self, request):
+        response_msg = {'code': 100, 'msg': '校验成功'}
+        # 修改才有instance,新增没有，只有data
+        book_ser = BookSeralizer(data=request.data)
+        # book_ser = BookSeralizer(request.data) #按位置传参数request.data，会给instance,就报错了
+
+        # 校验数据
+        if book_ser.is_valid():
+            book_ser.save()
+            response_msg['data'] = book_ser.data
+        else:
+            response_msg['code'] = 102
+            response_msg['msg'] = '数据校验失败'
+            response_msg['data'] = book_ser.errors
+        return Response(response_msg)
+
+```
+
+```python
+#ser.py
+
+#在序列化类中重写create方法
+    def create(self, validated_data):
+        # Book.objects.create(name=validated_data.get('name'))
+        instance = Book.objects.create(**validated_data)
+        return instance
+```
+
+![image-20221202191930627](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202191932.png)
+
+![image-20221202191630502](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202191632.png)
+
+3. 删除数据
+
+```python
+#urls.py
+re_path('books/(?P<pk>\d+)', views.BookView.as_view()),
+
+
+#views.py
+class BookView(APIView):
+    def delete(self, request, pk):
+        book_obj = Book.objects.filter(pk=pk).delete()
+        response_msg = {'code': 100, 'msg': '删除成功'}
+        return Response(response_msg)
+```
+
+![image-20221202192731507](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202192733.png)
+
+### 6、自定义Response对象
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/2 19:30
+
+#创建一个utils.py文件 
+class MyResponse():
+    def __init__(self):
+        self.code = 100
+        self.msg = '成功'
+
+    @property
+    def get_dict(self):
+        return self.__dict__
+
+
+if __name__ == '__main__':
+    res = MyResponse()
+    print(res.msg)
+    res.data={'name':'zhao'}
+    print(res.get_dict)
+```
+
+代码:
+
+* models.py
+
+```python
+from django.db import models
+
+
+# Create your models here.
+class Book(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=32)
+    price = models.DecimalField(max_digits=8, decimal_places=3)
+    author = models.CharField(max_length=32)
+    publish = models.CharField(max_length=32)
+```
+
+* 序列化类 
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/2 19:53
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+from App.models import Book
+
+
+def check_author(data):
+    if data.startswith('sb'):
+        raise ValidationError('作者不能以sb开头')
+
+
+class BookSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    name = serializers.CharField(max_length=16, min_length=4)
+    price = serializers.CharField(write_only=True)
+    author = serializers.CharField(validators=[check_author])
+    publish = serializers.CharField()
+
+    def validate_price(self, data):
+        if float(data) < 10:
+            raise ValidationError('价格太低了')
+        return data
+
+    def validate(self, validate_data):
+        author = validate_data.get('author')
+        publish = validate_data.get('publish')
+        if author == publish:
+            raise ValidationError('作者和出版社一样')
+        return validate_data
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name')
+        instance.price = validated_data.get('price')
+        instance.author = validated_data.get('author')
+        instance.publish = validated_data.get('publish')
+        instance.save()
+        return instance
+
+    def create(self, validated_data):
+        instance = Book.objects.create(**validated_data)
+        return instance
+```
+
+* 自定义Response
+
+```python 
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/2 20:12
+class MyResponse:
+    def __init__(self):
+        self.code = 100
+        self.msg = '检验成功'
+
+    @property
+    def get_dict(self):
+        return self.__dict__
+
+
+if __name__ == '__main__':
+    res = MyResponse()
+    res.data = {'name': 'zhao'}
+    print(res.get_dict)
+
+```
+
+* urls.py
+
+```python
+from django.contrib import admin
+from django.urls import path, re_path
+from App import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    re_path('book/(?P<pk>\d+)',views.BookView.as_view()),
+    path('books/',views.BooksView.as_view())
+]
+```
+
+* 视图类的书写
+
+```python
+from django.shortcuts import render
+from rest_framework.views import APIView
+from App.models import Book
+from App.ser import BookSerializer
+from rest_framework.response import Response
+from App.utils import MyResponse
+
+
+# Create your views here.
+class BookView(APIView):
+    # 获取单个数据
+    def get(self, request, pk):
+        book_obj = Book.objects.filter(pk=pk).first()
+        book_ser = BookSerializer(book_obj)
+        return Response(book_ser.data)
+
+    # 修改数据
+    def put(self, request, pk):
+        response = MyResponse()
+        book_obj = Book.objects.filter(pk=pk).first()
+        book_er = BookSerializer(instance=book_obj, data=request.data)
+        if book_er.is_valid():
+            book_er.save()
+            response.data = book_er.data
+            response.msg = '校验成功'
+
+        else:
+            response.msg = '校验失败'
+            response.code = 101
+            response.data = book_er.errors
+        return Response(response.get_dict)
+
+    # 删除数据
+    def delete(self, request, pk):
+        response = MyResponse()
+        Book.objects.filter(pk=pk).delete()
+        return Response(response.get_dict)
+
+
+class BooksView(APIView):
+    # 获取所有数据
+    def get(self, request):
+        response = MyResponse()
+        books_obj = Book.objects.all()
+        book_er = BookSerializer(books_obj, many=True)
+        response.data = book_er.data
+        return Response(response.get_dict)
+
+    # 新增数据
+    def post(self, request):
+        response = MyResponse()
+        book_ser = BookSerializer(data=request.data)
+        if book_ser.is_valid():
+            book_ser.save()
+            response.data = book_ser.data
+        else:
+            response.data = book_ser.errors
+            response.msg = '校验失败'
+            response.code = 101
+        return Response(response.get_dict)
+```
