@@ -7511,7 +7511,9 @@ class UserInfo(AbstractUser):
 
 
 
-## （三十六）Web应用模式
+# ==django-rest-framework==
+
+## （1）Web应用模式
 
 **在Web开发中，有两种模式:**
 
@@ -7543,11 +7545,11 @@ class UserInfo(AbstractUser):
 # 页面静态化
 ```
 
-## （三十七）API接口
+## （2）API接口
 
 通过网络，规定了前后端信息交互的url连接，也就是前后端信息交互的媒介
 
-## （三十八）Restful规范
+## （3）Restful规范
 
 ```python
 REST全称是Representational State Transfer,中文意思是表述（编者注：通常译为表征性状态转移）。它首次出现在2000年Roy Fielding的博士论文中
@@ -7674,7 +7676,7 @@ url链接一般都采用https协议进行传输，注：采用Https协议，可�
     }  
 ```
 
-## （三十九）drf安装和简单使用
+## （4）drf安装和简单使用
 
 ### 1、安装
 
@@ -7683,7 +7685,7 @@ url链接一般都采用https协议进行传输，注：采用Https协议，可�
 pip install djangorestframework   
 ```
 
-### 2、使用
+### ==2、使用==
 
 ```python
 1. settings.py中
@@ -7790,7 +7792,7 @@ pip install djangorestframework
 
 ![image-20221130191237150](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221130191238.png)
 
-## （四十）源码分析
+## （5）源码分析
 
 ### cbv
 
@@ -7987,8 +7989,8 @@ from rest_framework.request import Request
             return self.__getattribute__(attr)
         
         
-#request.data 感觉是数据属性，其实是个方法，@property修饰了
-它是一个字段，post请求不管使用社么编码，传过来的数据，都在request.data中
+# request.data 感觉是数据属性，其实是个方法，@property修饰了,,它是一个字段，前端以三种编码格式传入的数据，都在request.data中
+# 请求对象.query_params 与django标准的request.GET相同，只是更换了更正确的名称而已
 
 
 
@@ -8030,7 +8032,155 @@ from rest_framework.request import Request
 ****************************************** 
 ```
 
-## （四十一）序列化器-Serializer
+### drf的Response类
+
+```python
+#from rest_framework.response import Response
+
+class Response(SimpleTemplateResponse):
+    def __init__(self, data=None, status=None,
+                 template_name=None, headers=None,
+                 exception=False, content_type=None):
+
+# data:要返回的数据，字典
+#status:返回的状态码，默认是200
+#template_name 渲染的模板的名字，（自定制的模板）
+#headers:响应头，可以往响应头中放东西，就是一个字典
+#content_type:响应的编码格式 'application/json'  和 'text/html'
+
+```
+
+```python
+#urls.py
+   path('test/',views.TestView.as_view()),
+
+#views.py
+class TestView(APIView):
+    def get(self, request):
+        print(request)
+        return Response({'name': 'zhao'}, status=301, headers={'token': 'test'})
+```
+
+![image-20221203202936839](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221203202939.png)
+
+**status状态码**
+
+为了方便设置状态码，`rest framework`在`rest_framework.status`模块中提供了常用的状态码**常量**
+
+1) **信息告知-1xx**
+
+```python
+HTTP_100_CONTINUE = 100
+HTTP_101_SWITCHING_PROTOCOLS = 101
+HTTP_102_PROCESSING = 102
+HTTP_103_EARLY_HINTS = 103
+```
+
+
+
+2. **成功-2xx**
+
+```python
+HTTP_200_OK = 200
+HTTP_201_CREATED = 201
+HTTP_202_ACCEPTED = 202
+HTTP_203_NON_AUTHORITATIVE_INFORMATION = 203
+HTTP_204_NO_CONTENT = 204
+HTTP_205_RESET_CONTENT = 205
+HTTP_206_PARTIAL_CONTENT = 206
+HTTP_207_MULTI_STATUS = 207
+HTTP_208_ALREADY_REPORTED = 208
+HTTP_226_IM_USED = 226
+```
+
+
+
+3. **重定向-3xx**
+
+```python
+HTTP_300_MULTIPLE_CHOICES = 300
+HTTP_301_MOVED_PERMANENTLY = 301
+HTTP_302_FOUND = 302
+HTTP_303_SEE_OTHER = 303
+HTTP_304_NOT_MODIFIED = 304
+HTTP_305_USE_PROXY = 305
+HTTP_306_RESERVED = 306
+HTTP_307_TEMPORARY_REDIRECT = 307
+HTTP_308_PERMANENT_REDIRECT = 308
+```
+
+
+
+4. **客户端报错-4xx**
+
+```python
+
+
+
+HTTP_400_BAD_REQUEST = 400
+HTTP_401_UNAUTHORIZED = 401
+HTTP_402_PAYMENT_REQUIRED = 402
+HTTP_403_FORBIDDEN = 403
+HTTP_404_NOT_FOUND = 404
+HTTP_405_METHOD_NOT_ALLOWED = 405
+HTTP_406_NOT_ACCEPTABLE = 406
+HTTP_407_PROXY_AUTHENTICATION_REQUIRED = 407
+HTTP_408_REQUEST_TIMEOUT = 408
+HTTP_409_CONFLICT = 409
+HTTP_410_GONE = 410
+HTTP_411_LENGTH_REQUIRED = 411
+HTTP_412_PRECONDITION_FAILED = 412
+HTTP_413_REQUEST_ENTITY_TOO_LARGE = 413
+HTTP_414_REQUEST_URI_TOO_LONG = 414
+HTTP_415_UNSUPPORTED_MEDIA_TYPE = 415
+HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE = 416
+HTTP_417_EXPECTATION_FAILED = 417
+HTTP_418_IM_A_TEAPOT = 418
+HTTP_421_MISDIRECTED_REQUEST = 421
+HTTP_422_UNPROCESSABLE_ENTITY = 422
+HTTP_423_LOCKED = 423
+HTTP_424_FAILED_DEPENDENCY = 424
+HTTP_425_TOO_EARLY = 425
+HTTP_426_UPGRADE_REQUIRED = 426
+HTTP_428_PRECONDITION_REQUIRED = 428
+HTTP_429_TOO_MANY_REQUESTS = 429
+HTTP_431_REQUEST_HEADER_FIELDS_TOO_LARGE = 431
+HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS = 451
+```
+
+
+
+5. **服务器错误-5xx**
+
+```python
+
+HTTP_500_INTERNAL_SERVER_ERROR = 500
+HTTP_501_NOT_IMPLEMENTED = 501
+HTTP_502_BAD_GATEWAY = 502
+HTTP_503_SERVICE_UNAVAILABLE = 503
+HTTP_504_GATEWAY_TIMEOUT = 504
+HTTP_505_HTTP_VERSION_NOT_SUPPORTED = 505
+HTTP_506_VARIANT_ALSO_NEGOTIATES = 506
+HTTP_507_INSUFFICIENT_STORAGE = 507
+HTTP_508_LOOP_DETECTED = 508
+HTTP_509_BANDWIDTH_LIMIT_EXCEEDED = 509
+HTTP_510_NOT_EXTENDED = 510
+HTTP_511_NETWORK_AUTHENTICATION_REQUIRED = 511
+
+```
+
+![image-20221208100105613](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221208100108.png)
+
+```python
+from rest_framework import status
+
+class TestView(APIView):
+    def get(self, request):
+        print(request)
+        return Response({'name': 'zhao'}, status=status.HTTP_200_OK, headers={'token': 'test'})
+```
+
+## ==（6）序列化器-Serializer==
 
 **作用**:
 
@@ -8142,7 +8292,7 @@ class BookView(APIView):
 
 ![20210405180910624](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202162502.png)
 
-### 3、序列化组件修改数据
+### 3、序列化组件修改保存数据
 
 ```python
 1.写一个序列化类，继承Serializer
@@ -8225,7 +8375,7 @@ class BookView(APIView):
     	book_ser = BookSeralizer(instance=book_obj, data=request.data)
 
 4.数据校验 if book_ser.is_valid()
-5.如果校验通过就保存，book_ser.save() 序列化对象.save()
+5.如果校验通过就保存，视图中调用 序列化对象 ook_ser.save() 序列化对象.save()
 6.如果不通过，逻辑自己写
 7.如果字段的校验规则不够，可以写钩子函数（局部和全局）
 	# 局部钩子
@@ -8236,8 +8386,14 @@ class BookView(APIView):
             # 校验失败，抛异常
             raise ValidationError('价格太低')
         return data
-    #全局钩子
-    
+ 
+     # 全局钩子
+    def validate(self, validated_data): 
+        author = validated_data.get("author")
+        publish = validated_data.get("publish")
+        if author == publish:
+            raise ValidationError("作者跟出版社一样")
+            return validated_data
 8. 可以使用字段的validators来校验
 		author = serializers.CharField(validators=[check_author])， 来校验
         -写一个函数
@@ -8252,7 +8408,7 @@ class BookView(APIView):
 re_path('books/(?P<pk>\d+)', views.BookView.as_view())
 ```
 
-**第一种局部（全局）钩子校验:**
+**局部（全局）钩子校验:**
 
 ```python
 #自己创建的ser.py文件
@@ -8298,7 +8454,7 @@ class BookSeralizer(serializers.Serializer):
         return instance
 ```
 
-**第二种 自己逻辑上的校验:**
+**自己逻辑上的校验:**
 
 ```python
 #views.py
@@ -8331,7 +8487,7 @@ class BookView(APIView):
 
 ![image-20221202172556039](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202172557.png)
 
-**第三种校验方法：**
+**校验：**
 
 ```python
 def check_author(data):
@@ -8494,7 +8650,7 @@ class BookView(APIView):
 
 ![image-20221202194101218](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221202194102.png)
 
-### 5、查看所有，删除，新增，自定义
+### 5、查看所有，删除，新增
 
 1. 查询所有数据
 
@@ -8590,13 +8746,6 @@ class MyResponse():
     @property
     def get_dict(self):
         return self.__dict__
-
-
-if __name__ == '__main__':
-    res = MyResponse()
-    print(res.msg)
-    res.data={'name':'zhao'}
-    print(res.get_dict)
 ```
 
 代码:
@@ -8763,3 +8912,1260 @@ class BooksView(APIView):
             response.code = 101
         return Response(response.get_dict)
 ```
+
+### 7、模型类的序列化器
+
+```python
+#ser.py 序列化类
+
+class BookModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book  # 对应models.py中的模型
+        fields = '__all__'  # 表示所有字段都序列化
+        # fields = ('name', 'price')  # 序列化指定字段
+        # exclude = ('name',)  # 除了name字段，其他都序列化
+        
+        # 给authors和publish加write_only属性
+        # name加max_len属性
+        extra_kwargs = {
+            'name': {'max_length': 8},
+            'publish': {'write_only': True},
+            'authors': {'write_only': True},
+        }
+
+```
+
+```python
+#urls.py
+path('books2/', views.BooksView2.as_view())
+```
+
+```python
+#views.py
+from App.ser import BookModelSerializer
+class BooksView2(APIView):
+    def get(self, request):
+        response = MyResponse()
+        book_obj = Book.objects.all()
+        book_ser = BookModelSerializer(book_obj, many=True)
+        response.data = book_ser.data
+        return Response(response.get_dict)
+```
+
+### 8、关键字many源码分析
+
+```python
+# 序列化多条，需要传many=True
+```
+
+```python
+path('many/',views.ManyView.as_view()),
+
+class ManyView(APIView):
+    def get(self, request):
+        response = MyResponse()
+        book_obj = Book.objects.filter().first()
+        books_obj = Book.objects.all()
+        book_ser = BookModelSerializer(book_obj)#序列化单条
+        books_ser = BookModelSerializer(books_obj, many=True)#序列化多条
+        print(type(book_ser))  # <class 'App.ser.BookModelSerializer'>
+        print(type(books_ser))  
+        # <class 'rest_framework.serializers.ListSerializer'>
+        response.data = books_ser.data
+        return Response(response.get_dict)
+    
+    
+    #对象的生成---》先调用类的__new__方法，生成空对象
+	#对象=类名(name=zhao),触发类的__init__()
+    #类的__new__方法控制对象的生成    
+```
+
+
+
+```python
+"""源码分析"""
+class BaseSerializer(Field):
+    def __new__(cls, *args, **kwargs):
+        if kwargs.pop('many', False):
+            return cls.many_init(*args, **kwargs)
+        #没有传many=True,走下面，正常的对象实例化，
+        return super().__new__(cls, *args, **kwargs)
+    
+    
+    
+     @classmethod
+    def many_init(cls, *args, **kwargs):
+        allow_empty = kwargs.pop('allow_empty', None)
+        max_length = kwargs.pop('max_length', None)
+        min_length = kwargs.pop('min_length', None)
+        child_serializer = cls(*args, **kwargs)
+        list_kwargs = {
+            'child': child_serializer,
+        }
+        if allow_empty is not None:
+            list_kwargs['allow_empty'] = allow_empty
+        if max_length is not None:
+            list_kwargs['max_length'] = max_length
+        if min_length is not None:
+            list_kwargs['min_length'] = min_length
+        list_kwargs.update({
+            key: value for key, value in kwargs.items()
+            if key in LIST_SERIALIZER_KWARGS
+        })
+        meta = getattr(cls, 'Meta', None)
+        list_serializer_class = getattr(meta, 'list_serializer_class', ListSerializer)
+        return list_serializer_class(*args, **list_kwargs)
+```
+
+### 9、Serializer高级用法
+
+新创建一个应用，**==记得一定要去注册!==**
+
+```python
+# 路由分发
+from App2 import urls
+ # path('App2/', include('App2.urls'))
+ path('App2/', include(urls)),
+```
+
+```python
+#App2.等models.py
+from django.db import models
+
+class Book(models.Model):
+    title = models.CharField(max_length=32)
+    price = models.IntegerField()
+    pub_date = models.DateTimeField()
+    publish = models.ForeignKey('Publish', on_delete=models.CASCADE, null=True)
+    authors = models.ManyToManyField('Author')
+
+    def __str__(self):
+        return self.title
+
+
+class Publish(models.Model):
+    name = models.CharField(max_length=32)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.name
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=32)
+    age = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+```
+
+```python
+#App2.views.py
+
+from django.shortcuts import render
+from App2.models import Book
+from App2.ser import BookSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+
+class App2BookView(APIView):
+    def get(self, request, pk):
+        book_obj = Book.objects.filter(pk=pk).first()
+        book_ser = BookSerializer(book_obj)
+        return Response(book_ser.data)
+
+
+
+```
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/3 16:27
+
+#App2.ser.py
+from rest_framework import serializers
+
+
+class BookSerializer(serializers.Serializer):
+    title123 = serializers.CharField(source='title')
+    price = serializers.CharField()
+    authors = serializers.CharField()
+    publish = serializers.CharField(source='publish.email')  # 相当于book.publish.email
+    pub_date = serializers.CharField()
+```
+
+![image-20221203173233427](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221203173235.png)
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/3 16:27
+from rest_framework import serializers
+
+
+class BookSerializer(serializers.Serializer):
+    title123 = serializers.CharField(source='title')
+    price = serializers.CharField()
+    # authors = serializers.CharField()
+    authors = serializers.SerializerMethodField()  # 必须配一个方法，方法名叫get_字段名，返回值就是要显示的内容
+
+    def get_authors(self, instance):
+        # book对象
+        authors = instance.authors.all()  # 取出所有作者
+        l = []
+        for author in authors:
+            l.append({'name': author.name, 'age': author.age})
+        return l
+
+    publish = serializers.CharField(source='publish.email')  # 相当于book.publish.email
+    pub_date = serializers.CharField()
+
+```
+
+![image-20221203174011856](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221203174013.png)
+
+#### source
+
+```python
+# 可以改字段名字
+title123 = serializers.CharField(source='title')
+# 可以.跨表
+
+publish = serializers.CharField(source='publish.email')  # 相当于book.publish.email
+
+# 可以执行方法
+pub_date = serializers.CharField(source='test')  # test是Book表模型中
+```
+
+<img src="https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221203174714.png" alt="image-20221203174712830" style="zoom:80%;" />
+
+#### SerializerMethodField()
+
+```python
+authors = serializers.SerializerMethodField()  # 必须配一个方法，方法名叫get_字段名，返回值就是要显示的内容
+
+    def get_authors(self, instance):
+        # book对象
+        authors = instance.authors.all()  # 取出所有作者
+        l = []
+        for author in authors:
+            l.append({'name': author.name, 'age': author.age})
+        return l
+```
+
+### 10、回顾
+
+```python
+#1.Serializer类，需要序列化什么，必须写一个继承类，想要序列化什么字段，就在里面写字段，（source）
+#2 序列化queryset（列表）对象和真正的对象，many=True的作用，instance=要序列化的对象
+
+
+
+#3 反序列化 instance=要序列化的对象，data=request.data
+#4 字段验证，序列化类中，给字段加属性，局部和全局钩子函数，字段属性validators=[check_author]
+#5 当在视图中调用， 序列化对象.is_valid()  booK_ser.is_valid(raise_exception=True) 只要验证不通过，直接抛出异常
+#6 修改保存---》调用序列化列对象.save(),重写Serializer类 的update方法
+
+
+		 def update(self, instance, validated_data):
+            # instance是Book这个对象
+            # validated_data是校验后的数据
+            instance.name = validated_data.get('name')
+            instance.price = validated_data.get('price')
+            instance.author = validated_data.get("author")
+            instance.publish = validated_data.get('publish')
+            instance.save()  # book.save() 是django 的orm提供的
+            return instance
+#7 序列化得到的字段， 序列化对象.data
+#8 自定义Response对象
+    class MyResponse():
+        def __init__(self):
+            self.code = 100
+            self.msg = '成功'
+
+        @property
+        def get_dict(self):
+            return self.__dict__
+
+    
+ #9 反序列化的新增 序列化类(data=request.data),如果只传了data,当调用序列化对象.save(),会触发序列化类的create方法执行，当传了instance和data时，调用 序列化对象.save(),会触发序列化类的update方法执行
+
+#10 重写create方法，（可以很复杂）
+	    def create(self, validated_data):
+        instance = Book.objects.create(**validated_data)
+        return instance
+    
+    
+#11 ModelSerializer跟Model做了对应
+	class BookModelSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Book  # 对应models.py中的模型
+            fields = '__all__'  # 表示所有字段都序列化
+            # fields = ('name', 'price')  # 序列化指定字段
+            # exclude = ('name',)  # 除了name字段，其他都序列化，不能跟fields连用，写谁，就排除谁
+
+            # 给authors和publish加write_only属性
+            # name加max_len属性
+            extra_kwargs = {
+                'name': {'max_length': 8},
+                'publish': {'write_only': True},
+                'authors': {'write_only': True,'max_lenth':6,'min_length':4},
+            }
+#12 如果在ModelSerializer中写一个局部钩子或全局钩子，跟之前一摸一样
+
+#13 many=True能够序列化多条的原因-----》__new__是在__init__之前执行的，造出了一个空对象
+
+#14 接口：为了统一子类的行为
+```
+
+## ==（7）局部和全局响应配置==
+
+`rest framework`提供了一个响应类`Response`，使用该类构造响应对象时，响应的具体数据内容会被转换成（render渲染）成符合前端需求的类型
+
+`rest framework`提供了`Renderer`渲染器，用来根据请求头中的`Accept（接收数据类型声明）`来自动转换响应数据到对应的格式，如果前端请求中未进行`Accept`声明，则会采用默认方式处理响应数据，我们可以通过配置来修改默认响应格式。
+
+可以在`rest_framework.settings`查找所有的drf默认配置项
+
+```python
+DEFAULTS = {
+    # Base API policies
+    'DEFAULT_RENDERER_CLASSES': [          # 默认响应渲染类
+        'rest_framework.renderers.JSONRenderer',# json渲染器
+        'rest_framework.renderers.BrowsableAPIRenderer', # 浏览器API渲染器
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [],
+    'DEFAULT_CONTENT_NEGOTIATION_CLASS': 'rest_framework.negotiation.DefaultContentNegotiation',
+    'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
+    'DEFAULT_VERSIONING_CLASS': None,
+
+    # Generic view behavior
+    'DEFAULT_PAGINATION_CLASS': None,
+    'DEFAULT_FILTER_BACKENDS': [],
+
+    # Schema
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
+
+    # Throttling
+    'DEFAULT_THROTTLE_RATES': {
+        'user': None,
+        'anon': None,
+    },
+    'NUM_PROXIES': None,
+
+    # Pagination
+    'PAGE_SIZE': None,
+
+    # Filtering
+    'SEARCH_PARAM': 'search',
+    'ORDERING_PARAM': 'ordering',
+
+    # Versioning
+    'DEFAULT_VERSION': None,
+    'ALLOWED_VERSIONS': None,
+    'VERSION_PARAM': 'version',
+
+    # Authentication
+    'UNAUTHENTICATED_USER': 'django.contrib.auth.models.AnonymousUser',
+    'UNAUTHENTICATED_TOKEN': None,
+
+    # View configuration
+    'VIEW_NAME_FUNCTION': 'rest_framework.views.get_view_name',
+    'VIEW_DESCRIPTION_FUNCTION': 'rest_framework.views.get_view_description',
+
+    # Exception handling
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
+    'NON_FIELD_ERRORS_KEY': 'non_field_errors',
+
+    # Testing
+    'TEST_REQUEST_RENDERER_CLASSES': [
+        'rest_framework.renderers.MultiPartRenderer',
+        'rest_framework.renderers.JSONRenderer'
+    ],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'multipart',
+
+    # Hyperlink settings
+    'URL_FORMAT_OVERRIDE': 'format',
+    'FORMAT_SUFFIX_KWARG': 'format',
+    'URL_FIELD_NAME': 'url',
+
+    # Input and output formats
+    'DATE_FORMAT': ISO_8601,
+    'DATE_INPUT_FORMATS': [ISO_8601],
+
+    'DATETIME_FORMAT': ISO_8601,
+    'DATETIME_INPUT_FORMATS': [ISO_8601],
+
+    'TIME_FORMAT': ISO_8601,
+    'TIME_INPUT_FORMATS': [ISO_8601],
+
+    # Encoding
+    'UNICODE_JSON': True,
+    'COMPACT_JSON': True,
+    'STRICT_JSON': True,
+    'COERCE_DECIMAL_TO_STRING': True,
+    'UPLOADED_FILES_USE_URL': True,
+
+    # Browseable API
+    'HTML_SELECT_CUTOFF': 1000,
+    'HTML_SELECT_CUTOFF_TEXT': "More than {count} items...",
+
+    # Schemas
+    'SCHEMA_COERCE_PATH_PK': True,
+    'SCHEMA_COERCE_METHOD_NAMES': {
+        'retrieve': 'read',
+        'destroy': 'delete'
+    },
+}
+```
+
+```python
+#浏览器响应成浏览器的格式，postman响应成json格式，通过配置实现的。（默认配置）
+	
+```
+
+#### 局部配置
+
+* 对某个视图类有效
+
+==**drf的配置信息----》先从自己的类中找，-----》项目的settings.py中找，找不到再采用默认的**==
+
+* 在视图类中写如下代码
+
+```python
+
+from rest_framework.renderers import JSONRenderer
+class TestView(APIView):
+    renderer_classes = [JSONRenderer]
+    def get(self, request):
+        print(request)
+        return Response({'name': 'zhao'}, status=200, headers={'token': 'test'})
+```
+
+
+
+#### 全局配置
+
+* 全局的视图类，所有请求，都有效
+
+==**drf有默认的配置文件-----》先从项目的`settings.py`中找，找不到，采用默认的**==
+
+* 在settings.py中添加如下代码
+
+```python
+# 这个变量REST_FRAMEWORK，里面都是drf的配置信息
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [             # 默认响应渲染类
+        'rest_framework.renderers.JSONRenderer', # json渲染器
+        'rest_framework.renderers.BrowsableAPIRenderer', # 浏览器API渲染器
+    ]
+}
+
+
+#如果设置了上述代码，其实是没有变化的，浏览器还显示浏览器的样式，postman还显示josn格式数据
+```
+
+## ==（8）视图==
+
+```python
+#两个视图基类
+APIView
+GenericAPIView
+```
+
+**先写模型类和序列化类，然后配置路由**
+
+* models.py
+
+```python
+from django.db import models
+
+
+# Create your models here.
+class Book(models.Model):
+    name = models.CharField(max_length=32)
+    price = models.DecimalField(max_digits=8, decimal_places=3)
+    publish = models.CharField(max_length=32)
+```
+
+* ser.py
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/8 11:18
+from rest_framework import serializers
+from App3.models import Book
+
+
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = '__all__'
+```
+
+* urls.py
+
+```python
+from django.urls import path, re_path
+from App3 import views
+
+urlpatterns = [
+
+    
+
+   
+
+
+]
+```
+
+#### 1、基于APIView写5个接口
+
+```python
+from rest_framework.views import APIView
+from App3.ser import BookSerializer
+from App3.models import Book
+from rest_framework.response import Response
+
+
+class BookView(APIView):
+    # 获取所有
+    def get(self, request):
+        book_list_obj = Book.objects.all()
+        book_ser = BookSerializer(book_list_obj, many=True)
+        return Response(book_ser.data)
+
+    def post(self, request):
+        book_ser = BookSerializer(data=request.data)
+        if book_ser.is_valid():
+            book_ser.save()
+            return Response(book_ser.data)
+        else:
+            return Response({'status': 101, 'msg': '校验失败'})
+
+
+class BookDetailView(APIView):
+    # 获取单条
+    def get(self, request, pk):
+        book_obj = Book.objects.filter(pk=pk).first()
+        book_ser = BookSerializer(book_obj)
+        return Response(book_ser.data)
+
+    def put(self, request, pk):
+        book_obj = Book.objects.filter(pk=pk).first()
+        book_ser = BookSerializer(instance=book_obj, data=request.data)
+        if book_ser.is_valid():
+            book_ser.save()
+            return Response(book_ser.data)
+        else:
+            return Response({'status': 101, 'msg': '校验失败'})
+
+    def delete(self, request, pk):
+        book_obj = Book.objects.filter(pk=pk).delete()
+        return Response({'status': 100, 'msg': '删除成功'})
+```
+
+```python
+"""基于APIView的路由配置"""
+path('books/', views.BookView.as_view()),
+re_path('book/(?P<pk>\d+)', views.BookDetailView.as_view()),
+```
+
+#### 2、基于GenericAPIView写5个接口
+
+```python
+"""基于GenericAPIView写的5个接口"""
+
+
+class BookGenericView(GenericAPIView):
+    # queryset要传QuerySet对象
+    # serializer_class要传使用哪个序列化类来序列化数据
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    # 获取所有
+    def get(self, request):
+        book_list_obj = self.get_queryset()
+        # book_ser=self.get_serializer_class()(book_list_obj,many=True)
+        book_ser = self.get_serializer(book_list_obj,many=True)
+        return Response(book_ser.data)
+
+    def post(self, request):
+        # book_ser = self.get_serializer_class()(data=request.data)
+        book_ser = self.get_serializer(data=request.data)
+        if book_ser.is_valid():
+            book_ser.save()
+            return Response(book_ser.data)
+        else:
+            return Response({'status': 101, 'msg': '校验失败'})
+
+
+class BookGenericDetailView(GenericAPIView):
+    queryset = Book.objects
+    serializer_class = BookSerializer
+
+    # 获取单条
+    def get(self, request, pk):
+        book_obj = self.get_object()
+        # book_ser=self.get_serializer_class()(book_obj)
+        book_ser = self.get_serializer(book_obj)
+        return Response(book_ser.data)
+
+    def put(self, request, pk):
+        book_obj = self.get_object()
+        # book_ser = self.get_serializer_class()(instance=book_obj,data=request.data)
+        book_ser = self.get_serializer(instance=book_obj,data=request.data)
+        if book_ser.is_valid():
+            book_ser.save()
+            return Response(book_ser.data)
+        else:
+            return Response({'status': 101, 'msg': '校验失败'})
+
+    def delete(self, request, pk):
+        book_obj = self.get_object().delete()
+        return Response({'status': 100, 'msg': '删除成功'})
+```
+
+```python
+"""基于GenericAPIView的路由配置"""
+path('books2/', views.BookGenericView.as_view()),
+re_path('book2/(?P<pk>\d+)', views.BookGenericDetailView.as_view()),
+```
+
+#### 3、基于GenericAPIView和5个视图扩展类写的接口
+
+```python
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, RetrieveModelMixin
+
+
+# views.py
+class Book3View(GenericAPIView, ListModelMixin, CreateModelMixin):
+    queryset = Book.objects
+    serializer_class = BookSerializer
+
+    def get(self, request):
+        return self.list(request)
+
+    def post(self, request):
+        return self.create(request)
+
+
+class Book3DetailView(GenericAPIView, RetrieveModelMixin, DestroyModelMixin, UpdateModelMixin):
+    queryset = Book.objects
+    serializer_class = BookSerializer
+
+    def get(self, request, pk):
+        return self.retrieve(request, pk)
+
+    def put(self, request, pk):
+        return self.update(request, pk)
+
+    def delete(self, request, pk):
+        return self.destroy(request, pk)
+
+ 
+#urls.py
+path('books3/', views.Book3View.as_view()),
+re_path('books3/(?P<pk>\d+)', views.Book3DetailView.as_view()),
+        
+```
+
+#### 4、基于GenericAPIView写的9个视图子类
+
+```python
+# 继承了GenericAPIView+一个或两者或三个试图扩展类
+CreateAPIView
+ListAPIView
+RetrieveAPIView
+DestroyAPIView
+UpdateAPIView
+ListCreateAPIView
+RetrieveUpdateAPIView
+RetrieveDestroyAPIView
+RetrieveUpdateDestroyAPIView
+```
+
+
+
+```python
+#views.py
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView,RetrieveUpdateAPIView,RetrieveDestroyAPIView
+
+
+class Book4View(ListAPIView, CreateAPIView):
+    queryset = Book.objects
+    serializer_class = BookSerializer
+
+
+class Book4DetailView(UpdateAPIView,RetrieveAPIView,DestroyAPIView):
+    queryset = Book.objects
+    serializer_class = BookSerializer
+
+    
+#urls.py
+path('books4/', views.Book4View.as_view()),
+re_path('books4/(?P<pk>\d+)', views.Book4DetailView.as_view()),
+
+```
+
+#### 5、使用ModelViewSet编写五个接口
+
+```python
+#views.py
+from rest_framework.viewsets import ModelViewSet
+
+class Book5View(ModelViewSet):
+    queryset = Book.objects
+    serializer_class = BookSerializer
+    
+    
+#urls.py
+path('books5/', views.Book5View.as_view(actions={'get': 'list', 'post': 'create'})),
+# 当路径匹配，又是get请求，会执行Book5View的list方法
+
+re_path('books5/(?P<pk>\d+)',views.Book5View.as_view(actions={'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+```
+
+#### 6、ViewSetMixin源码分析
+
+```python
+#重写了as_view()
+
+# 路由中只要配置了对应关系，比如：{'get':'list'},当get请求来，就会执行list方法
+def view(request, *args, **kwargs):
+    self = cls(**initkwargs)
+
+    if 'get' in actions and 'head' not in actions:
+        actions['head'] = actions['get']
+
+    
+    self.action_map = actions
+
+   
+    for method, action in actions.items():
+        #method:get
+        #action:list,
+        handler = getattr(self, action)
+        #执行完上一句，handler就变成了list的内存地址
+        setattr(self, method, handler)
+        #执行完上一句，对象.get=list
+        #for循环完毕，对象,get:list      对象.post:create
+
+    self.request = request
+    self.args = args
+    self.kwargs = kwargs
+
+   
+    return self.dispatch(request, *args, **kwargs)
+```
+
+#### 7、继承ViewSetMixin的视图类
+
+```python
+#继承ViewSetMixin的视图类，路由可以改写,视图类里的方法名字随意
+
+#views.py
+from rest_framework.viewsets import ViewSetMixin
+
+class Book6View(ViewSetMixin, APIView):  # ViewSetMinxin一定要放在APIView前，
+    """继承的查找顺序：自己里面找，如果没有，先去第一个父类里找，再找第二个父类，"""
+    def get_all_book(self, request):
+        book_obj = Book.objects.all()
+        book_ser = BookSerializer(book_obj, many=True)
+        return Response(book_ser.data)
+    
+#urls.py
+path('books6/', views.Book6View.as_view(actions={'get': 'get_all_book'})),
+```
+
+## ==（9）路由Routers==
+
+对于视图集ViewSet，除了可以自己手动指明请求方式与动作action之间，还可以使用Routers来快速实现路由信息
+
+**`rest framework`提供了两个router**
+
+* **SimpleRouter**
+* **DefaultRouter**
+
+```python
+#1.在urls.py中配置
+path('books/', views.BookView.as_view()),
+re_path('book/(?P<pk>\d+)', views.BookDetailView.as_view()),
+
+#2.一旦视图类，继承了ViewSetMixin，路由
+  path('books5/', views.Book5View.as_view(actions={'get': 'list', 'post': 'create'})),
+re_path('books5/(?P<pk>\d+)',views.Book5View.as_view(actions={'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+
+#3.继承自视图类，ModelViewSet的路由写法（自动生成路由）
+```
+
+#### 1、自动生成路由
+
+```python
+# urls.py
+
+# 第一步，导入routers模块
+	from rest_framework import routers
+# 第二部，有两个类,实例化得到对象
+    # routers.DefaultRouter:生成的路由更多，
+    # routers.SimpleRouter
+	router = routers.SimpleRouter()
+# 第三步，注册
+    # router.register(prefix='前缀', viewset=继承自ModelViewSet视图类,basename='别名')
+    router.register(prefix='books', viewset=views.BookViewSet)
+# 第四步，自动生成路由
+	# print(router.urls)
+    urlpatterns += router.urls
+```
+
+```python
+#models.py
+from django.db import models
+class Book(models.Model):
+    name = models.CharField(max_length=32)
+    price = models.DecimalField(max_digits=8, decimal_places=3)
+    publish = models.CharField(max_length=32)
+
+#ser.py
+from rest_framework import serializers
+from app01.models import Book
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = '__all__'
+               
+#views.py
+from rest_framework.viewsets import ModelViewSet
+from app01.models import Book
+from app01.serializer import BookSerializer
+class BookViewSet(ModelViewSet):
+    queryset = Book.objects
+    serializer_class = BookSerializer
+```
+
+#### 2、action的使用
+
+```python
+为了给继承自ModelsViewSet的视图类中自定义的函数也添加路由
+```
+
+```python
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from rest_framework.decorators import action  # 装饰器
+from app01.models import Book
+from app01.serializer import BookSerializer
+
+class BookViewSet(ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    # methods传一个列表，列表中放请求方式，
+    # detail，布尔类型,
+    #
+    @action(methods=['get'], detail=False)
+    # ^books/get_1/$ [name='book-get-1'] # 朝这个地址发送get请求，会执行下面的函数
+    def get_1(self, request):
+        book_obj = self.get_queryset()[:2]  # 从0开始截取一条
+        ser = self.get_serializer(book_obj, many=True)
+        return Response(ser.data)
+
+    @action(methods=['get'], detail=True)
+    # 生成  ^books/(?P<pk>[^/.]+)/get_1/$ [name='book-get-1']
+    def get_2(self, request, pk):
+        book_obj = self.get_queryset()[:2] 
+        ser = self.get_serializer(book_obj, many=True)
+        return Response(ser.data)
+    
+#装饰器放在被装饰的函数中，methods:请求方式，detail:是否带pk
+```
+
+![image-20221208183641841](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221208183644.png)
+
+![image-20221208183956318](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221208183958.png)
+
+![image-20221208183826571](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221208183829.png)
+
+## ==（10）认证Authentication==
+
+#### 1、认证的写法
+
+```python
+#认证的实现
+ -1.写一个类，继承BaseAuthentication，重写authenticate,认证的逻辑写在里面,返回两个值，一个值最终给了Request对象的user，,如果认证失败就抛异常:AuthenticationFailed
+ -2.全局使用，局部使用
+```
+
+#### 2、认证的源码分析
+
+```python
+# 1. APIView-----》dispatch方法-----》self.initial(request, *args, **kwargs)----》有认证，权限，频率
+# 2.  只读认证源码 initial-----》 self.perform_authentication(request)
+
+    def perform_authentication(self, request):
+     	#去Resquest类中查找，方法属性user的get方法
+        request.user
+        
+# 3. self.perform_authentication(request)就一句话:   request.user ,需要去drf的Request对象中找user属性（方法）
+    class Request:
+        @property
+        def user(self):
+            if not hasattr(self, '_user'):
+                with wrap_attributeerrors():
+                    
+                    self._authenticate()
+                    
+            return self._user
+
+# 4. Request类中的user方法，刚开始，没有_user,所以走self._authenticate()
+	    @property
+    def user(self):
+        if not hasattr(self, '_user'):
+            with wrap_attributeerrors():
+                self._authenticate()
+        return self._user
+    
+# 5. 核心 就是 Request类的_authenticate(self)
+    def _authenticate(self):
+        
+        #遍历拿到一个个认证器，进行认证
+        # self.authenticators配置的一堆认证类产生的认证类对象组成的list
+        #self.authenticators在视图类中配置的一个个认证类: authentication_classes=[认证类1,认证类2],对象的列表
+        #每次循环，拿到一个认证类的对象
+        for authenticator in self.authenticators:
+            try:
+                #认证器（对象）调用认证方法authenticate(认证类对象self,request请求对象)
+                #返回值：登录的用户与认证的信息组成的tuple
+                #该方法被try包裹，代表该方法会抛异常，抛异常就代表认证失败
+                user_auth_tuple = authenticator.authenticate(self)
+            except exceptions.APIException:
+                self._not_authenticated()
+                raise
+
+            if user_auth_tuple is not None:
+                self._authenticator = authenticator
+                #如何有返回值，就将登录用户 与 登录认证 分别保存到 request.user,request.auth
+                self.user, self.auth = user_auth_tuple
+                return
+        #如果返回值user_auth_tuple为空，代表认证通过，但是没有 登录用户 与 登录认证信息，代表游客
+        self._not_authenticated()
+
+```
+
+#### 3、认证组件的使用
+
+```python
+# 写一个认证类,app_auth.py，名字随意
+
+from rest_framework.authentication import BaseAuthentication
+from rest_framework.exceptions import AuthenticationFailed
+from app01.models import UserToken
+
+class MyAuthentication(BaseAuthentication):
+    def authenticate(self, request):
+        # 认证逻辑，如果认证通过，返回两个值
+        # 如果认证失败，抛出AuthenticationFailed
+        token = request.GET.get('token')
+        if token:
+            user_token = UserToken.objects.filter(token=token).first()
+            # 认证通过
+            if user_token:
+                return user_token.user,token
+            else:
+                raise AuthenticationFailed('认证失败')
+        else:
+            raise AuthenticationFailed('请求地址中需要携带token')
+
+
+```
+
+##### 全局配置
+
+```python
+#可以有多个认证，从左到右依次执行
+#全局使用,在settings.py中配置
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        "app01.app_auth.MyAuthentication"
+    ]
+}
+
+```
+
+##### 局部使用
+
+```python
+#局部使用，在视图类上写
+authentication_classes = [MyAuthentication]
+```
+
+```python
+#urls.py
+from django.urls import path
+from app01 import views
+from rest_framework import routers
+
+router = routers.SimpleRouter()
+router.register(prefix='books', viewset=views.BookViewSet)
+urlpatterns = [
+    path('login/', views.LoginView.as_view()),
+]
+urlpatterns += router.urls
+
+
+#views.py
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action  # 装饰器
+from app01.models import Book
+from app01.serializer import BookSerializer
+from app01.app_auth import MyAuthentication
+
+class BookViewSet(ModelViewSet):
+    
+    authentication_classes = [MyAuthentication]
+    
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    @action(methods=['get'], detail=False)
+    def get_1(self, request):
+        book_obj = self.get_queryset()[:2]  # 从0开始截取一条
+        ser = self.get_serializer(book_obj, many=True)
+        return Response(ser.data)
+
+ 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from app01 import models
+import uuid
+
+class LoginView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = models.User.objects.filter(username=username, password=password).first()
+        if user:
+            # 生成随机字符串
+            res = uuid.uuid4()
+            #存到usertoken表中
+            # models.UserToken.objects.create(token=res,user=user)#用它每次登录都会存一条数据，不好，
+            models.UserToken.objects.update_or_create(defaults={'token':res},user=user)
+            return Response({'status': 100, 'msg': '登录成功', 'token':res})
+
+        return Response({'status':101,'msg':'用户名或密码错误'})
+```
+
+
+
+##### 局部禁用
+
+```python
+#局部禁用
+配置了全局后可以局部禁用
+authentication_classes = []
+```
+
+```python
+class BookViewSet(ModelViewSet):
+    authentication_classes = [MyAuthentication]
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    @action(methods=['get','post'], detail=False)
+    def get_1(self, request):
+        book_obj = self.get_queryset()[:2]
+        ser = self.get_serializer(book_obj, many=True)
+        return Response(ser.data)
+
+
+class LoginView(APIView):
+    authentication_classes = []
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = User.objects.filter(username=username, password=password).first()
+        if user:
+            token = uuid.uuid4()
+            UserToken.objects.update_or_create(defaults={'token': token}, user=user)
+            return Response({'status': 100, 'msg': '登录成功', 'token': token})
+        else:
+            return Response({'status': 101, 'msg': '用户名或密码错误'})
+```
+
+![image-20221209205742421](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221209205744.png)
+
+![image-20221209205643076](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221209205647.png)
+
+## ==（11）权限Permissions==
+
+权限控制可以限制用户对于视图的访问和对于具体数据对象的访问。
+
+* 在执行视图的dispatch方法前，会先进行视图访问权限的判断
+* 在通过get_object()获取具体对象时，会进行模型对象访问权限的判断
+
+**区分不同的用户访问不同 的接口**
+
+#### 1、源码分析
+
+```python
+#APIView----》dispatch-----》initial-----》self.check_permissions(reqeust)  (APIView的对象方法)
+	    def check_permissions(self, request):
+        #遍历权限对象列表得到一个权限对象 （权限器），进行权限认证
+        for permission in self.get_permissions():#权限类的对象，放到列表中
+            #权限类一定有一个has_permission权限方法，用来做权限认证的
+            #参数:权限对象self、请求对象request、视图类对象
+            #返回值:有权限返回True，无权限返回False,
+            if not permission.has_permission(request, self):
+                self.permission_denied(
+                    request,
+                    message=getattr(permission, 'message', None),
+                    code=getattr(permission, 'code', None)
+                )
+```
+
+![image-20221209215104778](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221209215108.png)
+
+#### 2、自定义权限
+
+```python
+#写一个类，继承BasePermission，重写has_permission，如果权限通过，就返回True,不通过返回False
+from rest_framework.permissions import BasePermission
+
+
+class UserPermission(BasePermission):
+    def has_permission(self, request, view):
+        # 不是超级用户不能访问，
+        # 由于已经认证过了，所有request里有user对象，(当前登录的用户)
+        user = request.user  # 当前登录用户
+        print(user.get_user_type_display())
+        # 该字段用来choices参数，通过get_字段名_display()就能取出choices后面的中文
+        if user.user_type == 1:
+            return True
+        else:
+            return False
+```
+
+##### 局部使用
+
+```python
+
+# 只有超级用户可以访问
+from app01.app_auth import UserPermission
+class TestView(APIView):
+    authentication_classes = [MyAuthentication]
+    permission_classes = [UserPermission]
+
+    def get(self, request, *args, **kwargs):
+        return Response('我是测试数据1111')
+        # return Response(True)
+
+
+# 只要登录用户就可以访问
+class Test2View(APIView):
+    authentication_classes = [MyAuthentication]
+
+    def get(self, request, *args, **kwargs):
+        return Response('我是测试数据2222')
+
+```
+
+****
+
+只有登录后，才能认证，才能有权限
+
+![image-20221209215635389](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221209215921.png)
+
+sb用户不是管理员用户，所有不能访问test路由
+
+![image-20221209215331678](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221209215335.png)
+
+但是sb用户 可以访问test2路由，只要登录了就能访问
+
+![image-20221209215906414](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221209215910.png)
+
+##### 全局使用
+
+```python
+#settings.py
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        "app01.app_auth.MyAuthentication"
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'app01.app_auth.UserPermission',
+    ],
+}
+
+```
+
+加了全局配置后，test2就不能访问了，也需要超级管理员才能访问，这首就需要**局部禁用**,加个空列表就可可以了
+
+##### 局部禁用
+
+```python
+class Test2View(APIView):
+    authentication_classes = [MyAuthentication]
+    permission_classes = []
+    def get(self, request, *args, **kwargs):
+        return Response('我是测试数据2222')
+
+```
+
+
+
+
+
+#### 3、内置权限
+
+##### IsAdminUser使用
+
+```PYTHON
+先创建超级用户 python manage.py createsuperuser
+并登录。
+```
+
+![image-20221209222802457](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221209222806.png)
+
+```python
+#views.py
+from rest_framework.permissions import IsAdminUser
+from rest_framework.authentication import BasicAuthentication,SessionAuthentication
+# 超级管理员可以查看
+class Test3View(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, *args, **kwargs):
+        return Response('我是测试数据3333')
+    
+    
+#urls.py
+ path('test3/', views.Test3View.as_view()),
+    
+```
+
+先登录到admin,再访问test3路由，就有quan'xia
+
+![image-20221209222849719](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221209222853.png)
+
+## ==（12）频率==
+
+## （13）过滤
+
+## （14）排序
+
+## （15）异常处理
