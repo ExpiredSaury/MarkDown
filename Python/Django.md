@@ -2054,13 +2054,61 @@ urlpatterns = [
 
 ## （十六）虚拟环境
 
+**安装**
+
+```python
+不同的项目依赖不同的模块版本，不能共用一套环境，需要使用虚拟环境
+在系统的python环境中安装
+    pip install virtualenv
+    pip install virtualenvwrapper-win
+   
+```
+
+ **配置虚拟环境管理器工作目录**
+
+```python
+# 配置环境变量：
+# 控制面板 => 系统和安全 => 系统 => 高级系统设置 => 环境变量 => 系统变量 => 点击新建 => 填入变量名与值
+变量名：WORKON_HOME  变量值：自定义存放虚拟环境的绝对路径
+eg: WORKON_HOME: E:\Python\Virtualenvs
+
+# 同步配置信息：
+# 去向Python3的安装目录 => Scripts文件夹 => virtualenvwrapper.bat => 双击
+
+```
+
+**cmd中使用命令**
+
+```python
+workon                      查看已有的虚拟环境
+workon 虚拟环境名称           使用某个虚拟环境
+python | exit()				进入|退出 该虚拟环境的Python环境
+pip或pip3 install 模块名		为虚拟环境安装模块
+deactivate					退出当前虚拟环境
+
+#创建
+mkvirtualenv 虚拟环境名称	 					默认Python环境创建虚拟环境
+mkvirtualenv -p python3.6 虚拟环境名称		基于某Python环境创建虚拟环境		
+
+遇到虚拟环境没创建到 E:\Python\Virtualenvs，使用 mkvirtualenv E:\Python\Virtualenvs
+
+# 删除
+rmvirtualenv 虚拟环境名称
+
+
+
+
+```
+
+
+
+**requirements.txt文件**
+
 ```python
 """
 
 在正常开发中，会给每一个项目配置一个该项目独有的解释器资源
 该环境内只有该项目用到的模块，用不到的一概不装
-
-
 
 虚拟环境
 	每创建一个虚拟环境就类似于重新下载了一个纯净的python解释器，但是虚拟机环境不要创建太多，是需要消耗硬盘空间的
@@ -2073,6 +2121,8 @@ urlpatterns = [
 
 """
 ```
+
+**参数介绍**
 
 ```python
 --encoding=utf8 ：为使用utf8编码
@@ -7467,7 +7517,7 @@ User.objects.create_user(username=username, password=password)
 User.objects.create_superuser(username=username,password=password)
 ```
 
-### 10、如何扩展auth_user表
+### 10、==如何扩展auth_user表==
 
 ```python
 from django.db import models
@@ -7654,7 +7704,7 @@ bbs是一个前后端不分离的全栈项目，前后端需要自己一步步�
 
 
 
-![image-20221113112818038](E:\MarkDown\markdown\imgs\image-20221113112818038.png)
+![image-20221113112818038](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212121805.png)
 
 ### 3、表创建及同步
 
@@ -8422,11 +8472,11 @@ class Meta:
     verbose_name_plural = '自定义名称'  # 用来修改admin后台管理默认的表名
 ```
 
-![image-20221120211249472](E:\MarkDown\markdown\imgs\image-20221120211249472.png)
+![image-20221120211249472](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212121805-1.png)
 
 
 
-![image-20221120211305579](E:\MarkDown\markdown\imgs\image-20221120211305579.png)
+![image-20221120211305579](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212121805-2.png)
 
 **admin路由分发的本质**
 
@@ -8449,7 +8499,7 @@ def index(request):
     
 ```
 
-![image-20221121144353582](E:\MarkDown\markdown\imgs\image-20221121144353582.png)
+![image-20221121144353582](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212121805-3.png)
 
 ##### **media配置及用户头像展示**
 
@@ -8471,7 +8521,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')#文件名随意
 会自动创建多级目录
 ```
 
-![image-20221121092212547](E:\MarkDown\markdown\imgs\image-20221121092212547.png)
+![image-20221121092212547](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212121759.png)
 
 **如何开设后端指定文件夹资源**
 
@@ -11431,7 +11481,8 @@ REST_FRAMEWORK = {
 ```python
 #两个视图基类
 APIView
-GenericAPIView
+GenericAPIView(继承APIView)，
+涉及到数据库和序列化类的操作，尽量用GenericAPIView
 ```
 
 **先写模型类和序列化类，然后配置路由**
@@ -11471,12 +11522,7 @@ from django.urls import path, re_path
 from App3 import views
 
 urlpatterns = [
-
     
-
-   
-
-
 ]
 ```
 
@@ -11550,7 +11596,7 @@ class BookGenericView(GenericAPIView):
         # book_ser=self.get_serializer_class()(book_list_obj,many=True)
         book_ser = self.get_serializer(book_list_obj,many=True)
         return Response(book_ser.data)
-
+	
     def post(self, request):
         # book_ser = self.get_serializer_class()(data=request.data)
         book_ser = self.get_serializer(data=request.data)
@@ -11594,6 +11640,17 @@ re_path('book2/(?P<pk>\d+)', views.BookGenericDetailView.as_view()),
 ```
 
 #### 3、基于GenericAPIView和5个视图扩展类写的接口
+
+```python
+父类都是object
+ListModelMixin, 
+CreateModelMixin,
+UpdateModelMixin, 
+DestroyModelMixin, 
+RetrieveModelMixin
+```
+
+
 
 ```python
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, RetrieveModelMixin
@@ -11662,7 +11719,7 @@ class Book4DetailView(UpdateAPIView,RetrieveAPIView,DestroyAPIView):
     queryset = Book.objects
     serializer_class = BookSerializer
 
-    
+     
 #urls.py
 path('books4/', views.Book4View.as_view()),
 re_path('books4/(?P<pk>\d+)', views.Book4DetailView.as_view()),
@@ -11678,7 +11735,6 @@ from rest_framework.viewsets import ModelViewSet
 class Book5View(ModelViewSet):
     queryset = Book.objects
     serializer_class = BookSerializer
-    
     
 #urls.py
 path('books5/', views.Book5View.as_view(actions={'get': 'list', 'post': 'create'})),
@@ -11734,6 +11790,7 @@ class Book6View(ViewSetMixin, APIView):  # ViewSetMinxin一定要放在APIView�
         book_obj = Book.objects.all()
         book_ser = BookSerializer(book_obj, many=True)
         return Response(book_ser.data)
+
     
 #urls.py
 path('books6/', views.Book6View.as_view(actions={'get': 'get_all_book'})),
@@ -12275,8 +12332,10 @@ class Test5View(APIView):
 
 ```python
 REST_FRAMEWORK = {
- 'EXCEPTION_HANDLER': 'app01.app_auth.exception_handler',  
+   # 'DEFAULT_THROTTLE_CLASSES': ['rest_framework.throttling.AnonRateThrottle'],
+   
 }
+
 ```
 
 
@@ -12319,6 +12378,8 @@ REST_FRAMEWORK = {
 
 ```python
 # 未登录用户一分钟访问5次，登录用户一分钟访问10次
+from rest_framework.authentication import SessionAuthentication
+
 class Test6View(APIView):
     authentication_classes = [SessionAuthentication]
     # permission_classes = []
@@ -12328,7 +12389,123 @@ class Test6View(APIView):
         return Response('我是未登录用户')
 ```
 
+#### 根据IP进行频率限制
 
+```python
+#全局配置
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_RATES': {
+        'zhao': '5/m',
+    },
+
+}
+```
+
+```python
+#utils.throttling.py
+
+#写一个类，继承SimpleRateThrottle，只需要重写get_cache_key方法
+from rest_framework.throttling import SimpleRateThrottle
+
+
+class Mythrottling(SimpleRateThrottle):
+    scope = 'zhao'
+
+    def get_cache_key(self, request, view):
+        print(request.META.get('REMOTE_ADDR'))
+        return request.META.get('REMOTE_ADDR')#返回什么就根据什么来限制
+
+# python manage.py runserver 0.0.0.0:8080 局域网可以相互访问
+
+#settings.py
+ALLOWED_HOSTS = [*]
+```
+
+```python
+path('books3/', views.BookView.as_view()),
+#views.py
+from utils.throttling import Mythrottling
+class BookView(APIView):
+    throttle_classes = [Mythrottling]
+    def get(self, request, *args, **kwargs):
+        book_list = Book.objects.all()
+        # 实例化得到分页器对象
+        page_cursor = MyPageNumberPagination()
+        book_list = page_cursor.paginate_queryset(book_list, request, view=self)
+        next_url = page_cursor.get_next_link()  # 下一页
+        pre_url = page_cursor.get_previous_link()  # 上一页
+        print(next_url)
+        print(pre_url)
+        book_ser = BookModelSerializer(book_list, many=True)
+        return Response(data=book_ser.data)
+```
+
+![image-20221210205915047](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221210205917.png)
+
+
+
+
+
+
+
+### 2、自定义频率限制
+
+```python
+#子定制频率类需要写两个方法
+	-判断是否限次，没有限次可以请求True，限次了不可以请求False 
+        def allow_request(self, request, view):
+   -限次后调用，显示还需要等待多长时间才能再次访问，返回等待的时间seconds
+	   def wait(self):
+```
+
+```python
+#utils.throttling.py中
+# 自定义逻辑
+# （1）取出访问者IP
+# (2)判断当前IP在不在访问字典里，不再就添加进去，并且直接返回True，表示第一次访问，在字典里就继续往下走
+# （3）循环判断当前IP的列表，有值，并且当前时间减去列表的最后一个时间大于60s，把这种数据pop掉，这样列表中只有60s以内的访问
+# （4）判断，当列表小于3，说明一分钟以内访问不足三次，把当前时间插入到列表第一个位置，返回True，顺利通过
+# （5)当大于等于3，说明一分钟内访问超过三次 ，返回False,验证失败
+class IPThrottle():
+    VISIT_DIC = {}  # 定义成类属性，所有的对用用的都是这一个
+
+    def __init__(self):
+        self.history_list = []
+
+    def allow_request(self, request, view):
+        ctime = time.time()
+        ip = request.META.get("REMOTE_ADDR")
+        if ip not in self.VISIT_DIC:
+            self.VISIT_DIC[ip] = [ctime, ]
+            return True
+        self.history_list = self.VISIT_DIC[ip]  # 当前访问者的时间列表
+        while True:
+            if ctime - self.history_list[-1] > 60:
+                self.history_list.pop()  # 把最后一个移除
+            else:
+                break
+        if len(self.history_list) < 3:
+            self.history_list.insert(0, ctime)
+            return True
+        else:
+            return False
+
+    def wait(self):
+        # 当前时间减去列表中最后一个时间
+        ctime = time.time()
+
+        return 60 - (ctime - self.history_list[-1])
+```
+
+全局配置
+
+```python
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES':(
+        'utils.throttling.IPThrottle',
+    ),
+}
+```
 
 ## （13）过滤组件
 
@@ -12898,8 +13075,8 @@ class BookView(APIView):
         book_list = page_cursor.paginate_queryset(book_list, request, view=self)
         next_url = page_cursor.get_next_link()  # 下一页
         pre_url = page_cursor.get_previous_link()  # 上一页
-        print(next_url)
-        print(pre_url)
+        print(next_url)#打印下一页的url
+        print(pre_url)#打印下一页的url
         book_ser = BookModelSerializer(book_list, many=True)
         return Response(data=book_ser.data)
         
@@ -12910,3 +13087,1423 @@ class BookView(APIView):
 ![image-20221210195511467](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221210195513.png)
 
 ![image-20221210195526353](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221210195528.png)
+
+## （19）自动生成接口文档
+
+rest framework可以自动帮助生成接口文档
+
+接口文档以网页的方式呈现
+
+自动接口文档能生成的是继承自`APIView`及其`子类`的视图
+
+#### 1、安装依赖
+
+`rest framework`生成接口文档需要`coreapi`库的支持
+
+```python
+pip install coreapi
+```
+
+#### 2、设置接口文档访问路径
+
+**在总路由中添加接口文档路径**
+
+文档路由对应的视图配置为`rest_framework.documentation. include_docs_urls`
+
+```python
+from rest_framework.documentation import include_docs_urls
+urlpatterns = [
+    ...
+    path('docs/',include_docs_urls(title='站点页面标题'))
+]
+
+```
+
+#### 3、文档描述说明的定义位置
+
+1) 单一方法的视图，可以i直接使用视图类的文档字符串，如：
+
+```python
+class BookListView(ListAPIView):
+    """
+    返回所有图书信息
+    """
+```
+
+2. 包含多个方法的视图，在类视图的文档字符串中，分开方法定义，如:
+
+```python
+class BookListAPIView(ListAPIView):
+    """
+    get:
+    返回所有图书信息
+
+    post:
+    新建图书
+    """
+```
+
+3. 对于视图集`ViewSet`,仍在类视图的文档字符串中分开定义，但是应使用`action`名称区分，如:
+
+```python
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
+
+class BookInfoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
+   """
+   list:
+   返回图书列表数据
+
+   retrieve:
+   返回图书的详情数据
+
+   latest:
+   返回最新的图书数据
+
+   read:
+   修改图书的阅读量
+   """
+```
+
+最后浏览器中输入，`http://127.0.0.1:8000/docs/`，报错
+
+![image-20221211121826453](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211121828.png)
+
+需要在配置文件`settings.py`中设置如下:
+
+```python
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    #默认用的是:  'rest_framework.schemas.openapi.AutoSchema',
+}
+```
+
+![image-20221211122824978](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211122826.png)
+
+![image-20221211122649995](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211122651.png)
+
+**注意：**
+
+1. 视图集ViewSet中的retrieve名称在接口文档中叫做read
+2. 参数的Description需要在模型类或者序列化器类的字段中以help_text选项定义，如下:
+
+```python
+class Book(BaseModel):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=32, verbose_name='书名', help_text='这里填写书名')
+    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='价格', help_text='这里填写书的价格')
+```
+
+或者
+
+```python
+class BookModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        list_serializer_class = BookListSerializer
+        model = Book
+        fields = '__all__'
+        extra_kwargs = {
+            'publish': {
+                'required':True,
+                'write_only': True,
+                'help_text':'出版社'
+            }   
+        }
+
+```
+
+
+
+## （20）JWT认证
+
+在用户注册信息登陆后，想记录用户的登录状态，或者为用户创建身份认证的凭证，不再使用Session认证机制，而使用`Json Web Token`(本质就是**token**)认证机制
+
+#### 1、构成
+
+JWT就是一段字符串，由三段信息文本用`.`链接一起就构成了JWT字符串，
+
+```python
+aaaa.bbbb.cccc
+```
+
+第一个部分成为头部（header），第二部分成为载荷（payload），第三部分是签名（signature）
+
+#### 2、原理
+
+1.  jwt分三段式：头.体.签名 （head.payload.sgin）
+2. 头和体是可逆加密，让服务器可以反解出user对象；签名是不可逆加密，保证整个token的安全性
+3. 头体签名三部分，都是采用json格式的字符串，进行加密，可逆加密一般采用base64算法，不可逆加密一般采用hash(md5)算法
+4. 头中的内容是基本信息：公司信息、项目组信息、token采用的加密方式信息
+
+```python
+{
+  "company": "公司信息",
+  ...
+}
+```
+
+5. 体中的内容是关键信息：用户主键、用户名、签发时客户端信息(设备号、地址)、过期时间
+
+```python
+{
+  "user_id": 1,
+  "username":"zhangsan",
+  ...
+}
+```
+
+6. 签名中的内容时安全信息：头的加密结果 + 体的加密结果 + 服务器不对外公开的安全码 进行md5加密
+
+```python
+{
+  "head": "头的加密字符串",
+  "payload": "体的加密字符串",
+  "secret_key": "安全码"
+}
+```
+
+#### 3、校验
+
+1. 将token按` . `拆分为三段字符串，第一段 头加密字符串 一般不需要做任何处理
+2. 第二段 体加密字符串，要反解出用户主键，通过主键从User表中就能得到登录用户，过期时间和设备信息都是安全信息，确保token没过期，且是同一设备来的
+3. 再用 第一段 + 第二段 + 服务器安全码 不可逆md5加密，与第三段 签名字符串 进行碰撞校验，通过后才能代表第二段校验得到的user对象就是合法的登录用户
+
+#### 3、drf项目的jwt认证开发流程
+
+```python
+1）用账号密码访问登录接口，登录接口逻辑中调用 签发token 算法，得到token，返回给客户端，客户端自己存到cookies中
+2）校验token的算法应该写在认证类中(在认证类中调用)，全局配置给认证组件，所有视图类请求，都会进行认证校验，所以请求带了token，就会反解出user对象，在视图类中用request.user就能访问登录的用户
+
+注：登录接口需要做 认证 + 权限 两个局部禁用
+
+#第三方写好的 django-rest-framework-jwt
+```
+
+#### 4、drf简单使用jwt
+
+##### 安装
+
+```python 
+ pip install djangorestframework-jwt 
+```
+
+##### 继承AbstractUser表
+
+```python
+#新建项目，继承AbstractUser表，做数据库迁移，配置文件中配置AUTH_USER_MODEL = 'app01.User'   # '应用名.表名'
+
+from django.contrib.auth.models import AbstractUser
+class User(AbstractUser):
+    phone = models.CharField(max_length=32)
+    icon = models.ImageField(upload_to='icon')  # ImageField依赖于pillow模块
+```
+
+##### 创建超级用户
+
+```python
+python manage.py  createsuperuser 
+```
+
+##### 简单使用
+
+```python
+from django.contrib import admin
+from django.urls import path
+from rest_framework_jwt.views import obtain_jwt_token,ObtainJSONWebToken, VerifyJSONWebToken, RefreshJSONWebToken
+
+# 基类：JSONWebTokenAPIView，继承了APIView
+# ObtainJSONWebToken, VerifyJSONWebToken, RefreshJSONWebToken都继承了JSONWebTokenAPIView
+"""
+obtain_jwt_token = ObtainJSONWebToken.as_view()
+refresh_jwt_token = RefreshJSONWebToken.as_view()
+verify_jwt_token = VerifyJSONWebToken.as_view()
+"""
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('login/',obtain_jwt_token)#用下面那个也可以
+    # path('login/', ObtainJSONWebToken.as_view())
+]
+
+```
+
+发送get请求会报错
+
+ ![image-20221211134557687](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211134559.png)
+
+必须发post请求
+
+![image-20221211134954891](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211134956.png)
+
+##### 简单认证使用
+
+```python
+#views.py
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+
+class TestView(APIView):
+    authentication_classes = [JSONWebTokenAuthentication]
+    def get(self, request):
+        return Response('ok')
+    
+    
+#urls.py
+path('test/', views.TestView.as_view()),
+
+
+#settings.py中要注册
+INSTALLED_APPS = [
+    'rest_framework',
+    'rest_framework_jwt'
+]
+
+```
+
+![image-20221211141310776](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211141312.png)
+
+**过期时间到了后会显示签名过期**
+
+![image-20221211140933111](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211140934.png)
+
+#### 5、使用jwt自定制认证类
+
+##### **基于BaseJSONWebTokenAuthentication写的**
+
+```python
+#auth.py，自定义认证类
+
+from rest_framework_jwt.authentication import jwt_decode_handler
+from rest_framework import exceptions
+from rest_framework_jwt.authentication import BaseJSONWebTokenAuthentication
+
+
+class MyToken(BaseJSONWebTokenAuthentication):
+    def authenticate(self, request):
+        jwt_value = str(request.META.get("HTTP_AUTHORIZATION"))  # 获取到token字符串
+        # 认证
+        try:
+            payload = jwt_decode_handler(jwt_value)#把三段式解析出来，看认证是否篡改，是否过期
+        except Exception:
+            raise exceptions.AuthenticationFailed('认证失败')
+        user = self.authenticate_credentials(payload)  # user是当前登录用户，
+        return user, payload
+```
+
+```python
+#views.py
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from app01.auth import MyToken
+
+class TestView(APIView):
+    authentication_classes = [MyToken]
+
+    def get(self, request):
+        print(request.user)
+        return Response('ok')
+  
+#urls.py
+path('test/', views.TestView.as_view()),    
+```
+
+##### **基于BaseAuthentication写的**
+
+```python
+from rest_framework.authentication import BaseAuthentication
+from rest_framework_jwt.authentication import jwt_decode_handler
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_jwt.utils import jwt_decode_handler  # 上面按个那个用哪个都一样
+import jwt
+from api.models import User
+
+
+class MyJwtAuthenticationnnnn(BaseAuthentication):
+    def authenticate(self, request):
+        jwt_value = request.META.get("HTTP_AUTHORIZATION")
+        if jwt_value:
+            try:
+                # jwt提供了通过三段token,取出payload的方法，并且还有校验功能
+                payload = jwt_decode_handler(jwt_value)
+            except jwt.ExpiredSignature:
+                raise AuthenticationFailed('签名过期')
+            except jwt.InvalidTokenError:
+                raise AuthenticationFailed('非法用户')
+            except Exception as e:
+                raise AuthenticationFailed(str(e))
+            # 因为payload就是用户信息 的字典，
+            print(payload)  # {'user_id': 1, 'username': 'zhao', 'exp': 1670811589, 'email': '13644@qq.com'}
+            # return payload, jwt_value
+            """需要得到user对象，第一种方式，取数据库查"""
+            # user = User.objects.filter(pk=payload.get('user_id'))
+            """第二种方式"""
+            user = User(id=payload.get('user_id'), username=payload.get('username'))
+            return user, jwt_value
+
+        # 没有值直接抛异常
+        raise AuthenticationFailed('没有携带认证信息')
+```
+
+```python
+#urls.py
+path('goods/',views.GoodsInfoAPIView.as_view()),
+
+#views.py
+from app02.utils import MyJwtAuthenticationnnnn
+
+
+class GoodsInfoAPIView(APIView):
+    authentication_classes = [MyJwtAuthenticationnnnn]
+
+    def get(self, request, *args, **kwargs):
+        print(request.user)
+        return Response('商品信息')
+
+```
+
+![image-20221212102326109](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212102327.png)
+
+![image-20221212102810487](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212102812.png)
+
+#### 6、jwt控制访问权限
+
+**控制用户登录后才能访问，和不登陆就能访问**
+
+```python
+#1.控制用户登录后才能访问，和不登陆就能访问
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+"""
+可以通过认证类JSONWebTokenAuthentication和权限类IsAuthenticated，来控制用户登陆以后才能访问某些接口
+如果用户不登陆就能访问，只需要把权限类IsAuthenticated去掉
+"""
+
+class OrderAPIView(APIView):   #登录才能访问
+    authentication_classes = [JSONWebTokenAuthentication]
+    # 权限控制
+    permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+        return Response('这是订单信息')
+
+
+class UserInfoAPIView(APIView):    #不登陆就可以访问
+    authentication_classes = [JSONWebTokenAuthentication]
+    def get(self, request, *args, **kwargs):
+        return Response('UserInfoAPIView')
+    
+    
+#urls.py
+#子路由
+from rest_framework_jwt.views import obtain_jwt_token
+urlpatterns = [
+  path('login/',obtain_jwt_token),
+  path('order/',views.OrderAPIView.as_view()),
+  path('userinfo/',views.UserInfoAPIView.as_view())
+]
+#总路由
+ path('app02/', include('app02.urls')),
+
+```
+
+登陆后才可访问
+
+![image-20221211203722091](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211203723.png)
+
+不登陆就可访问
+
+![image-20221211203516209](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211203517.png)
+
+#### 7、jwt控制返回自定义数据格式
+
+**控制登录接口返回的数据格式**
+
+```python
+#2.控制登录接口返回的数据格式
+ - 第一种方式，自己写登录接口
+ - 第二种方式，用内置的，控制登录接口返回的数据格式
+	-jwt的配置文件种有个这么个属性
+    	  'JWT_RESPONSE_PAYLOAD_HANDLER': 'rest_framework_jwt.utils.jwt_response_payload_handler',
+    -重写jwt_response_payload_handler，配置成自己的返回格式
+```
+
+```python
+#在app02下创建utils.py
+
+def myjwt_response_payload_handler(token, user=None, request=None):#返回什么，前端就能看到什么
+
+    return {
+        'token': token,
+        'msg':'登录成功',
+        'status':100,
+        'username':user.username
+    }
+```
+
+```python
+#settings.py中配置自己重写的方法
+JWT_AUTH={
+    'JWT_RESPONSE_PAYLOAD_HANDLER':'app02.utils.myjwt_response_payload_handler'
+}
+```
+
+再次登录
+
+![image-20221211205139618](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221211205141.png)
+
+#### 8、多方式登录,自动签发token
+
+```python
+#使用用户名，手机号，邮箱都可以登录
+#前端需要传的数据格式
+{
+    "username":"zhao/13145786651/123@qq.com",
+    "password":"123456"
+}
+```
+
+模型类
+
+```python
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    mobile = models.CharField(max_length=32, unique=True)  # 唯一
+    
+#settings.py中配置
+AUTH_USER_MODEL = 'api.User'    '应用.表名'
+```
+
+序列化类
+
+```python
+from rest_framework import serializers
+from api import models
+import re
+from rest_framework.exceptions import ValidationError
+from rest_framework_jwt.utils import jwt_encode_handler, jwt_payload_handler
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    username = serializers.CharField()
+
+    class Meta:
+        model = models.User
+        fields = ['username', 'password']
+
+    def validate(self, attrs):
+        # 写逻辑校验
+        username = attrs.get('username')  # 用户名有三种方式
+        password = attrs.get('password')
+        # 通过判断username数据不同，查询字段不一样
+        # 通过正则匹配，如果是手机号
+        if re.match('^1[3-9][0-9]{9}$', username):  # 手机号
+            user = models.User.objects.filter(models=username).first()
+        elif re.match('.+@.+$', username):  # 邮箱
+            user = models.User.objects.filter(email=username).first()
+        else:#用户名
+            user = models.User.objects.filter(username=username).first()
+        if user:  # 用户存在
+            # 校验密码
+            if user.check_password(password):
+                # 签发token
+                payload = jwt_payload_handler(user)
+                token = jwt_encode_handler(payload)
+                # self.aa = token
+                self.context['token'] = token
+                self.context['username'] = user.username
+                return attrs
+            else:
+                raise ValidationError('密码错误')
+        else:
+            raise ValidationError('用户不存在')
+```
+
+视图类
+
+```python
+from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSetMixin, ViewSet
+from app02 import serializer
+
+
+# class LoginView(ViewSetMixin, APIView):
+class LoginViewSet(ViewSet):  # 跟上面完全一样
+    # def post(self, request):#不写post,直接写login
+    #     #这是登录接口
+    #     pass
+    def login(self, request, *args, **kwargs):
+        # 1.需要有一个序列化的类
+        # 2.生成序列化类对象
+        login_serializer = serializer.LoginSerializer(data=request.data,context={'request':request})
+        # 3.调用序列化对象的is_validad
+        login_serializer.is_valid(raise_exception=True)
+        token = login_serializer.context.get('token')
+        user = login_serializer.context.get('username')
+        # 4. return
+        return Response({'status': 100, 'msg': '登录成功', 'token': token,'username':user})
+```
+
+路由配置
+
+```python
+path('login2/', views.LoginViewSet.as_view({'post': 'login'})),
+```
+
+![image-20221212115825810](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212115827.png)
+
+![image-20221212115858977](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212115900.png)
+
+#### 9、配置过期时间
+
+```python
+#settings.py种手动配置
+
+import datetime
+JWT_AUTH={
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),#过期时间手动配置7天
+
+}
+```
+
+## （21）基于角色的权限控制（django内置的auth体系)
+
+```python
+#RBAC（Role-Based Access Control：基于角色的访问控制）
+
+#django的auth就是内置了一套RBAC的权限系统
+
+
+#django中
+	#后台权限控制（公司内部系统，crm客户关系管理,erp,协同平台）
+	user表
+    group表
+    permission表
+    user_group表是user和group的中间表
+    group_permission表是group和permission的中间表
+    user_permission表是user和permission的中间表
+    #前台（主站），需要用三大认证，
+```
+
+## （22）Django缓存
+
+[相关博客](https://www.cnblogs.com/liuqingzheng/articles/9803351.html)
+
+在动态网站中,用户所有的请求,服务器都会去数据库中进行相应的增,删,查,改,渲染模板,执行业务逻辑,最后生成用户看到的页面.
+
+当一个网站的用户访问量很大的时候,每一次的的后台操作,都会消耗很多的服务端资源,所以必须使用缓存来减轻后端服务器的压力.
+
+缓存是将一些常用的数据保存内存或者memcache中,在一定的时间内有人来访问这些数据时,则不再去执行数据库及渲染等操作,而是直接从内存或memcache的缓存中去取得数据,然后返回给用户.
+
+
+
+**缓存位置通过配置文件来操作（以文件缓存为例子**）
+
+```python
+# 前后端混合开发缓存的使用
+#settings.py中配置
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache', #指定缓存使用的引擎
+        'LOCATION': 'E:\cache测试',        #指定缓存的路径
+        'TIMEOUT':300,              #缓存超时时间(默认为300秒,None表示永不过期)
+        'OPTIONS':{
+            'MAX_ENTRIES': 300,            # 最大缓存记录的数量（默认300）
+            'CULL_FREQUENCY': 3,           # 缓存到达最大个数之后，剔除缓存个数的比例，即：1/CULL_FREQUENCY（默认3）
+        }
+    }
+}
+
+# 前后端分离缓存的使用
+```
+
+   **缓存的粒度：**
+   ```python
+   -全站缓存
+   -单页面缓存
+   	在视图函数上加装饰器
+   -页面局部缓存
+   ```
+
+##### **单页面缓存**
+
+```python
+#views.py 
+@cache_page(5)  # 表示缓存5秒中
+def test_cache(request):
+    import time
+    ctime = time.time()
+    return render(request, 'index.html', context={'ctime': ctime})
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{ ctime }}
+</body>
+</html>
+```
+
+![动画](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212145245.gif)
+
+##### **页面局部缓存**
+
+刷新页面时,整个网页有一部分实现缓存
+
+```python
+def test_cache(request):
+    import time
+    ctime = time.time()
+    return render(request, 'index.html', context={'ctime': ctime})
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!---<script src="../jQuery-3.6.0-min.js"></script>--->
+
+</head>
+<body>
+{{ ctime }}
+
+<hr>
+页面局部缓存
+{% load cache %}
+{% cache 5 'name' %}   #5表示5秒钟，name是唯一key值
+    {{ ctime }}
+{% endcache %}
+</body>
+</html>
+```
+
+![动画](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212145018.gif)
+
+##### **全站缓存**
+
+既然是全站缓存,当然要使用Django中的中间件.
+
+用户的请求通过中间件,经过一系列的认证等操作,如果请求的内容在缓存中存在,则使用FetchFromCacheMiddleware获取内容并返回给用户
+
+当返回给用户之前,判断缓存中是否已经存在,如果不存在,则UpdateCacheMiddleware会将缓存保存至Django的缓存之中,以实现全站缓存
+
+```markdown
+缓存整个站点，是最简单的缓存方法
+在 MIDDLEWARE_CLASSES 中加入 “update” 和 “fetch” 中间件
+
+MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware', #第一
+     .....
+     ......
+    'django.middleware.cache.FetchFromCacheMiddleware', #最后
+)
+
+“update” 必须配置在第一个
+“fetch” 必须配置在最后一个
+```
+
+```python
+#settings.py
+MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',   #响应HttpResponse中设置几个headers
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',   #用来缓存通过GET和HEAD方法获取的状态码为200的响应
+
+)
+
+
+CACHE_MIDDLEWARE_SECONDS=10   #缓存时间10秒钟
+```
+
+视图
+
+```python
+from django.core.cache import cache
+cache.set('key',value可以是任意数据类型)
+cache.get('key')
+```
+
+```python
+#views.py
+from django.core.cache import cache
+
+class Person:
+    def __init__(self,name,age):
+        self.name=name
+        self.age=age
+
+def test_cache(request):
+    p=Person('zhao','18')
+    cache.set('name', p)
+    return HttpResponse('数据放进去')
+
+
+def test_cache2(request):
+    p = cache.get('name')
+    print(type(p))
+    print(p.name)
+    return HttpResponse('数据拿出来')
+
+
+#urls.py
+path('test/',views.test_cache),
+path('test2/',views.test_cache2)
+```
+
+![动画](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221212174114.gif)
+
+## （23）项目
+
+#### 后台创建，配置修改，目录变更
+
+```python
+#在控制台直接指向项目 python manage.py runserver----》manage.py中的内容修改
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'luffyapi.settings.dev')
+```
+
+![image-20221213114424340](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213114427.png)
+
+```python
+#项目上线走的不是manage.py，而是wsgi.py中的
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'luffyapi.settings.dev')
+```
+
+![image-20221213114609506](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213114611.png)
+
+```python
+#国际化，改成中文
+    LANGUAGE_CODE = 'zh-hans'
+
+    TIME_ZONE = 'Asia/shanghai'
+
+    USE_TZ = False
+```
+
+```python
+#创建app,
+    命令startapp在哪里执行，就把app创建在哪里
+    cd luffyapi
+    cd apps
+    python ../../manage.py startapp user
+
+#注册app
+	#配置环境变量
+        import sys
+        sys.path.insert(0, BASE_DIR)
+        sys.path.insert(1, os.path.join(BASE_DIR, 'apps'))
+    #注册
+    	INSTALLED_APPS = [
+       'user'  # 因为apps目录已经被加到环境变量了，所以直接能找到
+]
+
+```
+
+```python
+#导模块标红
+```
+
+![image-20221213120538321](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213120541.png)
+
+#### 数据库配置
+
+```python
+#项目依赖数据库  create database luffyapi;
+#创建数据库用户,并且授予luffyapi库的权限
+GRANT ALL PRIVILEGES on luffyapi.* to 'zhao'@'%' IDENTIFIED BY "luffyapi123?";
+GRANT ALL PRIVILEGES on luffyapi.* to 'zhao'@'localhost' IDENTIFIED BY "luffyapi123?";
+flush privileges;
+
+
+#项目连接
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'luffyapi',
+            'PASSWORD': 'luffyapi123?',
+            'USER': 'zhao',
+            'PORT': 3306,
+            'CHARSET': 'utf8',
+            'HOST':'127.0.0.1',
+        }
+    }
+    
+#pymysql连接    
+    import pymysql
+	pymysql.install_as_MySQLdb()
+
+
+
+```
+
+#### 配置user表
+
+```python 
+用户要基于auth的user表，数据库迁移命令之前操作好，否则报错
+    -把app下的迁移文件全部删除
+    -admin，auth,app下的迁移文件删除
+    -删库（删库之前一定要导出）
+```
+
+```python
+#user表
+from django.contrib.auth.models import AbstractUser
+class User(AbstractUser):
+    telephone=models.CharField(max_length=11)
+    icon=models.ImageField(upload_to='icon',default='icon/default.png')
+```
+
+```python
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+AUTH_USER_MODEL = 'user.user'
+```
+
+
+
+```python
+#暴露资源接口
+from django.contrib import admin
+from django.urls import path,re_path
+from django.views.static import serve
+from django.conf import settings
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    re_path('media/(?P<path>.*)',serve,{'document_root':settings.MEDIA_ROOT})
+]
+```
+
+#### 前台搭建
+
+```python
+1.安装node ,
+2. 安装模块
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+
+3.创建vue工程（需要一个脚手架）
+npm install -g @vue/cli
+
+4#命令行敲vue,就会有提示
+
+5创建vue项目 
+vue create 项目名
+```
+
+![image-20221213151202084](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213151204.png)
+
+![image-20221213151316277](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213151318.png)
+
+![image-20221213151409631](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213151411.png)
+
+![image-20221213151619358](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213151622.png)
+
+```python
+6.pycharm中安装vue.js插件
+7.pycharm打卡，terminal下敲:npm run serve,启动项目
+8.配置pycharm
+
+```
+
+![image-20221213152416074](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213152418.png)
+
+![image-20221213152605190](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213152607.png)
+
+```python
+目录介绍
+public
+    - favicon.ico
+    - index.html   #整个项目的单页面
+    
+-src
+	- assets        #静态文件，css,js，img
+    - components    #小组件  头部组件，尾部组件
+    - roter			#路由相关，（跳转）
+    - store			#vuex相关，状态管理器，临时存储数据的地方
+    - views			#页面组件  
+	- main.js       #配置文件，（根django的settings一样）
+	- App.vue		#根组件‘
+    
+    
+    
+#任何一个组件都有三部分， template,script,style
+<template>
+
+</template>
+
+<script>
+
+</script>
+
+
+<style scoped>
+
+</style>
+
+```
+
+#### 响应和异常处理
+
+```python
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'luffyapi.utils.expextion.common_exception_handler',
+}
+```
+
+异常
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/13 16:46
+from rest_framework.views import exception_handler
+from .response import APIResponse
+
+
+def common_exception_handler(exc, context):
+    response = exception_handler(exc, context)
+    if isinstance(exc,KeyError):
+        return APIResponse(code=0, msg='key error')
+    if not response:  # drf内置处理不了，丢该django
+        return APIResponse(code=0, msg='error', result=str(exc))
+    else:
+        return APIResponse(code=0, msg='error', result=response.data)
+```
+
+响应
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/13 16:33
+from rest_framework.response import Response
+
+
+class APIResponse(Response):
+    def __init__(self, code=100, msg='成功', result=None, status=None,
+                         headers=None,
+                         content_type=None,**kwargs):
+        dic={
+            'code':code,
+             'msg':msg,
+        }
+        if result:
+            dic['result']=result
+        dic.update(kwargs)
+        super().__init__(data=dic,status=status,headers=headers,content_type=content_type)
+```
+
+#### 配置日志
+
+- debug等级：终端查看、在线调试
+- info等级：报告程序进度和状态星系
+- waring等级：警告信息
+- error等级：状态错误
+- critical等级：致命的错误
+
+```python
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(lineno)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(module)s %(lineno)d %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            # 实际开发建议使用WARNING
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            # 实际开发建议使用ERROR
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            # 日志位置,日志文件名,日志保存目录必须手动创建，注：这里的文件路径要注意BASE_DIR代表的是小luffyapi
+            'filename': os.path.join(os.path.dirname(BASE_DIR), "logs", "luffy.log"),
+            # 日志文件的最大值,这里我们设置300M
+            'maxBytes': 300 * 1024 * 1024,
+            # 日志文件的数量,设置最大日志数量为10
+            'backupCount': 10,
+            # 日志格式:详细格式
+            'formatter': 'verbose',
+            # 文件内容编码
+            'encoding': 'utf-8'
+        },
+    },
+    # 日志对象
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'propagate': True, # 是否让日志信息继续冒泡给其他的日志处理系统
+        },
+    }
+}
+
+```
+
+**utils.logger.py**
+
+```python
+#封装logger对象
+import logging
+
+# logger=logging.getLogger('名字')  #名字跟配置文件中loggers日志对象下的名字对应
+logger = logging.getLogger('django')  # 'django'
+
+```
+
+![image-20221213171050833](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213171054.png)
+
+**将日志配置到错误处理中， utils.exeception.py**
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/13 16:46
+from rest_framework.views import exception_handler
+from .response import APIResponse
+from .logger import logger
+
+
+def common_exception_handler(exc, context):
+    # 日志信息
+    logger.error('view的是%s 错误是: %s' % (context['view'], str(exc)))
+    response = exception_handler(exc, context)
+
+    if isinstance(exc, KeyError):
+        return APIResponse(code=0, msg='key error')
+    if not response:  # drf内置处理不了，丢该django
+        return APIResponse(code=0, msg='error', result=str(exc))
+    else:
+        return APIResponse(code=0, msg='error', result=response.data)
+
+```
+
+![image-20221213175133119](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213175136.png)
+
+![image-20221213175324861](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213175326.png)
+
+```python
+#取出类名，上面的返回的是对象，因该取出类名
+logger.error('view是 %s  错误是: %s' % (context['view'].__class__.__name__, str(exc)))
+```
+
+**utils.execption.py终极代码**
+
+```python
+# -*- coding: UTF-8 -*- 
+# @Date ：2022/12/13 16:46
+from rest_framework.views import exception_handler
+from .response import APIResponse
+from .logger import logger
+
+
+def common_exception_handler(exc, context):
+    # 日志信息
+    # logger.error('view的是%s 错误是: %s' % (context['view'], str(exc)))
+    logger.error('view是 %s  错误是: %s' % (context['view'].__class__.__name__, str(exc)))
+    response = exception_handler(exc, context)
+
+    if isinstance(exc, KeyError):
+        return APIResponse(code=0, msg='key error')
+    if not response:  # drf内置处理不了，丢该django
+        return APIResponse(code=0, msg='error', result=str(exc))
+    else:
+        return APIResponse(code=0, msg='error', result=response.data)
+
+```
+
+![image-20221213180215321](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213180218.png)
+
+#### 跨域问题
+
+##### cors
+
+```python
+#xss跨站脚本攻击，csrf跨站请求伪造。cors跨域资源共享
+1 同源策略：浏览器的安全策略，不允许去另一个域加载数据
+2 域：ip或者端口都必须一致
+3 前后端分离项目会出现跨域
+
+4 CORS：后端技术，跨域资源共享，服务端只要做配置，（本身浏览器已经支持了），就支持跨域
+	Access-Control-Allow-Origin: *  # 所有的域都可以向我发送请求，浏览器不会禁止
+    允许不同的域名来我的服务器拿数据
+
+6 浏览器将CORS请求分成两类：
+	-简单请求（simple request）
+	-非简单请求（not-so-simple request）
+7 满足以下两大条件就是简单请求
+    (1) 请求方法是以下三种方法之一：
+        HEAD
+        GET
+        POST
+    (2)HTTP的头信息不超出以下几种字段：
+        Accept
+        Accept-Language
+        Content-Language
+        Last-Event-ID
+        Content-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain
+        
+8 简单请求，只发送一次，如果后端写了CORS，浏览器就不禁止了
+9 非简单请求，发两次，第一次是OPTIONS（预检请求），看后端是否允许，如果允许再发真正的请求
+
+```
+
+
+
+##### 引入
+
+重新创建一个项目，修改端口号8008，书写简单的视图函数，配上路由，向luffyapi项目发送ajax请求
+
+```python
+def test(request):
+   return render(request,'index.html')
+
+    path('test/',views.test)
+```
+
+```html
+<body>
+<button onclick="test()">点我</button>
+</body>
+<script>
+    function test() {
+        $.ajax({
+            url: 'http://127.0.0.1:8000/home/home/',
+            type: 'get',
+            success: function (data) {
+                console.log(data)
+            }
+        })
+    }
+</script>
+```
+
+![image-20221213220141174](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213220147.png)
+
+在luffyapi项目上设置允许谁访问;`Access-Control-Allow-Origin':'*'`,意思就是允许所有域来访问。
+
+```python
+class TestView(APIView):
+    def get(self, request, *args, **kwargs):
+        dic= {'name':'zhao' }
+        print(123)
+        return APIResponse(headers={'Access-Control-Allow-Origin':'*'})
+```
+
+![image-20221213221745221](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221213221747.png)
+
+
+
+##### 后端自定义中间件处理cors
+
+**utils.middle.py**
+
+```python
+from django.utils.deprecation import MiddlewareMixin
+
+
+class MyMiddle(MiddlewareMixin):
+    def process_response(self, request, response):
+        response['Access-Control-Allow-Origin'] = '*'
+        if request.method == 'OPTION':
+            response['Access-Control-Allow-Origin'] = 'Content-Type'
+            return response
+```
+
+```python
+#配置到中间件中
+MIDDLEWARE = [
+  	....
+    'luffyapi.utils.middle.MyMiddle',
+]
+```
+
+##### django使用django-cores-headers解决跨域问题
+
+**1、安装**
+
+```python
+pip install django-cors-headers
+```
+
+**2、添加到settings的app中**
+
+```python
+INSTALLED_APPS={
+    ....
+    'corsheaders'
+    ....
+}
+```
+
+**3、添加中间件**
+
+```python
+MIDDLEWARE = [
+    ...
+    'corsheaders.middleware.CorsMiddleware',
+    ...
+]
+```
+
+**4、在settings.py文件末尾添加如下配置**
+
+
+
+```python
+# 跨域增加忽略
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    # 这里添加你允许的跨域来源
+    'http://127.0.0.1',
+)
+
+# 添加运行的请求方法
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+    'VIEW',
+)
+
+# 添加允许的请求头
+CORS_ALLOW_HEADERS = (
+    'XMLHttpRequest',
+    'X_FILENAME',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Pragma',
+)
+```
+
+#### 前后端打通
+
+```python
+#前台可以发送ajax请求，axios
+#安装:  npm install axios
+#配置:
+	- main.js中
+    	import axios from "axios" //导入安装的axios
+		Vue.prototype.$axios = axios //相当于把axios这个对象放到vue对象中，以后用vue对象
+        
+    -  views  里面的 HomeView.vue中书写js代码
+            <script>
+                export default {
+                  name: 'HomeView',
+                  create() {
+                   //向某个地址发送get请求 this.$axios.get('http://127.0.0.1:8000/home/home/').then(function (response) {
+                      console.log(response)  //如果请求成功，返回的数据再response
+                    }).catch(function (error) {
+                      console.log(error)
+                    })
+                  },
+                  components: {}
+                }
+            </script>
+            
+ #es6xie'f           
+  create() {
+   
+    this.$axios.get('http://127.0.0.1:8000/home/home/').then(response => {
+      console.log(response.data)
+    }).catch(errors => {
+      console.log(errors)
+    })
+  },
+```
+
+#### xadmin后台管理
+
+##### 安装
+
+```python
+pip install https://codeload.github.com/sshwsfc/xadmin/zip/django2
+```
+
+##### app注册
+
+```python
+#app中注册
+INSTALLED_APPS = [
+	#xadmin主体模块
+    'xadmin',
+    #渲染表格模块
+    'crispy_forms',
+    #为模型通过版本控制，可以回滚数据
+    'reversion',
+]
+```
+
+##### 路由配置
+
+```python
+#路由配置
+import xadmin
+xadmin.autodiscover()
+# xversion模块自动注册需要版本控制的Model
+from xadmin.plugins import xversion
+xversion.register_models()
+
+urlpatterns = [
+    # path('admin/', admin.site.urls),
+    path('xadmin/', xadmin.site.urls),
+]
+
+```
+
+##### 安装报错
+
+```python
+将xadmin-->plugins-->importexport.py中
+
+把 48行复制一行然后注释掉，在49行里 去掉 SKIP_ADMIN_LOG, TMP_STORAGE_CLASS，换成 ImportMixin
+# from import_export.admin import DEFAULT_FORMATS, SKIP_ADMIN_LOG, TMP_STORAGE_CLASS
+from import_export.admin import DEFAULT_FORMATS, ImportMixin
+```
+
+##### 数据迁移
+
+```python
+python manage.py makemigrations
+python managepy migrate
+```
+
