@@ -53,7 +53,7 @@ jQuery在使用的时候也需要导入，但是它的文件特别的小，基�
 
 2. 如果不下载jQuery文件，可以直接引用`jQuery`提供的==CDN服务==（基于网络直接请求加载)
 
-   * CDN:内容分发网络
+   * **CDN:内容分发网络**
    * CDN有免费的有收费的
    * 前端免费的CDN网站: [BootCDN](https://www.bootcdn.cn/)
 
@@ -64,7 +64,7 @@ jQuery在使用的时候也需要导入，但是它的文件特别的小，基�
    ![image-20221014190546708](E:\MarkDown\markdown\imgs\image-20221014190546708.png)
 
 ```js
-<scriptsrc="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 ```
 
 ![image-20221014191232187](E:\MarkDown\markdown\imgs\image-20221014191232187.png)
@@ -930,7 +930,7 @@ $('#d1').empty()#清空标签内部所有的内容
 
 ##### 页面加载
 
-```python
+```js
 /*等待页面加载完毕再执行代码*/
 """js中等待加载完毕执行代码"""
 window.onload=function(){
@@ -987,7 +987,7 @@ VM196:1 6
 VM196:1 7
 VM196:1 8
 
-$('div').each(function(index,obj{console.log(index,obj)})
+$('div').each(function(index,obj){console.log(index,obj)})
 VM262:1 0 <div>1</div>
 VM262:1 1 <div>2</div>
 VM262:1 2 <div>3</div>

@@ -51,13 +51,13 @@ Javascript插入HTML页面后，可由所有的现代浏览器执行
 
 * **ECMAScript(javascript语法)**
 
-  ![image.png](E:\MarkDown\markdown\imgs\ffc0ec5ed25be158c2f3131e38e8b4cc.png)
+  ![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219111007.png)
 * **DOM（页面文档对象模型**）
 
-  ![image.png](E:\MarkDown\markdown\imgs\48acab1f6dc7d46b4bf52d7860530143.png)
+  ![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219111007-1.png)
 * **BOM（浏览器对象模型）**
 
-  ![image.png](E:\MarkDown\markdown\imgs\9f067928203add200f7d601f5f959383.png)
+  ![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219111007-2.png)
 
 ### JS三种书写位置
 
@@ -121,7 +121,7 @@ Javascript插入HTML页面后，可由所有的现代浏览器执行
 
 保留字就是预留的关键字，意思是现在虽然还不是关键字，但是未来可能会成为关键字，同样不能使用他们当变量名和方法名
 
-![image.png](E:\MarkDown\markdown\imgs\e4e6bb701e6b385222044c47a13afc25.png)
+![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219111007-3.png)
 
 ### js输入输出语句
 
@@ -215,7 +215,7 @@ qq=110
 console.log(qq);
 ```
 
-5. 命名规范
+**5.命名规范**
 
 * 由字母（A-Za-z)，数字（0-9），下划线（_)，美元符号($)组成
 * 严格区分大小写，var app ;和 var App;是两个变量
@@ -229,14 +229,14 @@ console.log(qq);
 
 在计算机中，不同的数据类型所需要占用的存储空间是不同的，为了便于把数据分成所需要内存大小不同的数据，充分利用存储空间，便定义了不同的数据类型
 
-变量是用来存储值的所在处，他们有名字和数据类型，变量的数据类型决定了如何将代表这些值的位存储到计算机内存中，JavaScript是一种弱类型或者说是动态语言，这意味着不用提前声明变量的类型，在程序中运行过程中，类型会被自动确定
+变量是用来存储值的所在处，他们有名字和数据类型，变量的数据类型决定了如何将代表这些值的位存储到计算机内存中，**JavaScript是一种弱类型或者说是动态语言**，这意味着不用提前声明变量的类型，在程序中运行过程中，类型会被自动确定
 
 ```html
 var age =10;  //这是数字型
 var sex ='female';  //字符串类型
 ```
 
-*在代码运行时，变量的数据类型是由JS引擎 根据=号右边变量值的数据类型来判断的，运行完毕后，变量就确定了数据类型*
+**==在代码运行时，变量的数据类型是由JS引擎 根据=号右边变量值的数据类型来判断的，运行完毕后，变量就确定了数据类型==**
 
 JavaScript拥有动态类型，同时也意味着相同的变量可作用不同的类型
 
@@ -292,9 +292,15 @@ alert(NaN);
 * -Infinity:代表无穷小，小于任何值
 * NaN （Not a number） ,代表一个非数值
 
-isNaN()方法用来判断非数字，并返回True或者False，如果是数字返回False，非数字返回True
+**isNaN()方法用来判断非数字，并返回True或者False，如果是数字返回False，非数字返回True**
 
-#### 字符串String
+```js
+var age=20;
+var isOk=isNaN(age);
+console.log(isOk) //false
+```
+
+#### **字符串String**
 
 字符串可以是引号中的任意文本，语法是双引号和单引号
 
@@ -315,7 +321,7 @@ isNaN()方法用来判断非数字，并返回True或者False，如果是数字�
 
 2. **字符串长度**
 
-字符串是由若干个字符组成的，这些字符的数量就是字符串的长度，通过字符串的length户型可以获取整个字符串的长度
+字符串是由若干个字符组成的，这些字符的数量就是字符串的长度，通过字符串的`length`可以获取整个字符串的长度
 
 ```js
 var str='my sdnafaf';
@@ -583,7 +589,7 @@ var b = ++a + 2; //  a = 12 ++a=12
 console.log(b); //14
 
 var c = 10;
-c++; //c++=11 c=11
+c++; //c++=10 c=11
 var d = c++ + 2 ; //c++= 11 c=12  
 console.log(d); //13
 
@@ -617,7 +623,7 @@ console.log(18=='18'); //true
 
 常用于多个条件的判断
 
-![image.png](E:\MarkDown\markdown\imgs\48e2b0c0838609fdac80cbf7a3839ea5.png)
+![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219111007-4.png)
 
 逻辑与两边都是真才为true，否则返回false
 
@@ -643,7 +649,9 @@ console.log(18=='18'); //true
 
 6. **运算符优先级**
 
-![image.png](E:\MarkDown\markdown\imgs\8cede1af46f1587b78305cd1516c9edf.png)
+![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219115108.png)
+
+![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219111007-5.png)
 
 * 一元运算符里面的逻辑非优先级很高
 * 逻辑与比逻辑或优先级高
@@ -782,7 +790,6 @@ switch(表达式){
     case value2:
         执行语句2;
         break;
-  
      .....
     default:
         执行最后的语句;
@@ -830,7 +837,9 @@ switch( fruit){
 
 * **switch和if else if 区别：**
 
-![image.png](E:\MarkDown\markdown\imgs\c5abc8fc91697aa89ea3d09f593ba91b.png)
+
+
+![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219115013.png)
 
 #### 循环
 
@@ -1007,7 +1016,7 @@ console.log(str);
 
 ##### 断点调试
 
-![image.png](E:\MarkDown\markdown\imgs\2c6771ee4dd87b2ebba7eb4d33cabcc3.png)
+![image-20221013090135443](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219114941.png)
 
 ##### while循环
 
@@ -1332,6 +1341,8 @@ console.log(newArr);
         }
 ```
 
+##### 其他方法
+
 ```python
 var l =[1,2,3,4,5,6,7,8,10]
 undefined
@@ -1484,7 +1495,7 @@ var 变量名=function(){
 
 #### 函数的参数
 
-在声明函数时，可以在函数名称后面的小括号中添加一些参数，这些参数称为形参，而在点用函数时，同样也需要传递响应的参数，被称为实参。
+在声明函数时，可以在函数名称后面的小括号中添加一些参数，这些参数称为形参，而在调用函数时，同样也需要传递响应的参数，被称为实参。
 
 ```js
 function 函数名(形参1,形参2){
@@ -1613,7 +1624,7 @@ function fn2(){
 
 用户输入年份，输出当前年份2月份的天数
 
-如果时闰年，2月份时29天，如果是平年，则2月份是28天
+如果是闰年，2月份时29天，如果是平年，则2月份是28天
 
 ```js
 function backDay() {
@@ -1621,7 +1632,7 @@ function backDay() {
             if (isRunyear(year)) {
                 alert('当前年份是闰年，2月份有29天');
             } else {
-                alert('当前年份是闰年，2月份有29天');
+                alert('当前年份是平年，2月份有28天');
             }
         }
 
@@ -1707,7 +1718,7 @@ res();
 
 ### 预解析
 
-JavaScript代码是由浏览器中的JavaScript解析器来执行的，JavaScriptJI解析器在运行JavaScript代码的时候分两步：**预解析和代码执行**
+JavaScript代码是由浏览器中的JavaScript解析器来执行的，JavaScript解析器在运行JavaScript代码的时候分两步：**预解析和代码执行**
 
 按照代码书写的顺序从上往下执行
 
@@ -1717,7 +1728,7 @@ JavaScript代码是由浏览器中的JavaScript解析器来执行的，JavaScrip
 
 * 变量提升就是把所有的变量声明提升到当前的作用域最前面， 不提升赋值操作
 
-![image.png](E:\MarkDown\markdown\imgs\fbf72c98adfbbde789ee4eebc6ec3707.png)![image.png](E:\MarkDown\markdown\imgs\db6062a509993197d116beb2640b91d3.png)
+![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219111007-8.png)![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219111007-9.png)
 
 * 函数提升就是把所有的函数声明提升到当前作用域的最前面，不调用函数
 
@@ -1950,7 +1961,7 @@ for (变量 in  对象){
 ##### 内置对象
 
 * JavaScript中对象分为3种：自定义对象、内置对象、浏览器对象
-* 前两种时JS基础内容，属于ECMAScript ;第三个浏览器对象属于我们JS独有的
+* 前两种是JS基础内容，属于ECMAScript ;第三个浏览器对象属于我们JS独有的
 * 内置对象就是JS语言自带的一些对象，供开发者使用，并提供了一些常用的或者是最基本功能（属性和方法）
 * JavaScript中常用的内置对象：Math、Date、Array、String等
 
@@ -2004,7 +2015,6 @@ for (变量 in  对象){
 
 ```js
         //绝对值方法
-        console.log(myMath.PI,myMath.max(1,88,99));
         console.log(Math.abs(-1));
         console.log(Math.abs('-1'));//隐式转换，会把字符串型-1转成数字型
         console.log(Math.abs('lisi'));//NaN
@@ -2042,7 +2052,7 @@ function getRandom() {
 
 是一个构造函数，必须使用new来调用创建日期对象
 
-![image.png](E:\MarkDown\markdown\imgs\1f02494c26fc43d56c9ad47a0d251c23.png)
+
 
 ```python
 # 时间对象具体方法
@@ -2080,7 +2090,9 @@ JSON.parse(res)
 {name: 'zhao', age: 18}
 ```
 
-![image-20221013090135443](E:\MarkDown\markdown\imgs\image-20221013090135443.png)
+
+
+![image.png](https://gitee.com/zh_sng/cartographic-bed/raw/master/img/20221219114934.png)
 
 ```python
 Supports the following objects and types by default:
@@ -2247,7 +2259,7 @@ prompt('请输入')#控制台显示输入的内容
         show()
      
       
-    </script>
+</script>
 ```
 
 ### DOM操作
@@ -2353,6 +2365,8 @@ imgEle
 <img src="../tou.jpg" name="zhao" title="头像">
 let divELe= document.getElementById('d1')
 undefined
+
+
 divELe.appendChild(imgEle)#标签内部添加元素（尾部追加）
 <img src="../tou.jpg" name="zhao" title="头像">
 ```
@@ -2584,8 +2598,6 @@ btnEle.onclick=function(){
     <input type="text" id="d1" style="display: block; height: 40px;width: 200px">
     <button id="d2">开始</button>
     <button id="d3">结束</button>
-
-
 
     <script>
         //定义一个全局变量
